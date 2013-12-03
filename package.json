@@ -1,0 +1,14 @@
+{
+	"name": "common-library",
+	"description": "A library for common code",
+	"devDependencies": {
+		"grunt": "~0.4.1",
+		"grunt-phpunit": "~0.3.0",
+		"grunt-exec": "~0.4.2"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@bitbucket.org:gmodev/device-detection-library.git"
+	},
+	"private": true
+}
