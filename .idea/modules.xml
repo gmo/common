@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/device-detection-library.iml" filepath="$PROJECT_DIR$/.idea/device-detection-library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Common Library.iml" filepath="$PROJECT_DIR$/.idea/Common Library.iml" />
     </modules>
   </component>
 </project>
