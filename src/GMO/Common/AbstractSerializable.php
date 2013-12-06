@@ -37,6 +37,7 @@ abstract class AbstractSerializable implements ISerializable {
 		foreach($refParams as $refParam) {
 			$paramCls = $refParam->getClass();
 			if (!array_key_exists($refParam->name, $obj)) {
+				$params[] = $refParam->isOptional() ? $refParam->getDefaultValue() : null;
 				continue;
 			}
 			if (!$paramCls) {
