@@ -8,23 +8,15 @@ module.exports = function(grunt) {
 		exec: {
 			composerInstall: {
 				cmd: 'composer install'
-			}
-		},
-
-		phpunit: {
-			classes: {
-				dir: 'tests/'
 			},
-			options: {
-				bin: 'vendor/bin/phpunit',
-				colors: true
+			runPhpUnitTests: {
+				cmd: './vendor/bin/phpunit --tap --log-tap ./tests/tap-files/phpunit.tap ./tests/UnitTest'
 			}
 		}
 	});
 
 	grunt.registerTask('build', ['exec:composerInstall']);
-	grunt.registerTask('test', ['build', 'phpunit']);
-
+	grunt.registerTask('test', ['build', 'exec:runPhpUnitTests']);
 
 	grunt.loadNpmTasks('grunt-exec');
 	grunt.loadNpmTasks('grunt-phpunit');
