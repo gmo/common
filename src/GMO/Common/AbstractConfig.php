@@ -6,19 +6,7 @@ namespace GMO\Common;
  * @package GMO\Common
  * @since 1.2.0
  */
-abstract class AbstractConfig {
-
-	/**
-	 * Absolute directory path to project root or relative this directory
-	 * @return string
-	 */
-	abstract protected static function getProjectRootDir();
-
-	/**
-	 * Config ini/json absolute file path or relative to project root
-	 * @return string
-	 */
-	abstract protected static function getConfigFile();
+abstract class AbstractConfig implements IConfig {
 
 	/**
 	 * Returns config value.
@@ -91,4 +79,20 @@ abstract class AbstractConfig {
 	private static $configFile = null;
 	private static $config = null;
 	private static $projectDir = null;
+}
+
+interface IConfig {
+
+	/**
+	 * Absolute directory path to project root or relative this directory
+	 * Don't call this method, use getProjectDir() instead.
+	 * @return string
+	 */
+	static function getProjectRootDir();
+
+	/**
+	 * Config ini/json absolute file path or relative to project root
+	 * @return string
+	 */
+	static function getConfigFile();
 }
