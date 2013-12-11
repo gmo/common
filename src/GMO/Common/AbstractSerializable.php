@@ -8,7 +8,7 @@ abstract class AbstractSerializable implements ISerializable {
 
 		$objVars = get_object_vars( $this );
 		foreach ( $objVars as $key => $value ) {
-			if ( $value instanceof AbstractSerializable ) {
+			if ( $value instanceof ISerializable ) {
 				$values[$key] = $value->toArray();
 			} else {
 				$values[$key] = $value;
