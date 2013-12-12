@@ -3,8 +3,14 @@ namespace GMO\Common;
 
 abstract class AbstractSerializable implements ISerializable {
 
+	/**
+	 * If overriding this, be sure to include "class" with the fully qualified class name
+	 * @return array
+	 */
 	public function toArray() {
-		$values = array();
+		$values = array(
+			"class" => get_called_class()
+		);
 
 		$objVars = get_object_vars( $this );
 		foreach ( $objVars as $key => $value ) {
@@ -28,6 +34,7 @@ abstract class AbstractSerializable implements ISerializable {
 	 * 3) Constructor parameter names need to match the class variable names
 	 *
 	 * @param array $obj
+	 * @throws \Exception if a constructor takes an object that doesn't implement GMO\Common\ISerializable
 	 * @return mixed
 	 */
 	public static function fromArray($obj) {
@@ -46,9 +53,12 @@ abstract class AbstractSerializable implements ISerializable {
 				$timestamp = $obj[$refParam->name];
 				$tz = new \DateTimeZone($timestamp['timezone']);
 				$params[] = new \DateTime($timestamp['date'], $tz);
-			} else {
+			} elseif ($paramCls->isSubclassOf('GMO\Common\ISerializable')) {
+				/** @var ISerializable $clsName */
 				$clsName = $paramCls->name;
 				$params[] = $clsName::fromArray($obj[$refParam->name]);
+			} else {
+				throw new \Exception($paramCls->name . ' does not implement GMO\Common\ISerializable');
 			}
 		}
 		return $cls->newInstanceArgs($params);

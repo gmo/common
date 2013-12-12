@@ -10,7 +10,7 @@ require_once __DIR__ . "/../tester_autoload.php";
 
 class given_a_fully_hydrated_object extends BehaviorDrivenTestCase {
 
-	protected static  function given() {
+	protected static function given() {
 		$address = new Address("123 Testing Way", "Unit Testing Ville", "12345");
 		self::$sut = new Contact("John", "J", "Doe", $address, 21, new \DateTime('2000-01-01 12:00:00'));
 	}
@@ -21,6 +21,7 @@ class given_a_fully_hydrated_object extends BehaviorDrivenTestCase {
 
 		$result = self::$sut->toArray();
 
+		$this->assertEquals('UnitTest\Contact', $result["class"]);
 		$this->assertEquals("John", $result["firstName"]);
 		$this->assertEquals("J", $result["middleName"]);
 		$this->assertEquals("Doe", $result["lastName"]);
@@ -37,8 +38,11 @@ class given_a_fully_hydrated_object extends BehaviorDrivenTestCase {
 
 	public function test_toJson() {
 
-		$this->assertEquals('{"firstName":"John","middleName":"J","lastName":"Doe","address":{"street":"123 Testing Way","city":"Unit Testing Ville","zip":"12345"},"age":21,"timestamp":{"date":"2000-01-01 12:00:00","timezone_type":3,"timezone":"America\/Chicago"}}',
-		                    self::$sut->toJson());
+		$this->assertEquals(
+			'{"class":"UnitTest\\\\Contact","firstName":"John","middleName":"J","lastName":"Doe","address":{'
+			.'"class":"UnitTest\\\\Address","street":"123 Testing Way","city":"Unit Testing Ville","zip":"12345"},'
+			.'"age":21,"timestamp":{"date":"2000-01-01 12:00:00","timezone_type":3,"timezone":"America\/Chicago"}}',
+		    self::$sut->toJson());
 	}
 
 	/** @var Contact */
@@ -51,7 +55,7 @@ class given_a_fully_hydrated_object extends BehaviorDrivenTestCase {
 
 class given_a_fully_hydrated_object_with_missing_optional_value extends BehaviorDrivenTestCase {
 
-	protected static  function given() {
+	protected static function given() {
 		$address = new Address("123 Testing Way", "Unit Testing Ville", "12345");
 		self::$sut = new Contact("John", "J", "Doe", $address);
 	}
@@ -66,8 +70,11 @@ class given_a_fully_hydrated_object_with_missing_optional_value extends Behavior
 	}
 	public function test_toJson() {
 
-		$this->assertEquals('{"firstName":"John","middleName":"J","lastName":"Doe","address":{"street":"123 Testing Way","city":"Unit Testing Ville","zip":"12345"},"age":0,"timestamp":null}',
-		                    self::$sut->toJson());
+		$this->assertEquals(
+			'{"class":"UnitTest\\\\Contact","firstName":"John","middleName":"J","lastName":"Doe","address":{'
+			.'"class":"UnitTest\\\\Address","street":"123 Testing Way","city":"Unit Testing Ville","zip":"12345"},'
+			.'"age":0,"timestamp":null}',
+            self::$sut->toJson());
 	}
 
 	/** @var Contact */
@@ -79,9 +86,9 @@ class given_a_fully_hydrated_object_with_missing_optional_value extends Behavior
 
 # region given_an_array_containing_all_the_object_properties
 
-class given_an_array_containing_all_the_object_properties extends  BehaviorDrivenTestCase {
+class given_an_array_containing_all_the_object_properties extends BehaviorDrivenTestCase {
 
-	protected static  function given() {
+	protected static function given() {
 
 		$addressArr = array();
 		$addressArr["street"] = "123 Testing Way";
@@ -130,9 +137,9 @@ class given_an_array_containing_all_the_object_properties extends  BehaviorDrive
 
 # region given_an_array_that_is_missing_an_optional_property
 
-class given_an_array_that_is_missing_an_optional_property extends  BehaviorDrivenTestCase {
+class given_an_array_that_is_missing_an_optional_property extends BehaviorDrivenTestCase {
 
-	protected static  function given() {
+	protected static function given() {
 
 		$addressArr = array();
 		$addressArr["street"] = "123 Testing Way";
@@ -176,9 +183,9 @@ class given_an_array_that_is_missing_an_optional_property extends  BehaviorDrive
 
 # region given_an_array_that_is_missing_a_required_property
 
-class given_an_array_that_is_missing_an_expected_property extends  BehaviorDrivenTestCase {
+class given_an_array_that_is_missing_an_expected_property extends BehaviorDrivenTestCase {
 
-	protected static  function given() {
+	protected static function given() {
 
 		$addressArr = array();
 		$addressArr["street"] = "123 Testing Way";
@@ -224,7 +231,7 @@ class given_an_array_that_is_missing_an_expected_property extends  BehaviorDrive
 
 class given_a_json_that_contains_all_the_values extends BehaviorDrivenTestCase {
 
-	protected static  function given() {
+	protected static function given() {
 		self::$json = '{"firstName":"John","middleName":"J","lastName":"Doe","address":{"street":"123 Testing Way", "city":"Unit Testing Ville","zip":"12345"},"age":21,"timestamp":{"date":"2009-10-11 12:13:14", "timezone_type":3,"timezone":"America\/Chicago"}}';
 	}
 	protected static function when() {
@@ -252,6 +259,28 @@ class given_a_json_that_contains_all_the_values extends BehaviorDrivenTestCase {
 
 # endregion
 
+# region given_a_json_that_contains_all_the_values
+
+class given_a_class_not_implementing_ISerializable extends BehaviorDrivenTestCase {
+
+	protected static function given() {
+		$derp = new Derp(new Herp());
+		static::$json = $derp->toJson();
+	}
+	protected static function when() { }
+
+	/**
+	 * @expectedException \Exception
+	 * @expectedExceptionMessage UnitTest\Herp does not implement GMO\Common\ISerializable
+	 */
+	public function test_exception_thrown() {
+		Derp::fromJson(static::$json);
+	}
+
+	private static $json;
+}
+
+# endregion
 
 # region Helper Classes
 
@@ -325,6 +354,16 @@ class Address extends AbstractSerializable {
 	protected $street;
 	protected $city;
 	protected $zip;
+}
+
+class Herp { }
+
+class Derp extends AbstractSerializable {
+
+	public function __construct(Herp $herp) {
+		$this->herp = $herp;
+	}
+	protected $herp;
 }
 
 # endregion
