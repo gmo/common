@@ -21,6 +21,7 @@ class given_a_fully_hydrated_object extends BehaviorDrivenTestCase {
 
 		$result = self::$sut->toArray();
 
+		$this->assertEquals('UnitTest\Contact', $result["class"]);
 		$this->assertEquals("John", $result["firstName"]);
 		$this->assertEquals("J", $result["middleName"]);
 		$this->assertEquals("Doe", $result["lastName"]);
@@ -37,8 +38,11 @@ class given_a_fully_hydrated_object extends BehaviorDrivenTestCase {
 
 	public function test_toJson() {
 
-		$this->assertEquals('{"firstName":"John","middleName":"J","lastName":"Doe","address":{"street":"123 Testing Way","city":"Unit Testing Ville","zip":"12345"},"age":21,"timestamp":{"date":"2000-01-01 12:00:00","timezone_type":3,"timezone":"America\/Chicago"}}',
-		                    self::$sut->toJson());
+		$this->assertEquals(
+			'{"class":"UnitTest\\\\Contact","firstName":"John","middleName":"J","lastName":"Doe","address":{'
+			.'"class":"UnitTest\\\\Address","street":"123 Testing Way","city":"Unit Testing Ville","zip":"12345"},'
+			.'"age":21,"timestamp":{"date":"2000-01-01 12:00:00","timezone_type":3,"timezone":"America\/Chicago"}}',
+		    self::$sut->toJson());
 	}
 
 	/** @var Contact */
@@ -66,8 +70,11 @@ class given_a_fully_hydrated_object_with_missing_optional_value extends Behavior
 	}
 	public function test_toJson() {
 
-		$this->assertEquals('{"firstName":"John","middleName":"J","lastName":"Doe","address":{"street":"123 Testing Way","city":"Unit Testing Ville","zip":"12345"},"age":0,"timestamp":null}',
-		                    self::$sut->toJson());
+		$this->assertEquals(
+			'{"class":"UnitTest\\\\Contact","firstName":"John","middleName":"J","lastName":"Doe","address":{'
+			.'"class":"UnitTest\\\\Address","street":"123 Testing Way","city":"Unit Testing Ville","zip":"12345"},'
+			.'"age":0,"timestamp":null}',
+            self::$sut->toJson());
 	}
 
 	/** @var Contact */
@@ -252,6 +259,28 @@ class given_a_json_that_contains_all_the_values extends BehaviorDrivenTestCase {
 
 # endregion
 
+# region given_a_json_that_contains_all_the_values
+
+class given_a_class_not_implementing_ISerializable extends BehaviorDrivenTestCase {
+
+	protected static function given() {
+		$derp = new Derp(new Herp());
+		static::$json = $derp->toJson();
+	}
+	protected static function when() { }
+
+	/**
+	 * @expectedException \Exception
+	 * @expectedExceptionMessage UnitTest\Herp does not implement GMO\Common\ISerializable
+	 */
+	public function test_exception_thrown() {
+		Derp::fromJson(static::$json);
+	}
+
+	private static $json;
+}
+
+# endregion
 
 # region Helper Classes
 
@@ -325,6 +354,16 @@ class Address extends AbstractSerializable {
 	protected $street;
 	protected $city;
 	protected $zip;
+}
+
+class Herp { }
+
+class Derp extends AbstractSerializable {
+
+	public function __construct(Herp $herp) {
+		$this->herp = $herp;
+	}
+	protected $herp;
 }
 
 # endregion
