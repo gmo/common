@@ -68,4 +68,35 @@ class String {
 		return $needle === "" || strtolower(substr($haystack, -strlen($needle))) === strtolower($needle);
 	}
 
+	/**
+	 * Splits a string on the delimiter and returns the first part.
+	 * If delimiter is empty false is returned.
+	 * If the delimiter is not found in the string the string is returned.
+	 * @param string $string The string to split
+	 * @param string $delimiter The term to split on
+	 * @return string|bool first piece or false
+	 */
+	public static function splitFirst($string, $delimiter) {
+		if (empty($delimiter)) {
+			return false;
+		}
+		$parts = explode($delimiter, $string);
+		return reset($parts);
+	}
+
+	/**
+	 * Splits a string on the delimiter and returns the last part.
+	 * If delimiter is empty false is returned.
+	 * If the delimiter is not found in the string the string is returned.
+	 * @param string $string The string to split
+	 * @param string $delimiter The term to split on
+	 * @return string|bool last piece or false
+	 */
+	public static function splitLast($string, $delimiter) {
+		if (empty($delimiter)) {
+			return false;
+		}
+		$parts = explode($delimiter, $string);
+		return end($parts);
+	}
 }

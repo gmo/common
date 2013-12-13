@@ -67,5 +67,23 @@ class StringTest extends \PHPUnit_Framework_TestCase {
 		$this->assertFalse(String::endsWith("blah", "BLAH"));
 	}
 
+	public function test_split_empty_returns_false() {
+		$this->assertFalse(String::splitFirst("herp derp", ""));
+		$this->assertFalse(String::splitLast("herp derp", ""));
+	}
+
+	public function test_split_not_containing_delimiter() {
+		$this->assertSame("herp derp", String::splitFirst("herp derp", ","));
+		$this->assertSame("herp derp", String::splitLast("herp derp", ","));
+	}
+
+	public function test_split_first_containing_delimiter() {
+		$this->assertSame("herp", String::splitFirst("herp derp", " "));
+	}
+
+	public function test_split_last_containing_delimiter() {
+		$this->assertSame("derp", String::splitLast("herp derp", " "));
+	}
+
 }
  
