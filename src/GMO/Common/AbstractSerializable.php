@@ -1,6 +1,8 @@
 <?php
 namespace GMO\Common;
 
+use GMO\Common\Exception\NotSerializableException;
+
 abstract class AbstractSerializable implements ISerializable {
 
 	/**
@@ -34,7 +36,7 @@ abstract class AbstractSerializable implements ISerializable {
 	 * 3) Constructor parameter names need to match the class variable names
 	 *
 	 * @param array $obj
-	 * @throws \Exception if a constructor takes an object that doesn't implement GMO\Common\ISerializable
+	 * @throws NotSerializableException if a constructor takes an object that doesn't implement GMO\Common\ISerializable
 	 * @return mixed
 	 */
 	public static function fromArray($obj) {
@@ -58,7 +60,7 @@ abstract class AbstractSerializable implements ISerializable {
 				$clsName = $paramCls->name;
 				$params[] = $clsName::fromArray($obj[$refParam->name]);
 			} else {
-				throw new \Exception($paramCls->name . ' does not implement GMO\Common\ISerializable');
+				throw new NotSerializableException($paramCls->name . ' does not implement GMO\Common\ISerializable');
 			}
 		}
 		return $cls->newInstanceArgs($params);

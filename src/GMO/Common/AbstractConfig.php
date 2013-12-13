@@ -1,6 +1,8 @@
 <?php
 namespace GMO\Common;
 
+use GMO\Common\Exception\ConfigException;
+
 /**
  * Class AbstractConfig
  * @package GMO\Common
