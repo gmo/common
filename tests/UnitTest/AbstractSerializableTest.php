@@ -270,7 +270,7 @@ class given_a_class_not_implementing_ISerializable extends BehaviorDrivenTestCas
 	protected static function when() { }
 
 	/**
-	 * @expectedException \Exception
+	 * @expectedException \GMO\Common\Exception\NotSerializableException
 	 * @expectedExceptionMessage UnitTest\Herp does not implement GMO\Common\ISerializable
 	 */
 	public function test_exception_thrown() {

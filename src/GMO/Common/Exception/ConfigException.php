@@ -1,9 +1,9 @@
 <?php
-namespace GMO\Common;
+namespace GMO\Common\Exception;
 
 /**
  * Class ConfigException
- * @package GMO\Common
- * @since 1.2.0
+ * @package GMO\Common\Exception
+ * @since 1.5.0
  */
 class ConfigException extends \Exception { }

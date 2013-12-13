@@ -2,7 +2,6 @@
 namespace UnitTest;
 
 use GMO\Common\AbstractConfig;
-use GMO\Common\IConfig;
 
 class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 
@@ -25,7 +24,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @expectedException \GMO\Common\ConfigException
+	 * @expectedException \GMO\Common\Exception\ConfigException
 	 * @expectedExceptionMessage Config file key: "asdf" is missing!
 	 */
 	public function test_missing_key() {
@@ -33,7 +32,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @expectedException \GMO\Common\ConfigException
+	 * @expectedException \GMO\Common\Exception\ConfigException
 	 * @expectedExceptionMessage Config file doesn't exist
 	 */
 	public function test_nonexistent_config_file() {
@@ -41,7 +40,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @expectedException \GMO\Common\ConfigException
+	 * @expectedException \GMO\Common\Exception\ConfigException
 	 * @expectedExceptionMessage Unknown config file format
 	 */
 	public function test_unknown_config_format() {
