@@ -4,6 +4,8 @@ namespace GMO\Common;
 /**
  * Class String
  * @package GMO\Common
+ * @since 1.6.0 Added splitFirst and splitLast
+ *              Renamed case-insensitive functions
  * @since 1.2.0
  */
 class String {
@@ -24,7 +26,7 @@ class String {
 	 * @param string $needle The search term
 	 * @return bool
 	 */
-	public static function iContains($haystack, $needle) {
+	public static function containsInsensitive($haystack, $needle) {
 		return $needle === "" || stripos($haystack, $needle) !== false;
 	}
 
@@ -44,7 +46,7 @@ class String {
 	 * @param string $needle The search term
 	 * @return bool
 	 */
-	public static function iStartsWith($haystack, $needle) {
+	public static function startsWithInsensitive($haystack, $needle) {
 		return $needle === "" || stripos($haystack, $needle) === 0;
 	}
 
@@ -64,8 +66,77 @@ class String {
 	 * @param string $needle The search term
 	 * @return bool
 	 */
-	public static function iEndsWith($haystack, $needle) {
+	public static function endsWithInsensitive($haystack, $needle) {
 		return $needle === "" || strtolower(substr($haystack, -strlen($needle))) === strtolower($needle);
 	}
 
+	/**
+	 * Splits a string on the delimiter and returns the first part.
+	 * If delimiter is empty false is returned.
+	 * If the delimiter is not found in the string the string is returned.
+	 * @param string $string The string to split
+	 * @param string $delimiter The term to split on
+	 * @return string|bool first piece or false
+	 */
+	public static function splitFirst($string, $delimiter) {
+		if (empty($delimiter)) {
+			return false;
+		}
+		$parts = explode($delimiter, $string);
+		return reset($parts);
+	}
+
+	/**
+	 * Splits a string on the delimiter and returns the last part.
+	 * If delimiter is empty false is returned.
+	 * If the delimiter is not found in the string the string is returned.
+	 * @param string $string The string to split
+	 * @param string $delimiter The term to split on
+	 * @return string|bool last piece or false
+	 */
+	public static function splitLast($string, $delimiter) {
+		if (empty($delimiter)) {
+			return false;
+		}
+		$parts = explode($delimiter, $string);
+		return end($parts);
+	}
+
+	#region Deprecated functions
+	/**
+	 * Return whether a term is in a string ignoring case
+	 * @param string $haystack The string to search in
+	 * @param string $needle The search term
+	 * @return bool
+	 * @deprecated Use containsInsensitive() instead
+	 * @TODO Remove in 2.0
+	 */
+	public static function iContains($haystack, $needle) {
+		return static::containsInsensitive($haystack, $needle);
+	}
+
+	/**
+	 * Return whether a string starts with a term ignoring case
+	 * @param string $haystack The string to search in
+	 * @param string $needle The search term
+	 * @return bool
+	 * @deprecated Use startsWithInsensitive() instead
+	 * @TODO Remove in 2.0
+	 */
+	public static function iStartsWith($haystack, $needle) {
+		return static::startsWithInsensitive($haystack, $needle);
+	}
+
+	/**
+	 * Return whether a string ends with a term ignoring case
+	 * @param string $haystack The string to search in
+	 * @param string $needle The search term
+	 * @return bool
+	 * @deprecated Use endsWithInsensitive() instead
+	 * @TODO Remove in 2.0
+	 */
+	public static function iEndsWith($haystack, $needle) {
+		return static::endsWithInsensitive($haystack, $needle);
+	}
+	#endregion
 }
