@@ -4,6 +4,8 @@ namespace GMO\Common;
 /**
  * Class String
  * @package GMO\Common
+ * @since 1.6.0 Added splitFirst and splitLast
+ *              Renamed case-insensitive functions
  * @since 1.2.0
  */
 class String {
@@ -24,7 +26,7 @@ class String {
 	 * @param string $needle The search term
 	 * @return bool
 	 */
-	public static function iContains($haystack, $needle) {
+	public static function containsInsensitive($haystack, $needle) {
 		return $needle === "" || stripos($haystack, $needle) !== false;
 	}
 
@@ -44,7 +46,7 @@ class String {
 	 * @param string $needle The search term
 	 * @return bool
 	 */
-	public static function iStartsWith($haystack, $needle) {
+	public static function startsWithInsensitive($haystack, $needle) {
 		return $needle === "" || stripos($haystack, $needle) === 0;
 	}
 
@@ -64,7 +66,7 @@ class String {
 	 * @param string $needle The search term
 	 * @return bool
 	 */
-	public static function iEndsWith($haystack, $needle) {
+	public static function endsWithInsensitive($haystack, $needle) {
 		return $needle === "" || strtolower(substr($haystack, -strlen($needle))) === strtolower($needle);
 	}
 
@@ -99,4 +101,42 @@ class String {
 		$parts = explode($delimiter, $string);
 		return end($parts);
 	}
+
+	#region Deprecated functions
+	/**
+	 * Return whether a term is in a string ignoring case
+	 * @param string $haystack The string to search in
+	 * @param string $needle The search term
+	 * @return bool
+	 * @deprecated Use containsInsensitive() instead
+	 * @TODO Remove in 2.0
+	 */
+	public static function iContains($haystack, $needle) {
+		return static::containsInsensitive($haystack, $needle);
+	}
+
+	/**
+	 * Return whether a string starts with a term ignoring case
+	 * @param string $haystack The string to search in
+	 * @param string $needle The search term
+	 * @return bool
+	 * @deprecated Use startsWithInsensitive() instead
+	 * @TODO Remove in 2.0
+	 */
+	public static function iStartsWith($haystack, $needle) {
+		return static::startsWithInsensitive($haystack, $needle);
+	}
+
+	/**
+	 * Return whether a string ends with a term ignoring case
+	 * @param string $haystack The string to search in
+	 * @param string $needle The search term
+	 * @return bool
+	 * @deprecated Use endsWithInsensitive() instead
+	 * @TODO Remove in 2.0
+	 */
+	public static function iEndsWith($haystack, $needle) {
+		return static::endsWithInsensitive($haystack, $needle);
+	}
+	#endregion
 }
