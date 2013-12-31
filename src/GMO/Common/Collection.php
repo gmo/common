@@ -158,7 +158,7 @@ class Collection {
 	 */
 	public static function pop(array &$collection, $key, $default = null) {
 		$val = static::get($collection, $key, $default);
-		static::remove($collection, $key);
+		$collection = static::remove($collection, $key);
 		return $val;
 	}
 

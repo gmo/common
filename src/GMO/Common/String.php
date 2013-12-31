@@ -4,6 +4,8 @@ namespace GMO\Common;
 /**
  * Class String
  * @package GMO\Common
+ * @since 1.8.0 Added equals method
+ *              Added optional caseSensitive params
  * @since 1.6.0 Added splitFirst and splitLast
  *              Renamed case-insensitive functions
  * @since 1.2.0
@@ -13,11 +15,15 @@ class String {
 	/**
 	 * Return whether a term is in a string
 	 * @param string $haystack The string to search in
-	 * @param string $needle The search term
+	 * @param string $needle   The search term
+	 * @param bool   $caseSensitive Optional. Default: true
 	 * @return bool
 	 */
-	public static function contains($haystack, $needle) {
-		return $needle === "" || strpos($haystack, $needle) !== false;
+	public static function contains($haystack, $needle, $caseSensitive = true) {
+		if ($caseSensitive) {
+			return $needle === "" || strpos($haystack, $needle) !== false;
+		}
+		return static::containsInsensitive($haystack, $needle);
 	}
 
 	/**
@@ -31,13 +37,31 @@ class String {
 	}
 
 	/**
-	 * Return whether a string starts with a term
-	 * @param string $haystack The string to search in
-	 * @param string $needle The search term
+	 * Compare two strings for identically
+	 * @param string $string1
+	 * @param string $string2
+	 * @param bool   $caseSensitive Optional. Default: true
 	 * @return bool
 	 */
-	public static function startsWith($haystack, $needle) {
-		return $needle === "" || strpos($haystack, $needle) === 0;
+	public static function equals($string1, $string2, $caseSensitive = true) {
+		if ($caseSensitive) {
+			return $string1 === $string2;
+		}
+		return strtolower($string1) === strtolower($string2);
+	}
+
+	/**
+	 * Return whether a string starts with a term
+	 * @param string $haystack The string to search in
+	 * @param string $needle   The search term
+	 * @param bool   $caseSensitive Optional. Default: true
+	 * @return bool
+	 */
+	public static function startsWith($haystack, $needle, $caseSensitive = true) {
+		if ($caseSensitive) {
+			return $needle === "" || strpos($haystack, $needle) === 0;
+		}
+		return static::containsInsensitive($haystack, $needle);
 	}
 
 	/**
@@ -53,11 +77,15 @@ class String {
 	/**
 	 * Return whether a string ends with a term
 	 * @param string $haystack The string to search in
-	 * @param string $needle The search term
+	 * @param string $needle   The search term
+	 * @param bool   $caseSensitive Optional. Default: true
 	 * @return bool
 	 */
-	public static function endsWith($haystack, $needle) {
-		return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
+	public static function endsWith($haystack, $needle, $caseSensitive = true) {
+		if ($caseSensitive) {
+			return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
+		}
+		return static::endsWithInsensitive($haystack, $needle);
 	}
 
 	/**

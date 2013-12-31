@@ -34,6 +34,12 @@ class StringTest extends \PHPUnit_Framework_TestCase {
 		$this->assertFalse(String::contains("this", "THIS"));
 	}
 
+	public function test_equals() {
+		$this->assertTrue(String::equals("this", "this"));
+		$this->assertFalse(String::equals("this", "THIS"));
+		$this->assertTrue(String::equals("this", "THIS", false));
+	}
+
 	public function test_startsWith() {
 		$this->assertTrue(String::startsWith("blah", "b"));
 		$this->assertTrue(String::startsWith("blah", "bla"));

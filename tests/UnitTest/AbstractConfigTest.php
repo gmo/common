@@ -19,8 +19,30 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($expected, IniConfig::getYamlFile());
 	}
 
-	public function test_get_optional_value() {
-		$this->assertFalse(IniConfig::getOptionalKey());
+	public function test_get_default_value() {
+		$this->assertSame("defaultValue", IniConfig::getDefaultKey());
+	}
+
+	public function test_get_bool_string_true() {
+		$this->assertTrue(IniConfig::getBool("SWITCHES", "debug"));
+	}
+
+	public function test_get_bool_string_false() {
+		$this->assertFalse(IniConfig::getBool("SWITCHES", "other"));
+	}
+
+	public function test_get_bool_string_other() {
+		$this->assertFalse(IniConfig::getBool("SWITCHES", "unknown"));
+	}
+
+	public function test_get_bool() {
+		$this->assertTrue(IniConfig::getBool("SWITCHES", "live"));
+		$this->assertFalse(IniConfig::getBool("SWITCHES", "nope"));
+	}
+
+	public function test_get_bool_int() {
+		$this->assertTrue(IniConfig::getBool("SWITCHES", "live"));
+		$this->assertFalse(IniConfig::getBool("SWITCHES", "nope"));
 	}
 
 	/**
@@ -89,12 +111,17 @@ class IniConfig extends AbstractConfig {
 	public static function getYamlFile() {
 		return static::toAbsPathFromProjectRoot(static::getValue("FILES", "yaml"));
 	}
-	public static function getOptionalKey() {
-		return static::getValue("NOT", "needed", true);
+	public static function getDefaultKey() {
+		return static::getValue("NOT", "needed", "defaultValue");
 	}
 	public static function getMissingKey() {
 		return static::getValue("NEEDED", "asdf");
 	}
+
+	public static function getBool($section, $key, $default = null) {
+		return parent::getBool($section, $key, $default);
+	}
+
 }
 
 class NonexistentConfig extends AbstractConfig {
