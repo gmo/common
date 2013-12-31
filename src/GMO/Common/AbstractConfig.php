@@ -6,26 +6,31 @@ use GMO\Common\Exception\ConfigException;
 /**
  * Class AbstractConfig
  * @package GMO\Common
+ * @since 1.8.0 Changed getValue's $optional param to $default
  * @since 1.2.0
  */
 abstract class AbstractConfig implements IConfig {
 
 	/**
-	 * Returns config value.
-	 * @param string $section
-	 * @param string $key
-	 * @param bool   $optional Return false or throw ConfigException
+
+	/**
+	 * Returns config value. If default isn't specified,
+	 * a ConfigException is thrown when the key is missing.
+	 * If a default is specified that is returned instead.
+	 * @param string     $section
+	 * @param string     $key
+	 * @param mixed|null $default
 	 * @return mixed
-	 * @throws ConfigException If key is missing and not optional
+	 * @throws ConfigException If key is missing and no default
 	 */
-	protected static function getValue( $section, $key, $optional = false ) {
+	protected static function getValue( $section, $key, $default = null ) {
 		static::setConfig();
 
 		if( !isset(self::$config[$section][$key]) ) {
-			if ($optional) {
-				return false;
-			} else {
+			if ($default === null) {
 				throw new ConfigException("Config file key: \"$key\" is missing!");
+			} else {
+				return $default;
 			}
 		}
 

@@ -19,8 +19,9 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($expected, IniConfig::getYamlFile());
 	}
 
-	public function test_get_optional_value() {
-		$this->assertFalse(IniConfig::getOptionalKey());
+	public function test_get_default_value() {
+		$this->assertSame("defaultValue", IniConfig::getDefaultKey());
+	}
 	}
 
 	/**
@@ -89,8 +90,8 @@ class IniConfig extends AbstractConfig {
 	public static function getYamlFile() {
 		return static::toAbsPathFromProjectRoot(static::getValue("FILES", "yaml"));
 	}
-	public static function getOptionalKey() {
-		return static::getValue("NOT", "needed", true);
+	public static function getDefaultKey() {
+		return static::getValue("NOT", "needed", "defaultValue");
 	}
 	public static function getMissingKey() {
 		return static::getValue("NEEDED", "asdf");
