@@ -7,11 +7,62 @@ use GMO\Common\Exception\ConfigException;
  * Class AbstractConfig
  * @package GMO\Common
  * @since 1.8.0 Changed getValue's $optional param to $default
+ *              Added getBool, getFile, getDir methods
  * @since 1.2.0
  */
 abstract class AbstractConfig implements IConfig {
 
 	/**
+	 * Returns a boolean value from config.
+	 * @param string     $section
+	 * @param string     $key
+	 * @param mixed|null $default
+	 * @return bool
+	 * @throws ConfigException If key is missing and no default
+	 */
+	protected static function getBool( $section, $key, $default = null ) {
+		$value = static::getValue($section, $key, $default);
+		if (is_string($value)) {
+			//                                              booleans from ini are converted to 1|0
+			return String::equals($value, "true", false) || String::equals($value, "1");
+		} else {
+			return (bool)$value;
+		}
+	}
+
+	/**
+	 * Returns a absolute file path from config.
+	 * Relative paths are converted to absolute based on project root.
+	 * @param string     $section
+	 * @param string     $key
+	 * @param mixed|null $default
+	 * @return string
+	 * @throws ConfigException If key is missing and no default
+	 */
+	protected static function getFile( $section, $key, $default = null ) {
+		$value = static::getValue($section, $key, $default);
+		if (String::equals($value, $default)) {
+			return $value;
+		}
+		return Path::toAbsFile(static::getProjectDir(), $value);
+	}
+
+	/**
+	 * Returns a absolute directory path from config.
+	 * Relative paths are converted to absolute based on project root.
+	 * @param string     $section
+	 * @param string     $key
+	 * @param mixed|null $default
+	 * @return string
+	 * @throws ConfigException If key is missing and no default
+	 */
+	protected static function getDir( $section, $key, $default = null ) {
+		$value = static::getValue($section, $key, $default);
+		if (String::equals($value, $default)) {
+			return $value;
+		}
+		return Path::toAbsDir(static::getProjectDir(), $value);
+	}
 
 	/**
 	 * Returns config value. If default isn't specified,
@@ -79,6 +130,9 @@ abstract class AbstractConfig implements IConfig {
 				self::$config = json_decode(file_get_contents($file), true);
 			} else {
 				throw new ConfigException("Unknown config file format");
+			}
+			if (!self::$config) {
+				throw new ConfigException("Unable to parse $type file: $file");
 			}
 		}
 	}

@@ -22,6 +22,27 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 	public function test_get_default_value() {
 		$this->assertSame("defaultValue", IniConfig::getDefaultKey());
 	}
+
+	public function test_get_bool_string_true() {
+		$this->assertTrue(IniConfig::getBool("SWITCHES", "debug"));
+	}
+
+	public function test_get_bool_string_false() {
+		$this->assertFalse(IniConfig::getBool("SWITCHES", "other"));
+	}
+
+	public function test_get_bool_string_other() {
+		$this->assertFalse(IniConfig::getBool("SWITCHES", "unknown"));
+	}
+
+	public function test_get_bool() {
+		$this->assertTrue(IniConfig::getBool("SWITCHES", "live"));
+		$this->assertFalse(IniConfig::getBool("SWITCHES", "nope"));
+	}
+
+	public function test_get_bool_int() {
+		$this->assertTrue(IniConfig::getBool("SWITCHES", "live"));
+		$this->assertFalse(IniConfig::getBool("SWITCHES", "nope"));
 	}
 
 	/**
@@ -96,6 +117,11 @@ class IniConfig extends AbstractConfig {
 	public static function getMissingKey() {
 		return static::getValue("NEEDED", "asdf");
 	}
+
+	public static function getBool($section, $key, $default = null) {
+		return parent::getBool($section, $key, $default);
+	}
+
 }
 
 class NonexistentConfig extends AbstractConfig {
