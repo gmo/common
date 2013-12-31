@@ -47,14 +47,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_increment() {
 		$actual = Collection::increment($this->counts, "wins");
-		$this->assertSame(3, $actual);
-		$this->assertSame(3, $this->counts["wins"]);
+		$this->assertSame(array( "wins" => 3, "losses" => 0 ), $actual);
 	}
 
 	public function test_increment_new_key() {
 		$actual = Collection::increment($this->counts, "ties");
-		$this->assertSame(1, $actual);
-		$this->assertSame(1, $this->counts["ties"]);
+		$this->assertSame(array( "wins" => 2, "losses" => 0, "ties" => 1 ), $actual);
 	}
 
 	public function test_is_associative() {
@@ -83,7 +81,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_get_first() {
 		$actual = Collection::getFirst($this->list);
-		$this->assertSame("item0", $actual);
+		$this->assertSame("item1", $actual);
 	}
 
 	public function test_get_last() {
