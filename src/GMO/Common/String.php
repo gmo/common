@@ -61,7 +61,7 @@ class String {
 		if ($caseSensitive) {
 			return $needle === "" || strpos($haystack, $needle) === 0;
 		}
-		return static::containsInsensitive($haystack, $needle);
+		return static::startsWithInsensitive($haystack, $needle);
 	}
 
 	/**
