@@ -1,9 +1,17 @@
 <?php
-namespace GMO\Common;
+namespace {
+	if (!interface_exists('JsonSerializable')) {
+		interface JsonSerializable {
+			function jsonSerialize();
+		}
+	}
+}
 
-interface ISerializable {
-	function toArray();
-	function toJson();
-	static function fromArray($obj);
-	static function fromJson($json);
+namespace GMO\Common {
+	interface ISerializable extends \JsonSerializable {
+		function toArray();
+		function toJson();
+		static function fromArray($obj);
+		static function fromJson($json);
+	}
 }
