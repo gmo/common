@@ -53,7 +53,7 @@ abstract class AbstractSerializable implements ISerializable {
 				$params[] = $obj[$refParam->name];
 			} elseif ($paramCls->name === "DateTime") {
 				$timestamp = $obj[$refParam->name];
-				$tz = new \DateTimeZone($timestamp['timezone']);
+				$tz = $timestamp['timezone'] ? new \DateTimeZone($timestamp['timezone']) : null;
 				$params[] = new \DateTime($timestamp['date'], $tz);
 			} elseif ($paramCls->isSubclassOf('GMO\Common\ISerializable')) {
 				/** @var ISerializable $clsName */
