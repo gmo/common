@@ -18,6 +18,8 @@ abstract class AbstractSerializable implements ISerializable {
 		foreach ( $objVars as $key => $value ) {
 			if ( $value instanceof ISerializable ) {
 				$values[$key] = $value->toArray();
+			} elseif ($value instanceof \DateTime) {
+				$values[$key] = json_decode(json_encode($value), true);
 			} else {
 				$values[$key] = $value;
 			}
