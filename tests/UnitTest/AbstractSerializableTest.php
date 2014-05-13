@@ -28,6 +28,8 @@ class given_a_fully_hydrated_object extends BehaviorDrivenTestCase {
 		$this->assertEquals(21, $result["age"]);
 		/** @var \DateTime $timestamp */
 		$timestamp = $result["timestamp"];
+		$tz = $timestamp['timezone'] ? new \DateTimeZone($timestamp['timezone']) : null;
+		$timestamp = new \DateTime($timestamp['date'], $tz);
 		$this->assertEquals("2000-01-01 12:00:00", $timestamp->format("Y-m-d h:i:s"));
 
 		$address = $result["address"];
