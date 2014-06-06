@@ -2,6 +2,7 @@
 namespace UnitTest;
 
 use GMO\Common\AbstractConfig;
+use GMO\Common\Path;
 
 class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 
@@ -14,9 +15,12 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function test_get_abs_path_from_config() {
-		$projectRoot = realpath(__DIR__ . "/../..");
-		$expected = $projectRoot . "/tests/testConfig.yml";
+		$expected = Path::truePath("../testConfig.yml", __DIR__);
 		$this->assertEquals($expected, IniConfig::getYamlFile());
+	}
+
+	public function test_get_path_default_value() {
+		$this->assertEquals("nope", IniConfig::getUnknownFile());
 	}
 
 	public function test_get_default_value() {
@@ -109,7 +113,10 @@ class IniConfig extends AbstractConfig {
 		return static::getValue("AUTHORIZATION", "allow");
 	}
 	public static function getYamlFile() {
-		return static::toAbsPathFromProjectRoot(static::getValue("FILES", "yaml"));
+		return static::getPath("FILES", "yaml");
+	}
+	public static function getUnknownFile() {
+		return static::getPath("FILES", "derp", "nope");
 	}
 	public static function getDefaultKey() {
 		return static::getValue("NOT", "needed", "defaultValue");

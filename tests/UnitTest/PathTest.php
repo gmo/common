@@ -25,7 +25,8 @@ class PathTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_absolute_path_to_absolute_dir() {
 		$file = "/var/www/html/";
-		$this->assertEquals($file, Path::toAbsDir(null, $file));
+		$expected = "/var/www/html";
+		$this->assertEquals($expected, Path::toAbsDir(null, $file));
 	}
 
 	public function test_relative_dir_to_absolute_dir() {
@@ -47,5 +48,18 @@ class PathTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals("/usr/dummy.txt", Path::toAbsFile("/usr/bin/", "/../dummy.txt"));
 	}
 
+	public function test_true_path() {
+		$this->assertEquals("/herp/derp/dummy.txt", Path::truePath("dummy.txt", "/herp/derp"));
+		$this->assertEquals("herp/dummy.txt", Path::truePath("../dummy.txt", "herp/derp"));
+		$this->assertEquals("herp/dummy.txt", Path::truePath("/../dummy.txt", "herp/derp/"));
+		$this->assertEquals("dummy.txt", Path::truePath("../../dummy.txt", "herp/derp"));
+	}
+
+	/**
+	 * @expectedException \GMO\Common\Exception\PathException
+	 * @expectedExceptionMessage Cannot move up another directory
+	 */
+	public function test_true_path_exception() {
+		$this->assertEquals("dummy.txt", Path::truePath("../../dummy.txt", "herp"));
+	}
 }
- 

@@ -6,6 +6,8 @@ use GMO\Common\Exception\ConfigException;
 /**
  * Class AbstractConfig
  * @package GMO\Common
+ *
+ * @since 1.11.0 Added getPath. Deprecated getFile & getDir
  * @since 1.8.0 Changed getValue's $optional param to $default
  *              Added getBool, getFile, getDir methods
  * @since 1.2.0
@@ -31,37 +33,37 @@ abstract class AbstractConfig implements IConfig {
 	}
 
 	/**
-	 * Returns a absolute file path from config.
+	 * Returns a absolute path from config.
 	 * Relative paths are converted to absolute based on project root.
 	 * @param string     $section
 	 * @param string     $key
 	 * @param mixed|null $default
 	 * @return string
 	 * @throws ConfigException If key is missing and no default
+	 * @since 1.11.0
 	 */
-	protected static function getFile( $section, $key, $default = null ) {
+	protected static function getPath( $section, $key, $default = null ) {
 		$value = static::getValue($section, $key, $default);
 		if (String::equals($value, $default)) {
 			return $value;
 		}
-		return Path::toAbsFile(static::getProjectDir(), $value);
+		return static::toAbsPathFromProjectRoot($value);
 	}
 
 	/**
-	 * Returns a absolute directory path from config.
-	 * Relative paths are converted to absolute based on project root.
-	 * @param string     $section
-	 * @param string     $key
-	 * @param mixed|null $default
-	 * @return string
-	 * @throws ConfigException If key is missing and no default
+	 * Use {@see AbstractConfig::getPath()} instead
+	 * @deprecated
+	 */
+	protected static function getFile( $section, $key, $default = null ) {
+		return static::getPath($section, $key, $default);
+	}
+
+	/**
+	 * Use {@see AbstractConfig::getPath()} instead
+	 * @deprecated
 	 */
 	protected static function getDir( $section, $key, $default = null ) {
-		$value = static::getValue($section, $key, $default);
-		if (String::equals($value, $default)) {
-			return $value;
-		}
-		return Path::toAbsDir(static::getProjectDir(), $value);
+		return static::getPath($section, $key, $default);
 	}
 
 	/**
@@ -94,7 +96,7 @@ abstract class AbstractConfig implements IConfig {
 	 * @return string
 	 */
 	protected static function toAbsPathFromProjectRoot($path) {
-		return Path::toAbsFile(static::getProjectDir(), $path);
+		return Path::truePath($path, static::getProjectDir());
 	}
 
 	/**
@@ -105,7 +107,7 @@ abstract class AbstractConfig implements IConfig {
 		if (self::$projectDir === null) {
 			$cls = new \ReflectionClass(get_called_class());
 			$baseDir = dirname($cls->getFileName());
-			self::$projectDir = Path::toAbsDir($baseDir, static::getProjectRootDir());
+			self::$projectDir = Path::truePath(static::getProjectRootDir(), $baseDir);
 		}
 		return self::$projectDir;
 	}
@@ -119,7 +121,7 @@ abstract class AbstractConfig implements IConfig {
 		}
 
 		if (self::$config === null) {
-			$file = Path::toAbsFile(static::getProjectDir(), static::getConfigFile());
+			$file = Path::truePath(static::getConfigFile(), static::getProjectDir());
 			if (!file_exists($file)) {
 				throw new ConfigException("Config file doesn't exist");
 			}
