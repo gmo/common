@@ -80,4 +80,12 @@ abstract class AbstractSerializable implements ISerializable {
 		return $this->toArray();
 	}
 
+	public function serialize() {
+		return $this->toJson();
+	}
+
+	public function unserialize($serialized) {
+		return $this->fromJson($serialized);
+	}
+
 }

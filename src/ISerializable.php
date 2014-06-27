@@ -8,7 +8,7 @@ namespace {
 }
 
 namespace GMO\Common {
-	interface ISerializable extends \JsonSerializable {
+	interface ISerializable extends \JsonSerializable, \Serializable {
 		function toArray();
 		function toJson();
 		static function fromArray($obj);
