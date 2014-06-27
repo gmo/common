@@ -2,10 +2,13 @@
 	"name": "gmo/common",
 	"description": "A library for common code",
 	"require": {
-		"psr/log": "1.0.0"
 	},
 	"require-dev": {
+		"psr/log": "1.0.0",
 		"phpunit/phpunit": "3.7.*"
+	},
+	"suggest": {
+		"psr/log": "Provides a basic console logger for PSR-3 interface"
 	},
 	"autoload": {
 		"psr-4": {
