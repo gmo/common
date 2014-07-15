@@ -85,7 +85,10 @@ abstract class AbstractSerializable implements ISerializable {
 	}
 
 	public function unserialize($serialized) {
-		return $this->fromJson($serialized);
+		$cls = $this->fromJson($serialized);
+		$properties = get_class_vars(get_called_class());
+		foreach ($properties as $property => $value) {
+			$this->$property = $cls->$property;
+		}
 	}
-
 }
