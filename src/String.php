@@ -167,4 +167,6 @@ class String {
 		return static::endsWithInsensitive($haystack, $needle);
 	}
 	#endregion
+
+	private function __construct() { }
 }

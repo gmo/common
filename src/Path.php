@@ -76,4 +76,6 @@ class Path {
 		$path = $abs ? DIRECTORY_SEPARATOR . $path : $path;
 		return $path;
 	}
+
+	private function __construct() { }
 }

@@ -182,4 +182,5 @@ class Collection {
 		return array_pop($list);
 	}
 
+	private function __construct() { }
 }
