@@ -9,13 +9,16 @@ namespace GMO\Common;
 class Collection {
 
 	/**
-	 * Returns a key's value from array or default value if key does not exist
-	 * @param array      $collection
-	 * @param string|int $key
-	 * @param mixed|null $default
+	 * Returns a key's value from a collection or default value if key does not exist
+	 * @param array|\ArrayAccess $collection
+	 * @param string|int         $key
+	 * @param mixed|null         $default
 	 * @return mixed
 	 */
-	public static function get(array $collection, $key, $default = null) {
+	public static function get($collection, $key, $default = null) {
+		if (!is_array($collection) && !$collection instanceof \ArrayAccess) {
+			throw new \InvalidArgumentException('Collection parameter must be an array or a object implementing ArrayAccess');
+		}
 		return isset($collection[$key]) ? $collection[$key] : $default;
 	}
 
@@ -139,13 +142,35 @@ class Collection {
 	}
 
 	/**
-	 * Merges two arrays.
+	 * Merges N number of arrays. Parameters that are not arrays will be converted
 	 * @param array $array1
 	 * @param array $array2
+	 * @param null  $_
 	 * @return array
 	 */
-	public static function merge(array $array1, array $array2) {
-		return array_merge($array1, $array2);
+	public static function merge($array1, $array2, $_ = null) {
+		$args = array_map(function($arg) {
+			return is_array($arg) ? $arg : array($arg);
+		}, func_get_args());
+		return call_user_func_array('array_merge', $args);
+	}
+
+	/**
+	 * Flattens nested collections into a single collection
+	 * containing all of the values, and optionally keys
+	 * @param array|\Traversable $collection The nested collection to flatten
+	 * @param bool               $keys       Whether to use keys as index.
+	 * @return array
+	 */
+	public static function flatten($collection, $keys = true) {
+		if (is_array($collection)) {
+			$it = new \RecursiveArrayIterator($collection);
+		} elseif ($collection instanceof \Traversable) {
+			$it = $collection;
+		} else {
+			throw new \InvalidArgumentException('Collection parameter must be an array or a Traversable object');
+		}
+		return iterator_to_array(new \RecursiveIteratorIterator($it), $keys);
 	}
 
 	/**

@@ -13,6 +13,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_get_has_key() {
 		$this->assertSame("red", Collection::get($this->sut, "color1"));
+		$this->assertSame("red", Collection::get(new \ArrayObject($this->sut), "color1"));
 		$this->assertSame("item1", Collection::get($this->list, 0));
 	}
 
@@ -106,8 +107,23 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function test_merge() {
-		$actual = Collection::merge($this->sut, array("color3" => "green"));
-		$this->assertSame(array("color1" => "red", "color2" => "blue", "color3" => "green"), $actual);
+		$actual = Collection::merge($this->sut, array("color3" => "green"), array("color4" => "black"));
+		$this->assertSame(array(
+			"color1" => "red",
+			"color2" => "blue",
+			"color3" => "green",
+			"color4" => "black",
+		), $actual);
+
+		$actual = Collection::merge(array("red"), "blue");
+		$this->assertSame(array("red", "blue"), $actual);
+	}
+
+	public function test_flatten() {
+		$input = array('a', 'b', array('c', 'd'), 'e', array('f' => 'ooops'), 'g');
+		$expected = array('a', 'b', 'c', 'd', 'e', 'f' => 'ooops', 'g');
+		$actual = Collection::flatten($input);
+		$this->assertSame($expected, $actual);
 	}
 
 	public function test_pop_has_key() {
@@ -146,4 +162,3 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
 	private $list;
 	private $counts;
 }
- 
