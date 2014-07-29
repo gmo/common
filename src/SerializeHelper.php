@@ -67,7 +67,7 @@ class SerializeHelper {
 	 * @param array $obj
 	 * @throws NotSerializableException If a constructor takes an object that
 	 *                                  does not implement {@see ISerializable}
-	 * @return mixed
+	 * @return $this
 	 */
 	public static function createClassFromArray($className, $obj) {
 		$cls = new \ReflectionClass($className);

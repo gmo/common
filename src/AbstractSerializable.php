@@ -28,7 +28,7 @@ abstract class AbstractSerializable implements ISerializable {
 	 * @param array $obj
 	 * @throws NotSerializableException If a constructor takes an object that
 	 *                                  does not implement {@see ISerializable}
-	 * @return mixed
+	 * @return $this
 	 */
 	public static function fromArray($obj) {
 		return SerializeHelper::createClassFromArray(get_called_class(), $obj);
