@@ -4,6 +4,7 @@ namespace GMO\Common;
 /**
  * Class String
  * @package GMO\Common
+ * @since 1.15.0 Added remove* and className methods
  * @since 1.8.0 Added equals method
  *              Added optional caseSensitive params
  * @since 1.6.0 Added splitFirst and splitLast
@@ -128,6 +129,57 @@ class String {
 		}
 		$parts = explode($delimiter, $string);
 		return end($parts);
+	}
+
+
+	/**
+	 * Removes the first occurrence of the value from the string.
+	 *
+	 * The full string is returned if the value does not exist in the string.
+	 * @param string $string        The string to search in
+	 * @param string $value         The value to search for
+	 * @param bool   $caseSensitive Should the search be case sensitive
+	 * @return string
+	 */
+	public static function removeFirst($string, $value, $caseSensitive = true) {
+		$pos = $caseSensitive ? strpos($string, $value) : stripos($string, $value);
+		if ($pos === false) {
+			return $string;
+		}
+		return substr_replace($string, '', $pos, strlen($value));
+	}
+
+	/**
+	 * Removes the last occurrence of the value from the string.
+	 *
+	 * The full string is returned if the value does not exist in the string.
+	 * @param string $string        The string to search in
+	 * @param string $value         The value to search for
+	 * @param bool   $caseSensitive Should the search be case sensitive
+	 * @return string
+	 */
+	public static function removeLast($string, $value, $caseSensitive = true) {
+		$pos = $caseSensitive ? strrpos($string, $value) : strripos($string, $value);
+		if ($pos === false) {
+			return $string;
+		}
+		return substr_replace($string, '', $pos, strlen($value));
+	}
+
+	/**
+	 * Returns the class name without the namespace.
+	 *
+	 * If the class does not exist false is returned.
+	 * @param string|object $cls object or fully qualified class name
+	 * @return string|false
+	 */
+	public static function className($cls) {
+		if (is_string($cls) && !class_exists($cls)) {
+			return false;
+		} elseif (is_object($cls)) {
+			$cls = get_class($cls);
+		}
+		return String::splitLast($cls, "\\");
 	}
 
 	#region Deprecated functions

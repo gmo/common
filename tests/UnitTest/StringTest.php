@@ -91,4 +91,28 @@ class StringTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame("derp", String::splitLast("herp derp", " "));
 	}
 
+	public function test_remove_not_containing_value() {
+		$this->assertSame("asdf", String::removeFirst("asdf", "zxc"));
+		$this->assertSame("asdf", String::removeLast("asdf", "zxc"));
+	}
+
+	public function test_remove_first_containing_value() {
+		$this->assertSame("HelloHelloGoodbye", String::removeFirst("HelloGoodbyeHelloGoodbye", "Goodbye"));
+		$this->assertSame("HelloHelloGoodbye", String::removeFirst("HelloGOODBYEHelloGoodbye", "goodbye", false));
+	}
+
+	public function test_remove_last_containing_value() {
+		$this->assertSame("HelloGoodbyeGoodbye", String::removeLast("HelloGoodbyeHelloGoodbye", "Hello"));
+		$this->assertSame("HelloGoodbyeGoodbye", String::removeLast("HelloGoodbyeHELLOGoodbye", "hello", false));
+	}
+
+	public function test_class_name() {
+		$this->assertSame('StringTest', String::className($this));
+		$this->assertSame('StringTest', String::className('UnitTest\\StringTest'));
+	}
+
+	public function test_class_name_does_not_exist() {
+		$this->assertFalse(String::className('ClassDoesNotExist'));
+	}
+
 }
