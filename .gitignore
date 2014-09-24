@@ -2,3 +2,4 @@ vendor
 workspace.xml
 atlassian-ide-plugin.xml
 tap-files/
+.idea/dictionaries
