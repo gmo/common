@@ -346,6 +346,9 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	 */
 	public function filter($p)
 	{
+		if ($p === null) {
+			return new static(array_filter($this->elements));
+		}
 		return new static(array_filter($this->elements, $p));
 	}
 
