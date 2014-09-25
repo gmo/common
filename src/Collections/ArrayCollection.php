@@ -386,7 +386,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	 */
 	public function __toString()
 	{
-		return __CLASS__ . '@' . spl_object_hash($this);
+		return __CLASS__ . '@' . md5(spl_object_hash($this));
 	}
 
 	/**
@@ -402,7 +402,26 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	 */
 	public function slice($offset, $length = null)
 	{
-		return array_slice($this->elements, $offset, $length, true);
+		return new static(array_slice($this->elements, $offset, $length, true));
+	}
+
+	/**
+	 * Copies the elements in this collection to a new collection.
+	 *
+	 * @return $this
+	 */
+	public function copy()
+	{
+		return new static($this->elements);
+	}
+
+	/**
+	 * Copies the elements in this collection to a new collection.
+	 *
+	 * @return $this
+	 */
+	public function __clone() {
+		return $this->copy();
 	}
 
 	//region Serializable Methods

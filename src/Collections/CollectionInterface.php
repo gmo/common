@@ -258,7 +258,7 @@ interface CollectionInterface extends Countable, IteratorAggregate, ArrayAccess
 	 * @param int      $offset The offset to start from.
 	 * @param int|null $length The maximum number of elements to return, or null for no limit.
 	 *
-	 * @return array
+	 * @return $this
 	 */
 	public function slice($offset, $length = null);
 }
