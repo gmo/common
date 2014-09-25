@@ -25,6 +25,12 @@ use GMO\Common\ISerializable;
 /**
  * An ArrayCollection is a Collection implementation that wraps a regular PHP array.
  *
+ * GMO Modifications:
+ *  Implementing ISerializable
+ *  Modified public functions to take a callable rather than {@see \Closure}
+ * 	Added default parameter to get()
+ *  Added merge()
+ *
  * @since  2.0
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Jonathan Wage <jonwage@gmail.com>
@@ -295,6 +301,18 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		$args = func_get_args();
 		array_unshift($args, $this->elements);
 		call_user_func_array('array_replace', $args);
+	}
+
+	/**
+	 * Merges elements from array(s) into this collection
+	 * @param array $values The array from which elements will be extracted.
+	 * @param array $_ Optional N-number of arrays
+	 */
+	public function merge(array $values, array $_ = null)
+	{
+		$args = func_get_args();
+		array_unshift($args, $this->elements);
+		call_user_func_array('array_merge', $args);
 	}
 
 	/**
