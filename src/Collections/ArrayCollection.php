@@ -240,7 +240,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		if (isset($this->elements[$key])) {
 			return $this->elements[$key];
 		}
-		return null;
+		return $default;
 	}
 
 	/**
