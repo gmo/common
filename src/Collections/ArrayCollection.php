@@ -62,58 +62,36 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return new static($elements);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function toArray()
 	{
 		return $this->elements;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function first()
 	{
 		return reset($this->elements);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function last()
 	{
 		return end($this->elements);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function key()
 	{
 		return key($this->elements);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function next()
 	{
 		return next($this->elements);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function current()
 	{
 		return current($this->elements);
 	}
 
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public function remove($key)
 	{
 		if (isset($this->elements[$key]) || array_key_exists($key, $this->elements)) {
@@ -126,9 +104,6 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function removeElement($element)
 	{
 		$key = array_search($element, $this->elements, true);
@@ -152,68 +127,16 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		$this->removeElement($this->last());
 	}
 
-	/**
-	 * Required by interface ArrayAccess.
-	 *
-	 * {@inheritDoc}
-	 */
-	public function offsetExists($offset)
-	{
-		return $this->containsKey($offset);
-	}
-
-	/**
-	 * Required by interface ArrayAccess.
-	 *
-	 * {@inheritDoc}
-	 */
-	public function offsetGet($offset)
-	{
-		return $this->get($offset);
-	}
-
-	/**
-	 * Required by interface ArrayAccess.
-	 *
-	 * {@inheritDoc}
-	 */
-	public function offsetSet($offset, $value)
-	{
-		if ( ! isset($offset)) {
-			return $this->add($value);
-		}
-		return $this->set($offset, $value);
-	}
-
-	/**
-	 * Required by interface ArrayAccess.
-	 *
-	 * {@inheritDoc}
-	 */
-	public function offsetUnset($offset)
-	{
-		return $this->remove($offset);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public function containsKey($key)
 	{
 		return isset($this->elements[$key]) || array_key_exists($key, $this->elements);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function contains($element)
 	{
 		return in_array($element, $this->elements, true);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function exists($p)
 	{
 		foreach ($this->elements as $key => $element) {
@@ -224,17 +147,11 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return false;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function indexOf($element)
 	{
 		return array_search($element, $this->elements, true);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function get($key, $default = null)
 	{
 		if (isset($this->elements[$key])) {
@@ -243,41 +160,26 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return $default;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function getKeys()
 	{
 		return array_keys($this->elements);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function getValues()
 	{
 		return array_values($this->elements);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function count()
 	{
 		return count($this->elements);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function set($key, $value)
 	{
 		$this->elements[$key] = $value;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function add($value)
 	{
 		$this->elements[] = $value;
@@ -302,35 +204,16 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		$this->elements = call_user_func_array('array_replace', $args);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function isEmpty()
 	{
 		return ! $this->elements;
 	}
 
-	/**
-	 * Required by interface IteratorAggregate.
-	 *
-	 * {@inheritDoc}
-	 */
-	public function getIterator()
-	{
-		return new ArrayIterator($this->elements);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public function map($func)
 	{
 		return new static(array_map($func, $this->elements));
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function filter($p)
 	{
 		if ($p === null) {
@@ -339,9 +222,6 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return new static(array_filter($this->elements, $p));
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function forAll($p)
 	{
 		foreach ($this->elements as $key => $element) {
@@ -353,9 +233,6 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return true;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function partition($p)
 	{
 		$coll1 = $coll2 = array();
@@ -369,27 +246,11 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return array(new static($coll1), new static($coll2));
 	}
 
-	/**
-	 * Returns a string representation of this object.
-	 *
-	 * @return string
-	 */
-	public function __toString()
-	{
-		return __CLASS__ . '@' . md5(spl_object_hash($this));
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public function clear()
 	{
 		$this->elements = array();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function slice($offset, $length = null)
 	{
 		return new static(array_slice($this->elements, $offset, $length, true));
@@ -414,64 +275,80 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return $this->copy();
 	}
 
+	/**
+	 * Returns a string representation of this object.
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return __CLASS__ . '@' . md5(spl_object_hash($this));
+	}
+
+	//region IteratorAggregate Methods
+
+	public function getIterator()
+	{
+		return new ArrayIterator($this->elements);
+	}
+
+	//endregion
+
+	//region ArrayAccess methods
+
+	public function offsetExists($offset)
+	{
+		return $this->containsKey($offset);
+	}
+
+	public function offsetGet($offset)
+	{
+		return $this->get($offset);
+	}
+
+	public function offsetSet($offset, $value)
+	{
+		if ( ! isset($offset)) {
+			$this->add($value);
+		}
+		$this->set($offset, $value);
+	}
+
+	public function offsetUnset($offset)
+	{
+		return $this->remove($offset);
+	}
+
+	//endregion
+
 	//region Serializable Methods
 
-	/**
-	 * Required by interface ISerializable.
-	 *
-	 * {@inheritdoc}
-	 */
 	public static function fromArray($obj)
 	{
 		return static::create($obj);
 	}
 
-	/**
-	 * Required by interface ISerializable.
-	 *
-	 * {@inheritdoc}
-	 */
 	public function toJson()
 	{
 		return json_encode($this->toArray(), true);
 	}
 
-	/**
-	 * Required by interface ISerializable.
-	 *
-	 * {@inheritdoc}
-	 */
 	public static function fromJson($json)
 	{
 		return static::fromArray(json_decode($json, true));
 	}
 
-	/**
-	 * Required by interface ISerializable.
-	 *
-	 * {@inheritdoc}
-	 */
 	public function serialize()
 	{
 		return $this->toJson();
 	}
 
-	/**
-	 * Required by interface ISerializable.
-	 *
-	 * {@inheritdoc}
-	 */
 	public function unserialize($serialized)
 	{
 		$cls = $this->fromJson($serialized);
 		$this->elements = $cls->toArray();
 	}
 
-	/**
-	 * Required by interface ISerializable.
-	 *
-	 * {@inheritdoc}
-	 */
 	public function jsonSerialize()
 	{
 		return $this->toArray();

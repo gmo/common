@@ -190,7 +190,7 @@ interface CollectionInterface extends Countable, IteratorAggregate, ArrayAccess
 	/**
 	 * Tests for the existence of an element that satisfies the given predicate.
 	 *
-	 * @param callable $p The predicate.
+	 * @param callable $p The predicate. Function is passed key, value.
 	 *
 	 * @return boolean TRUE if the predicate is TRUE for at least one element, FALSE otherwise.
 	 */
@@ -199,8 +199,9 @@ interface CollectionInterface extends Countable, IteratorAggregate, ArrayAccess
 	/**
 	 * Returns all the elements of this collection that satisfy the predicate p.
 	 * The order of the elements is preserved.
+	 * If no predicate, all elements that equal false will be removed.
 	 *
-	 * @param callable $p The predicate used for filtering.
+	 * @param callable|null $p The predicate used for filtering. Function is passed value.
 	 *
 	 * @return $this A collection with the results of the filter operation.
 	 */
@@ -209,7 +210,7 @@ interface CollectionInterface extends Countable, IteratorAggregate, ArrayAccess
 	/**
 	 * Tests whether the given predicate p holds for all elements of this collection.
 	 *
-	 * @param callable $p The predicate.
+	 * @param callable $p The predicate. Function is passed key, value.
 	 *
 	 * @return boolean TRUE, if the predicate yields TRUE for all elements, FALSE otherwise.
 	 */
@@ -219,7 +220,7 @@ interface CollectionInterface extends Countable, IteratorAggregate, ArrayAccess
 	 * Applies the given public function to each element in the collection and returns
 	 * a new collection with the elements returned by the public function.
 	 *
-	 * @param callable $func
+	 * @param callable $func Function is passed value.
 	 *
 	 * @return $this
 	 */
@@ -229,7 +230,7 @@ interface CollectionInterface extends Countable, IteratorAggregate, ArrayAccess
 	 * Partitions this collection in two collections according to a predicate.
 	 * Keys are preserved in the resulting collections.
 	 *
-	 * @param callable $p The predicate on which to partition.
+	 * @param callable $p The predicate on which to partition. Function is passed key, value.
 	 *
 	 * @return array An array with two elements. The first element contains the collection
 	 *               of elements where the predicate returned TRUE, the second element
