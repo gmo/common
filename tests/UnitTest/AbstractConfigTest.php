@@ -2,6 +2,7 @@
 namespace UnitTest;
 
 use GMO\Common\AbstractConfig;
+use GMO\Common\Collections\ArrayCollection;
 use GMO\Common\Path;
 
 class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
@@ -47,6 +48,44 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 	public function test_get_bool_int() {
 		$this->assertTrue(IniConfig::getBool("SWITCHES", "live"));
 		$this->assertFalse(IniConfig::getBool("SWITCHES", "nope"));
+	}
+
+	public function test_get_list() {
+		$list = IniConfig::getList("LISTS", "life");
+		$this->assertTrue($list instanceof ArrayCollection);
+		$this->assertCount(4, $list);
+	}
+
+	public function test_get_list_default_value_array() {
+		$default = array('hi');
+		$list = IniConfig::getList("LISTS", "adsf", $default);
+		$this->assertTrue($list instanceof ArrayCollection);
+		$this->assertCount(1, $list);
+		$this->assertSame('hi', $list->first());
+	}
+
+	public function test_get_list_default_value_array_collection() {
+		$default = new ArrayCollection(array('hi'));
+		$list = IniConfig::getList("LISTS", "adsf", $default);
+		$this->assertTrue($list instanceof ArrayCollection);
+		$this->assertCount(1, $list);
+		$this->assertSame('hi', $list->first());
+	}
+
+	public function test_get_list_default_value_traversable() {
+		$default = new \ArrayObject(array('hi'));
+		$list = IniConfig::getList("LISTS", "adsf", $default);
+		$this->assertTrue($list instanceof ArrayCollection);
+		$this->assertCount(1, $list);
+		$this->assertSame('hi', $list->first());
+	}
+
+	/**
+	 * @expectedException \GMO\Common\Exception\ConfigException
+	 * @expectedExceptionMessage Config file key: "listssss" is missing!
+	 */
+	public function test_get_nonexistent_list() {
+		IniConfig::getList("LISTS", "listssss");
 	}
 
 	/**
@@ -123,6 +162,10 @@ class IniConfig extends AbstractConfig {
 	}
 	public static function getMissingKey() {
 		return static::getValue("NEEDED", "asdf");
+	}
+
+	public static function getList($section, $key, $default = null) {
+		return parent::getList($section, $key, $default);
 	}
 
 	public static function getBool($section, $key, $default = null) {

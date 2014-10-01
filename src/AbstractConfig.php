@@ -1,6 +1,7 @@
 <?php
 namespace GMO\Common;
 
+use GMO\Common\Collections\ArrayCollection;
 use GMO\Common\Exception\ConfigException;
 
 /**
@@ -13,6 +14,27 @@ use GMO\Common\Exception\ConfigException;
  * @since 1.2.0
  */
 abstract class AbstractConfig implements IConfig {
+
+	/**
+	 * Returns an ArrayCollection from config.
+	 * @param string     $section
+	 * @param string     $key
+	 * @param array|\Traversable|null $default
+	 * @return ArrayCollection
+	 * @throws ConfigException If key is missing and no default, or the value isn't a list
+	 */
+	protected static function getList( $section, $key, $default = null ) {
+		$value = static::getValue($section, $key, $default);
+		if ($value instanceof ArrayCollection) {
+			return $value;
+		}
+		if ($value instanceof \Traversable) {
+			$value = iterator_to_array($value);
+		} elseif (!is_array($value)) {
+			throw new ConfigException('Value in config is not a list');
+		}
+		return new ArrayCollection($value);
+	}
 
 	/**
 	 * Returns a boolean value from config.
