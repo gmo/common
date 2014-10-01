@@ -43,21 +43,24 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	/**
 	 * Initializes a new ArrayCollection.
 	 *
-	 * @param array $elements
+	 * @param CollectionInterface|array $elements
 	 */
-	public function __construct(array $elements = array())
+	public function __construct($elements = array())
 	{
+		if ($elements instanceof CollectionInterface) {
+			$elements = $elements->toArray();
+		}
 		$this->elements = $elements;
 	}
 
 	/**
 	 * Initializes a new ArrayCollection.
 	 *
-	 * @param array $elements
+	 * @param CollectionInterface|array $elements
 	 *
 	 * @return $this
 	 */
-	public static function create(array $elements = array())
+	public static function create($elements = array())
 	{
 		return new static($elements);
 	}
@@ -195,13 +198,15 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	/**
 	 * Replaces elements in this collection from array(s)
 	 * @param array $values The array from which elements will be extracted.
-	 * @param array $_ Optional N-number of arrays
+	 * @param array $_      Optional N-number of arrays
+	 * @return $this
 	 */
 	public function replace(array $values, array $_ = null)
 	{
 		$args = func_get_args();
 		array_unshift($args, $this->elements);
 		$this->elements = call_user_func_array('array_replace', $args);
+		return $this;
 	}
 
 	public function isEmpty()
