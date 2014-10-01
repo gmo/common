@@ -216,15 +216,15 @@ class ArrayCollection implements CollectionInterface, ISerializable
 
 	public function map($func)
 	{
-		return new static(array_map($func, $this->elements));
+		return static::create(array_map($func, $this->elements));
 	}
 
 	public function filter($p)
 	{
 		if ($p === null) {
-			return new static(array_filter($this->elements));
+			return static::create(array_filter($this->elements));
 		}
-		return new static(array_filter($this->elements, $p));
+		return static::create(array_filter($this->elements, $p));
 	}
 
 	public function forAll($p)
@@ -258,7 +258,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 
 	public function slice($offset, $length = null)
 	{
-		return new static(array_slice($this->elements, $offset, $length, true));
+		return static::create(array_slice($this->elements, $offset, $length, true));
 	}
 
 	/**
