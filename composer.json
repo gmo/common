@@ -5,15 +5,22 @@
 	},
 	"require-dev": {
 		"psr/log": "1.0.0",
+		"monolog/monolog": "~1.6",
 		"phpunit/phpunit": "3.7.*"
 	},
 	"suggest": {
-		"psr/log": "Provides a basic console logger for PSR-3 interface"
+		"psr/log": "Provides a basic console logger for PSR-3 interface",
+		"monolog/monolog": "Provides serializable formatter"
 	},
 	"autoload": {
 		"psr-4": {
 			"GMO\\Common\\": "src/",
 			"GMO\\TestHelper\\": "TestHelper/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"": "tests/"
 		}
 	}
 }

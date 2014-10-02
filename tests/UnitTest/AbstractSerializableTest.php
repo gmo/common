@@ -2,289 +2,152 @@
 namespace UnitTest;
 
 use GMO\Common\AbstractSerializable;
-use GMO\TestHelper\BehaviorDrivenTestCase;
 
-require_once __DIR__ . "/../tester_autoload.php";
+class SerializableTest extends \PHPUnit_Framework_TestCase {
 
-# region given_a_fully_hydrated_object
+	public function testToArray() {
+		$contact = $this->getContact();
 
-class given_a_fully_hydrated_object extends BehaviorDrivenTestCase {
+		$result = $contact->toArray();
 
-	protected static function given() {
-		$address = new Address("123 Testing Way", "Unit Testing Ville", "12345");
-		self::$sut = new Contact("John", "J", "Doe", $address, 21, new \DateTime('2000-01-01 12:00:00'));
-	}
-	protected static function when() {
-	}
-
-	public function test_toArray_contains_all_the_properties_and_values() {
-
-		$result = self::$sut->toArray();
-
-		$this->assertEquals('UnitTest\Contact', $result["class"]);
-		$this->assertEquals("John", $result["firstName"]);
-		$this->assertEquals("J", $result["middleName"]);
-		$this->assertEquals("Doe", $result["lastName"]);
-		$this->assertEquals(21, $result["age"]);
-		/** @var \DateTime $timestamp */
-		$timestamp = $result["timestamp"];
-		$tz = $timestamp['timezone'] ? new \DateTimeZone($timestamp['timezone']) : null;
-		$timestamp = new \DateTime($timestamp['date'], $tz);
-		$this->assertEquals("2000-01-01 12:00:00", $timestamp->format("Y-m-d h:i:s"));
+		$this->assertSame('UnitTest\Contact', $result['class']);
+		$this->assertSame('John', $result['firstName']);
+		$this->assertSame('J', $result['middleName']);
+		$this->assertSame('Doe', $result['lastName']);
+		$this->assertSame(21, $result['age']);
+		$timestamp = $result['timestamp'];
+		$this->assertSame('GMO\Common\DateTime', $timestamp['class']);
+		$this->assertSame('2009-10-11 12:13:14.000000', $timestamp['date']);
 
 		$address = $result["address"];
-		$this->assertEquals("123 Testing Way", $address["street"]);
-		$this->assertEquals("Unit Testing Ville", $address["city"]);
-		$this->assertEquals("12345", $address["zip"]);
+		$this->assertSame('UnitTest\Address', $address['class']);
+		$this->assertSame("123 Testing Way", $address["street"]);
+		$this->assertSame("Unit Testing Ville", $address["city"]);
+		$this->assertSame("12345", $address["zip"]);
 	}
 
-	public function test_toJson() {
+	public function testToJson() {
+		$contact = $this->getContact();
 
 		$this->assertEquals(
 			'{"class":"UnitTest\\\\Contact","firstName":"John","middleName":"J","lastName":"Doe","address":{'
 			.'"class":"UnitTest\\\\Address","street":"123 Testing Way","city":"Unit Testing Ville","zip":"12345"},'
-			.'"age":21,"timestamp":{"date":"2000-01-01 12:00:00","timezone_type":3,"timezone":"America\/Chicago"}}',
-		    self::$sut->toJson());
+			.'"age":21,"timestamp":{"class":"GMO\\\\Common\\\\DateTime","date":"2009-10-11 12:13:14.000000","timezone_type":3,"timezone":"America\/Chicago"}}',
+			$contact->toJson()
+		);
 	}
 
-	/** @var Contact */
-	private static $sut;
-}
+	public function testToArrayOptionalValuesAreDefaulted() {
+		$contact = new Contact('John', 'J', 'Doe', $this->getAddress());
 
-# endregion
+		$result = $contact->toArray();
 
-# region given_a_fully_hydrated_object_with_missing_optional_value
-
-class given_a_fully_hydrated_object_with_missing_optional_value extends BehaviorDrivenTestCase {
-
-	protected static function given() {
-		$address = new Address("123 Testing Way", "Unit Testing Ville", "12345");
-		self::$sut = new Contact("John", "J", "Doe", $address);
-	}
-	protected static function when() {
-		self::$result = self::$sut->toArray();
+		$this->assertSame(0, $result['age']);
+		$this->assertNull($result['timestamp']);
 	}
 
-	public function test_toArray_returns_the_optional_value_set_to_the_default_value() {
+	public function testFromArray() {
+		$contact = Contact::fromArray($this->getContactArray());
 
-		$this->assertEquals(0, self::$result["age"]);
-		$this->assertEquals(null, self::$result["timestamp"]);
-	}
-	public function test_toJson() {
+		$this->assertSame('John', $contact->getFirstName());
+		$this->assertSame('J', $contact->getMiddleName());
+		$this->assertSame('Doe', $contact->getLastName());
+		$this->assertSame(21, $contact->getAge());
 
-		$this->assertEquals(
-			'{"class":"UnitTest\\\\Contact","firstName":"John","middleName":"J","lastName":"Doe","address":{'
-			.'"class":"UnitTest\\\\Address","street":"123 Testing Way","city":"Unit Testing Ville","zip":"12345"},'
-			.'"age":0,"timestamp":null}',
-            self::$sut->toJson());
-	}
+		$this->assertSame('2009-10-11 12:13:14', $contact->getTimestamp()->format('Y-m-d h:i:s'));
 
-	/** @var Contact */
-	private static $sut;
-	private static $result = array();
-}
-
-# endregion
-
-# region given_an_array_containing_all_the_object_properties
-
-class given_an_array_containing_all_the_object_properties extends BehaviorDrivenTestCase {
-
-	protected static function given() {
-
-		$addressArr = array();
-		$addressArr["street"] = "123 Testing Way";
-		$addressArr["city"] = "Unit Testing Ville";
-		$addressArr["zip"] = "12345";
-
-		$timestamp = array();
-		$timestamp["date"] = "2009-10-11 12:13:14";
-		$timestamp["timezone"] = "America/Chicago";
-
-		$contactArr = array();
-		$contactArr["firstName"] = "John";
-		$contactArr["middleName"] = "J";
-		$contactArr["lastName"] = "Doe";
-		$contactArr["age"] = 21;
-		$contactArr["timestamp"] = $timestamp;
-		$contactArr["address"] = $addressArr;
-
-		self::$data = $contactArr;
-	}
-	protected static function when() {
-		self::$sut = Contact::fromArray(self::$data);
+		$this->assertSame('123 Testing Way', $contact->getAddress()->getStreet());
+		$this->assertSame('Unit Testing Ville', $contact->getAddress()->getCity());
+		$this->assertSame('12345', $contact->getAddress()->getZip());
 	}
 
-	public function test_fromArray_returns_a_fully_hydrated_object() {
+	public function testFromArrayOptionalValuesAreDefaulted() {
+		$contactArr = $this->getContactArray();
+		unset($contactArr['age']);
+		$contact = Contact::fromArray($contactArr);
 
-		$this->assertEquals("John", self::$sut->getFirstName());
-		$this->assertEquals("J", self::$sut->getMiddleName());
-		$this->assertEquals("Doe", self::$sut->getLastName());
-		$this->assertEquals("21", self::$sut->getAge());
-		$this->assertEquals("2009-10-11 12:13:14", self::$sut->getTimestamp()->format("Y-m-d h:i:s"));
+		$this->assertSame('John', $contact->getFirstName());
+		$this->assertSame('J', $contact->getMiddleName());
+		$this->assertSame('Doe', $contact->getLastName());
+		$this->assertSame(0, $contact->getAge());
 
-		$address = self::$sut->getAddress();
+		$this->assertSame('2009-10-11 12:13:14', $contact->getTimestamp()->format('Y-m-d h:i:s'));
 
-		$this->assertEquals("123 Testing Way", $address->getStreet());
-		$this->assertEquals("Unit Testing Ville", $address->getCity());
-		$this->assertEquals("12345", $address->getZip());
+		$this->assertSame('123 Testing Way', $contact->getAddress()->getStreet());
+		$this->assertSame('Unit Testing Ville', $contact->getAddress()->getCity());
+		$this->assertSame('12345', $contact->getAddress()->getZip());
 	}
 
-	/** @var Contact */
-	private static $sut;
-	private static $data = array();
-}
+	public function testFromArrayMissingRequiredValuesAreNull() {
+		$contactArr = $this->getContactArray();
+		unset($contactArr['lastName']);
+		$contact = Contact::fromArray($contactArr);
 
-# endregion
+		$this->assertSame('John', $contact->getFirstName());
+		$this->assertSame('J', $contact->getMiddleName());
+		$this->assertNull($contact->getLastName());
+		$this->assertSame(21, $contact->getAge());
 
-# region given_an_array_that_is_missing_an_optional_property
+		$this->assertSame('2009-10-11 12:13:14', $contact->getTimestamp()->format('Y-m-d h:i:s'));
 
-class given_an_array_that_is_missing_an_optional_property extends BehaviorDrivenTestCase {
-
-	protected static function given() {
-
-		$addressArr = array();
-		$addressArr["street"] = "123 Testing Way";
-		$addressArr["city"] = "Unit Testing Ville";
-		$addressArr["zip"] = "12345";
-
-		$contactArr = array();
-		$contactArr["firstName"] = "John";
-		$contactArr["middleName"] = "J";
-		$contactArr["lastName"] = "Doe";
-		// Removed the optional property age
-		$contactArr["address"] = $addressArr;
-
-		self::$data = $contactArr;
-	}
-	protected static function when() {
-		self::$sut = Contact::fromArray(self::$data);
+		$this->assertSame('123 Testing Way', $contact->getAddress()->getStreet());
+		$this->assertSame('Unit Testing Ville', $contact->getAddress()->getCity());
+		$this->assertSame('12345', $contact->getAddress()->getZip());
 	}
 
-	public function test_fromArray_returns_a_fully_hydrated_object_with_the_optional_property_set_to_default_value() {
+	public function testFromJson() {
+		$json = '{"firstName":"John","middleName":"J","lastName":"Doe","address":{"street":"123 Testing Way", "city":"Unit Testing Ville","zip":"12345"},"age":21,"timestamp":{"date":"2009-10-11 12:13:14.000000", "timezone_type":3,"timezone":"America\/Chicago"}}';
+		$contact = Contact::fromJson($json);
 
-		$this->assertEquals("John", self::$sut->getFirstName());
-		$this->assertEquals("J", self::$sut->getMiddleName());
-		$this->assertEquals("Doe", self::$sut->getLastName());
-		// Age is now set to the default value 0
-		$this->assertEquals(0, self::$sut->getAge());
+		$this->assertSame('John', $contact->getFirstName());
+		$this->assertSame('J', $contact->getMiddleName());
+		$this->assertSame('Doe', $contact->getLastName());
+		$this->assertSame(21, $contact->getAge());
 
-		$address = self::$sut->getAddress();
+		$this->assertSame('2009-10-11 12:13:14', $contact->getTimestamp()->format('Y-m-d h:i:s'));
 
-		$this->assertEquals("123 Testing Way", $address->getStreet());
-		$this->assertEquals("Unit Testing Ville", $address->getCity());
-		$this->assertEquals("12345", $address->getZip());
+		$this->assertSame('123 Testing Way', $contact->getAddress()->getStreet());
+		$this->assertSame('Unit Testing Ville', $contact->getAddress()->getCity());
+		$this->assertSame('12345', $contact->getAddress()->getZip());
 	}
-
-	/** @var Contact */
-	private static $sut;
-	private static $data = array();
-}
-
-# endregion
-
-# region given_an_array_that_is_missing_a_required_property
-
-class given_an_array_that_is_missing_an_expected_property extends BehaviorDrivenTestCase {
-
-	protected static function given() {
-
-		$addressArr = array();
-		$addressArr["street"] = "123 Testing Way";
-		$addressArr["city"] = "Unit Testing Ville";
-		$addressArr["zip"] = "12345";
-
-		$contactArr = array();
-		$contactArr["firstName"] = "John";
-		$contactArr["middleName"] = "J";
-		// Removed expected property lastName
-		$contactArr["age"] = "21";
-		$contactArr["address"] = $addressArr;
-
-		self::$data = $contactArr;
-	}
-	protected static function when() {
-		self::$sut = Contact::fromArray(self::$data);
-	}
-
-	public function test_fromArray_returns_a_fully_hydrated_object_with_the_expected_property_set_to_null() {
-
-		$this->assertEquals("John", self::$sut->getFirstName());
-		$this->assertEquals("J", self::$sut->getMiddleName());
-		// Since lastName is missing the value will be set to null
-		$this->assertEquals(null, self::$sut->getLastName());
-		$this->assertEquals(21, self::$sut->getAge());
-
-		$address = self::$sut->getAddress();
-
-		$this->assertEquals("123 Testing Way", $address->getStreet());
-		$this->assertEquals("Unit Testing Ville", $address->getCity());
-		$this->assertEquals("12345", $address->getZip());
-	}
-
-	/** @var Contact */
-	private static $sut;
-	private static $data = array();
-}
-
-# endregion
-
-# region given_a_json_that_contains_all_the_values
-
-class given_a_json_that_contains_all_the_values extends BehaviorDrivenTestCase {
-
-	protected static function given() {
-		self::$json = '{"firstName":"John","middleName":"J","lastName":"Doe","address":{"street":"123 Testing Way", "city":"Unit Testing Ville","zip":"12345"},"age":21,"timestamp":{"date":"2009-10-11 12:13:14", "timezone_type":3,"timezone":"America\/Chicago"}}';
-	}
-	protected static function when() {
-	}
-
-	public function test_fromJson() {
-
-		$contact = Contact::fromJson(self::$json);
-
-		$this->assertEquals("John", $contact->getFirstName());
-		$this->assertEquals("J", $contact->getMiddleName());
-		$this->assertEquals("Doe", $contact->getLastName());
-		$this->assertEquals("21", $contact->getAge());
-		$this->assertEquals("2009-10-11 12:13:14", $contact->getTimestamp()->format("Y-m-d h:i:s"));
-
-		$address = $contact->getAddress();
-
-		$this->assertEquals("123 Testing Way", $address->getStreet());
-		$this->assertEquals("Unit Testing Ville", $address->getCity());
-		$this->assertEquals("12345", $address->getZip());
-	}
-
-	private static $json;
-}
-
-# endregion
-
-# region given_a_json_that_contains_all_the_values
-
-class given_a_class_not_implementing_ISerializable extends BehaviorDrivenTestCase {
-
-	protected static function given() {
-		$derp = new Derp(new Herp());
-		static::$json = $derp->toJson();
-	}
-	protected static function when() { }
 
 	/**
 	 * @expectedException \GMO\Common\Exception\NotSerializableException
 	 * @expectedExceptionMessage UnitTest\Herp does not implement GMO\Common\ISerializable
 	 */
-	public function test_exception_thrown() {
-		Derp::fromJson(static::$json);
+	public function testNotSerializable() {
+		$derp = new Derp(new Herp());
+		Derp::fromJson($derp->toJson());
 	}
 
-	private static $json;
+	private function getContact() {
+		return new Contact('John', 'J', 'Doe', $this->getAddress(), 21, new \DateTime('2009-10-11 12:13:14'));
+	}
+
+	private function getAddress() {
+		return new Address('123 Testing Way', 'Unit Testing Ville', '12345');
+	}
+
+	private function getContactArray() {
+		return array(
+			'firstName'  => 'John',
+			'middleName' => 'J',
+			'lastName'   => 'Doe',
+			'age'        => 21,
+			'timestamp'  => array(
+				'date'     => '2009-10-11 12:13:14',
+				'timezone' => 'America/Chicago',
+			),
+			'address'    => array(
+				'street' => '123 Testing Way',
+				'city'   => 'Unit Testing Ville',
+				'zip'    => '12345',
+			),
+		);
+	}
+
+
 }
-
-# endregion
-
-# region Helper Classes
 
 class Contact extends AbstractSerializable {
 
@@ -333,7 +196,6 @@ class Contact extends AbstractSerializable {
 	protected $timestamp;
 }
 
-
 class Address extends AbstractSerializable {
 
 	public function getStreet() {
@@ -367,7 +229,3 @@ class Derp extends AbstractSerializable {
 	}
 	protected $herp;
 }
-
-# endregion
-
-class EOF {}

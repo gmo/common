@@ -35,7 +35,7 @@ class SerializeHelper {
 			if ($value instanceof ISerializable) {
 				$values[$key] = $value->toArray();
 			} elseif ($value instanceof \DateTime) {
-				$values[$key] = json_decode(json_encode($value), true);
+				$values[$key] = DateTime::castFromBuiltin($value)->toArray();
 			} else {
 				$values[$key] = $value;
 			}
@@ -83,8 +83,7 @@ class SerializeHelper {
 				$params[] = $obj[$refParam->name];
 			} elseif ($paramCls->name === "DateTime") {
 				$timestamp = $obj[$refParam->name];
-				$tz = $timestamp['timezone'] ? new \DateTimeZone($timestamp['timezone']) : null;
-				$params[] = new \DateTime($timestamp['date'], $tz);
+				$params[] = DateTime::fromArray($timestamp);
 			} elseif ($paramCls->isSubclassOf('GMO\Common\ISerializable')) {
 				/** @var ISerializable $clsName */
 				$clsName = $paramCls->name;

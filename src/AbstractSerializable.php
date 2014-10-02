@@ -38,6 +38,10 @@ abstract class AbstractSerializable implements ISerializable {
 		return json_encode( $this->toArray() );
 	}
 
+	/**
+	 * @param $json
+	 * @return $this
+	 */
 	public static function fromJson($json) {
 		return static::fromArray(json_decode( $json, true ));
 	}
