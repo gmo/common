@@ -1,8 +1,8 @@
 <?php
 namespace UnitTest;
 
-use GMO\Common\AbstractConfig;
 use GMO\Common\Collections\ArrayCollection;
+use GMO\Common\Config\AbstractConfig;
 use GMO\Common\Path;
 
 class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
@@ -13,6 +13,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_get_ini_value() {
 		$this->assertEquals(1, IniConfig::getAllowedAuthorization());
+		$this->assertSame("dev", IniConfig::getValue(null, 'env'));
 	}
 
 	public function test_get_abs_path_from_config() {
@@ -26,6 +27,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_get_default_value() {
 		$this->assertSame("defaultValue", IniConfig::getDefaultKey());
+		$this->assertSame("defaultValue", IniConfig::getValue(null, "needed", "defaultValue"));
 	}
 
 	public function test_get_bool_string_true() {
@@ -90,7 +92,6 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @expectedException \GMO\Common\Exception\ConfigException
-	 * @expectedExceptionMessage Config file key: "asdf" is missing!
 	 */
 	public function test_missing_key() {
 		IniConfig::getMissingKey();
@@ -117,36 +118,18 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 #region Test Config Classes
 class JsonConfig extends AbstractConfig {
 
-	/**
-	 * Absolute directory path to project root or relative this directory
-	 * @return string
-	 */
-	public static function getProjectRootDir() { return "../.."; }
-	/**
-	 * Config ini/json absolute file path or relative to project root
-	 * @return string
-	 */
-	public static function getConfigFile() { return "package.json"; }
+	public static function setProjectDir() { return "../.."; }
+	public static function setConfigFile() { return "package.json"; }
 
 	public static function getRepoType() {
 		return static::getValue("repository", "type");
 	}
-
 }
 
 class IniConfig extends AbstractConfig {
 
-	/**
-	 * Absolute directory path to project root or relative this directory
-	 * @return string
-	 */
-	public static function getProjectRootDir() { return "../.."; }
-
-	/**
-	 * Config ini/json absolute file path or relative to project root
-	 * @return string
-	 */
-	public static function getConfigFile() { return "tests/testConfig.ini"; }
+	public static function setProjectDir() { return "../.."; }
+	public static function setConfigFile() { return "tests/testConfig.ini"; }
 
 	public static function getAllowedAuthorization() {
 		return static::getValue("AUTHORIZATION", "allow");
@@ -163,30 +146,12 @@ class IniConfig extends AbstractConfig {
 	public static function getMissingKey() {
 		return static::getValue("NEEDED", "asdf");
 	}
-
-	public static function getList($section, $key, $default = null) {
-		return parent::getList($section, $key, $default);
-	}
-
-	public static function getBool($section, $key, $default = null) {
-		return parent::getBool($section, $key, $default);
-	}
-
 }
 
 class NonexistentConfig extends AbstractConfig {
 
-	/**
-	 * Absolute directory path to project root or relative this directory
-	 * @return string
-	 */
-	public static function getProjectRootDir() { return "../.."; }
-
-	/**
-	 * Config ini/json absolute file path or relative to project root
-	 * @return string
-	 */
-	public static function getConfigFile() { return "asdf"; }
+	public static function setProjectDir() { return "../.."; }
+	public static function setConfigFile() { return "asdf"; }
 
 	public static function getSomething() {
 		return static::getValue("nope", "nope");
@@ -195,17 +160,8 @@ class NonexistentConfig extends AbstractConfig {
 
 class YamlConfig extends AbstractConfig {
 
-	/**
-	 * Absolute directory path to project root or relative this directory
-	 * @return string
-	 */
-	public static function getProjectRootDir() { return "../.."; }
-
-	/**
-	 * Config ini/json absolute file path or relative to project root
-	 * @return string
-	 */
-	public static function getConfigFile() { return "tests/testConfig.yml"; }
+	public static function setProjectDir() { return "../.."; }
+	public static function setConfigFile() { return "tests/testConfig.yml"; }
 
 	public static function getSomething() {
 		return static::getValue("nope", "nope");
