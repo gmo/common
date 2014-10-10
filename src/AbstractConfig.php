@@ -35,8 +35,10 @@ abstract class AbstractConfig extends NewAbstractConfig {
 		return static::absPath($path);
 	}
 
-	abstract public function getConfigFile();
-	abstract public function getProjectRootDir();
+	/** @noinspection PhpAbstractStaticMethodInspection */
+	abstract public static function getProjectRootDir();
+	/** @noinspection PhpAbstractStaticMethodInspection */
+	abstract public static function getConfigFile();
 
 	public static function setProjectDir() { return static::getProjectRootDir(); }
 	public static function setConfigFile() { return static::getConfigFile(); }
