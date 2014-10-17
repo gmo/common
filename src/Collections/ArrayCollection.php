@@ -21,6 +21,7 @@ namespace GMO\Common\Collections;
 
 use ArrayIterator;
 use GMO\Common\ISerializable;
+use Traversable;
 
 /**
  * An ArrayCollection is a Collection implementation that wraps a regular PHP array.
@@ -43,20 +44,23 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	/**
 	 * Initializes a new ArrayCollection.
 	 *
-	 * @param CollectionInterface|array $elements
+	 * @param CollectionInterface|Traversable|array $elements
 	 */
 	public function __construct($elements = array())
 	{
 		if ($elements instanceof CollectionInterface) {
-			$elements = $elements->toArray();
+			$this->elements = $elements->toArray();
+		} elseif ($elements instanceof Traversable) {
+			$this->elements = iterator_to_array($elements);
+		} else {
+			$this->elements = $elements;
 		}
-		$this->elements = $elements;
 	}
 
 	/**
 	 * Initializes a new ArrayCollection.
 	 *
-	 * @param CollectionInterface|array $elements
+	 * @param CollectionInterface|Traversable|array $elements
 	 *
 	 * @return $this
 	 */
