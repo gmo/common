@@ -51,7 +51,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		if ($elements instanceof CollectionInterface) {
 			$this->elements = $elements->toArray();
 		} elseif ($elements instanceof Traversable) {
-			$this->elements = iterator_to_array($elements);
+			$this->elements = iterator_to_array($elements, true);
 		} else {
 			$this->elements = $elements;
 		}
