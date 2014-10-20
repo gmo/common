@@ -53,14 +53,14 @@ interface CollectionInterface extends Countable, IteratorAggregate, ArrayAccess
 	 *
 	 * @param mixed $element The element to add.
 	 *
-	 * @return boolean Always TRUE.
+	 * @return $this
 	 */
 	public function add($element);
 
 	/**
 	 * Clears the collection, removing all elements.
 	 *
-	 * @return void
+	 * @return $this
 	 */
 	public function clear();
 
@@ -91,11 +91,11 @@ interface CollectionInterface extends Countable, IteratorAggregate, ArrayAccess
 	public function remove($key);
 
 	/**
-	 * Removes the specified element from the collection, if it is found.
+	 * Removes and returns the specified element from the collection, if it is found.
 	 *
 	 * @param mixed $element The element to remove.
 	 *
-	 * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+	 * @return mixed The removed element or NULL, if the collection did not contain the element
 	 */
 	public function removeElement($element);
 
@@ -141,7 +141,7 @@ interface CollectionInterface extends Countable, IteratorAggregate, ArrayAccess
 	 * @param string|integer $key   The key/index of the element to set.
 	 * @param mixed          $value The element to set.
 	 *
-	 * @return void
+	 * @return $this
 	 */
 	public function set($key, $value);
 

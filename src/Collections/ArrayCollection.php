@@ -48,13 +48,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	 */
 	public function __construct($elements = array())
 	{
-		if ($elements instanceof CollectionInterface) {
-			$this->elements = $elements->toArray();
-		} elseif ($elements instanceof Traversable) {
-			$this->elements = iterator_to_array($elements, true);
-		} else {
-			$this->elements = $elements;
-		}
+		$this->elements = static::normalize($elements);
 	}
 
 	/**
@@ -111,27 +105,28 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return null;
 	}
 
+	/** @inheritdoc */
 	public function removeElement($element)
 	{
 		$key = array_search($element, $this->elements, true);
 
 		if ($key !== false) {
+			$value = $this->elements[$key];
 			unset($this->elements[$key]);
-
-			return true;
+			return $value;
 		}
 
-		return false;
+		return null;
 	}
 
 	public function removeFirst()
 	{
-		$this->removeElement($this->first());
+		return $this->removeElement($this->first());
 	}
 
 	public function removeLast()
 	{
-		$this->removeElement($this->last());
+		return $this->removeElement($this->last());
 	}
 
 	public function containsKey($key)
@@ -185,29 +180,30 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	public function set($key, $value)
 	{
 		$this->elements[$key] = $value;
+		return $this;
 	}
 
 	public function add($value)
 	{
 		$this->elements[] = $value;
-		return true;
+		return $this;
 	}
 
 	public function prepend($value)
 	{
 		array_unshift($this->elements, $value);
-		return true;
+		return $this;
 	}
 
 	/**
-	 * Replaces elements in this collection from array(s)
-	 * @param array $values The array from which elements will be extracted.
-	 * @param array $_      Optional N-number of arrays
+	 * Replaces elements in this collection from another collection by comparing keys
+	 * @param CollectionInterface|Traversable|array $collection The collection from which elements will be extracted.
+	 * @param CollectionInterface|Traversable|array $_          Optional N-number of collections
 	 * @return $this
 	 */
-	public function replace(array $values, array $_ = null)
+	public function replace($collection, $_ = null)
 	{
-		$args = func_get_args();
+		$args = static::normalizeArgs(func_get_args());
 		array_unshift($args, $this->elements);
 		$this->elements = call_user_func_array('array_replace', $args);
 		return $this;
@@ -258,6 +254,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	public function clear()
 	{
 		$this->elements = array();
+		return $this;
 	}
 
 	public function slice($offset, $length = null)
@@ -364,4 +361,38 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	}
 
 	//endregion
+
+	/**
+	 * Creates a collection by using one for keys and another for its values
+	 * @param CollectionInterface|Traversable|array $keys Collection of keys to be used.
+	 *                                                    Illegal values for key will be converted to strings
+	 * @param CollectionInterface|Traversable|array $values Collection of values to be used
+	 * @return static
+	 */
+	public static function combine($keys, $values) {
+		return new static(array_combine(static::normalize($keys), static::normalize($values)));
+	}
+
+	protected static function normalizeArgs($args)
+	{
+		foreach ($args as &$arg) {
+			$arg = static::normalize($arg);
+		}
+		return $args;
+	}
+
+	/**
+	 * @param CollectionInterface|Traversable|array $collection
+	 * @return array
+	 */
+	protected static function normalize($collection)
+	{
+		if ($collection instanceof CollectionInterface) {
+			return $collection->toArray();
+		} elseif ($collection instanceof Traversable) {
+			return iterator_to_array($collection, true);
+		} else {
+			return $collection;
+		}
+	}
 }
