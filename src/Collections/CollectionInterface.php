@@ -201,7 +201,7 @@ interface CollectionInterface extends Countable, IteratorAggregate, ArrayAccess
 	 * The order of the elements is preserved.
 	 * If no predicate, all elements that equal false will be removed.
 	 *
-	 * @param callable|null $p The predicate used for filtering. Function is passed value.
+	 * @param callable|null $p The predicate used for filtering. Function can be passed value, key, or key/value.
 	 *
 	 * @return $this A collection with the results of the filter operation.
 	 */

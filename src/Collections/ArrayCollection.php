@@ -209,6 +209,25 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return $this;
 	}
 
+	/**
+	 * Merges elements from another collection into this collection.
+	 * If the collections have string keys, the value from the input
+	 * collection will replace the current value. If the collections
+	 * have numeric keys, the input collection will be appended to
+	 * this collection.
+	 *
+	 * @param CollectionInterface|Traversable|array $collection The collection from which elements will be extracted.
+	 * @param CollectionInterface|Traversable|array $_          Optional N-number of collections
+	 * @return $this
+	 */
+	public function merge($collection, $_ = null)
+	{
+		$args = static::normalizeArgs(func_get_args());
+		array_unshift($args, $this->elements);
+		$this->elements = call_user_func_array('array_merge', $args);
+		return $this;
+	}
+
 	public function isEmpty()
 	{
 		return ! $this->elements;
@@ -224,7 +243,20 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		if ($p === null) {
 			return static::create(array_filter($this->elements));
 		}
-		return static::create(array_filter($this->elements, $p));
+		$func = new \ReflectionFunction($p);
+		$params = $func->getParameters();
+		if (count($params) === 1 && $params[0]->getName() !== 'key') {
+			return static::create(array_filter($this->elements, $p));
+		}
+
+		$newElements = new static();
+		foreach ($this->elements as $key => $value) {
+			if ($p($key, $value)) {
+				$newElements->set($key, $value);
+			}
+		}
+		return $newElements;
+
 	}
 
 	public function forAll($p)
