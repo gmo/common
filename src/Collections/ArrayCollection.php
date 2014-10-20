@@ -394,6 +394,264 @@ class ArrayCollection implements CollectionInterface, ISerializable
 
 	//endregion
 
+	//region Sorting Methods
+
+	/**
+	 * Reverses the elements in this collection
+	 * @return $this
+	 */
+	public function reverse()
+	{
+		$this->elements = array_reverse($this->elements, true);
+		return $this;
+	}
+
+	/**
+	 * Shuffles elements in this collection
+	 * @return $this
+	 */
+	public function shuffle()
+	{
+		shuffle($this->elements);
+		return $this;
+	}
+
+	/**
+	 * Sort this collection by keys
+	 *
+	 * If $p is true, elements will be sorted from lowest to highest.
+	 *
+	 * If $p is false, elements will be sorted in reverse order.
+	 *
+	 * If $p is callable, it will be called to compare the keys.
+	 * The comparison function must return an integer less than, equal to,
+	 * or greater than zero if the first argument is considered to be
+	 * respectively less than, equal to, or greater than the second.
+	 * @param bool|callable $p Sort order or user defined function
+	 * @return $this
+	 */
+	public function sortKeys($p = true)
+	{
+		if (is_callable($p)) {
+			uksort($this->elements, $p);
+		} elseif ($p) {
+			ksort($this->elements);
+		} else {
+			krsort($this->elements);
+		}
+		return $this;
+	}
+
+	/**
+	 * Sort this collection by values
+	 *
+	 * If $p is true, elements will be sorted from lowest to highest.
+	 *
+	 * If $p is false, elements will be sorted in reverse order.
+	 *
+	 * If $p is callable, it will be called to compare the values.
+	 * The comparison function must return an integer less than, equal to,
+	 * or greater than zero if the first argument is considered to be
+	 * respectively less than, equal to, or greater than the second.
+	 * @param bool|callable $p Sort order or function
+	 * @return $this
+	 */
+	public function sortValues($p = true)
+	{
+		if (is_callable($p)) {
+			usort($this->elements, $p);
+		} elseif ($p) {
+			sort($this->elements);
+		} else {
+			rsort($this->elements);
+		}
+		return $this;
+	}
+
+	/**
+	 * Sort this collection using a "natural order" algorithm
+	 * @param bool $caseSensitive Whether to sort with case sensitivity or not
+	 * @return $this
+	 */
+	public function sortNatural($caseSensitive = true)
+	{
+		if ($caseSensitive) {
+			natsort($this->elements);
+		} else {
+			natcasesort($this->elements);
+		}
+		return $this;
+	}
+
+	//endregion
+
+	//region Comparison Methods
+
+	/**
+	 * Computes the difference of collections using keys for comparison
+	 *
+	 * @param CollectionInterface|Traversable|array $values Collection to check against
+	 * @param CollectionInterface|Traversable|array $_      Optional N-number of collections
+	 * @param callable|null                         $p      Optionally pass a function to compare with.
+	 *                                                      Function is passed a, b and must return an integer less
+	 *                                                      than equal to, or greater than zero if the first argument
+	 *                                                      is considered to be respectively less than, equal to, or
+	 *                                                      greater than the second.
+	 * @return static A collection containing all the entries from this collection that
+	 *                are not present in any of the other input collections
+	 */
+	public function diffKeys($values, $_ = null, $p = null)
+	{
+		$args = static::normalizeArgs(func_get_args());
+		array_unshift($args, $this->elements);
+		$p = end($args);
+		if (is_callable($p)) {
+			return new static(call_user_func_array('array_diff_ukey', $args));
+		} else {
+			return new static(call_user_func_array('array_diff_key', $args));
+		}
+	}
+
+	/**
+	 * Computes the difference of collections using values for comparison
+	 *
+	 * @param CollectionInterface|Traversable|array $values Collection to check against
+	 * @param CollectionInterface|Traversable|array $_      Optional N-number of collections
+	 * @param callable|null                         $p      Optionally pass a function to compare with.
+	 *                                                      Function is passed a, b and must return an integer less
+	 *                                                      than equal to, or greater than zero if the first argument
+	 *                                                      is considered to be respectively less than, equal to, or
+	 *                                                      greater than the second.
+	 * @return static A collection containing all the entries from this collection that
+	 *                are not present in any of the other input collections
+	 */
+	public function diffValues($values, $_ = null, $p = null)
+	{
+		$args = static::normalizeArgs(func_get_args());
+		array_unshift($args, $this->elements);
+		$p = end($args);
+		if (is_callable($p)) {
+			return new static(call_user_func_array('array_udiff', $args));
+		} else {
+			return new static(call_user_func_array('array_diff', $args));
+		}
+	}
+
+	/**
+	 * Computes the intersection of collections using keys for comparison
+	 *
+	 * @param CollectionInterface|Traversable|array $values Collection to check against
+	 * @param CollectionInterface|Traversable|array $_      Optional N-number of collections
+	 * @param callable|null                         $p      Optionally pass a function to compare with.
+	 *                                                      Function is passed a, b and must return an integer less
+	 *                                                      than equal to, or greater than zero if the first argument
+	 *                                                      is considered to be respectively less than, equal to, or
+	 *                                                      greater than the second.
+	 * @return static A collection containing all the entries from this collection that
+	 *                are present in all of the other input collections
+	 */
+	public function intersectKeys($values, $_ = null, $p = null)
+	{
+		$args = static::normalizeArgs(func_get_args());
+		array_unshift($args, $this->elements);
+		$p = end($args);
+		if (is_callable($p)) {
+			return new static(call_user_func_array('array_intersect_ukey', $args));
+		} else {
+			return new static(call_user_func_array('array_intersect_key', $args));
+		}
+	}
+
+	/**
+	 * Computes the intersection of collections using values for comparison
+	 *
+	 * @param CollectionInterface|Traversable|array $values Collection to check against
+	 * @param CollectionInterface|Traversable|array $_      Optional N-number of collections
+	 * @param callable|null                         $p      Optionally pass a function to compare with.
+	 *                                                      Function is passed a, b and must return an integer less
+	 *                                                      than equal to, or greater than zero if the first argument
+	 *                                                      is considered to be respectively less than, equal to, or
+	 *                                                      greater than the second.
+	 * @return static A collection containing all the entries from this collection that
+	 *                are present in all of the other input collections
+	 */
+	public function intersectValues($values, $_ = null, $p = null)
+	{
+		$args = static::normalizeArgs(func_get_args());
+		array_unshift($args, $this->elements);
+		$p = end($args);
+		if (is_callable($p)) {
+			return new static(call_user_func_array('array_uintersect', $args));
+		} else {
+			return new static(call_user_func_array('array_intersect', $args));
+		}
+	}
+
+	//endregion
+
+	/**
+	 * Removes duplicate values from this collection
+	 * @param null $flags
+	 * @return $this
+	 */
+	public function unique($flags = null)
+	{
+		$this->elements = array_unique($this->elements, $flags);
+		return $this;
+	}
+
+	/**
+	 * Calculates the sum of the values in this collection
+	 * @return number The sum of values
+	 */
+	public function sum()
+	{
+		return array_sum($this->elements);
+	}
+
+	/**
+	 * Iteratively reduce this collection to a single value using a callback function.
+	 *
+	 * Function is passed $carry (previous or initial value) and $item (value of the current iteration).
+	 * @param callable $func
+	 * @param mixed    $initial value
+	 * @return mixed The resulting value or null if collection is empty and initial is null.
+	 */
+	public function reduce($func, $initial = null)
+	{
+		return array_reduce($this->elements, $func, $initial);
+	}
+
+	/**
+	 * Exchanges all keys with their associated values.
+	 *
+	 * If a value has several occurrences, the latest key will be used as its value, and all others will be lost.
+	 * @throws \Exception thrown when flip fails
+	 * @return $this
+	 */
+	public function flip()
+	{
+		$arr = array_flip($this->elements);
+		if (!$arr) {
+			throw new \Exception('Failed to flip collection');
+		}
+		$this->elements = $arr;
+		return $this;
+	}
+
+	/**
+	 * Split this collection into chunks.
+	 *
+	 * The last chunk may contain less elements.
+	 *
+	 * @param int $size The size of each chunk
+	 * @return static|static[] Returns a multidimensional collection, with each dimension containing size elements
+	 */
+	public function chunk($size)
+	{
+		return static::create(array_map(array($this, 'create'), array_chunk($this->elements, $size, true)));
+	}
+
 	/**
 	 * Creates a collection by using one for keys and another for its values
 	 * @param CollectionInterface|Traversable|array $keys Collection of keys to be used.
