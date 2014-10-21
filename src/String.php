@@ -1,6 +1,8 @@
 <?php
 namespace GMO\Common;
 
+use GMO\Common\Collections\ArrayCollection;
+
 /**
  * Class String
  * @package GMO\Common
@@ -100,6 +102,26 @@ class String {
 	}
 
 	/**
+	 * Splits a string on the delimiter
+	 * @param string $string    The string to split
+	 * @param string $delimiter The term to split on
+	 * @param int    $limit     If limit is set and positive, the returned array will contain a maximum of limit
+	 *                          elements with the last element containing the rest of string.
+	 *
+	 *                          If the limit parameter is negative, all components except the last -limit are returned.
+	 *
+	 *                          If the limit parameter is zero, then this is treated as 1.
+	 * @return ArrayCollection A collection containing the string parts.
+	 *                         The collection will be empty if the delimiter is an empty string or
+	 *                         if delimiter contains a value that is not contained in string
+	 *                         and a negative limit is used.
+	 */
+	public static function split($string, $delimiter, $limit = null) {
+		$parts = $limit === null ? explode($delimiter, $string) : explode($delimiter, $string, $limit);
+		return new ArrayCollection($parts ?: array());
+	}
+
+	/**
 	 * Splits a string on the delimiter and returns the first part.
 	 * If delimiter is empty false is returned.
 	 * If the delimiter is not found in the string the string is returned.
@@ -180,6 +202,23 @@ class String {
 			$cls = get_class($cls);
 		}
 		return String::splitLast($cls, "\\");
+	}
+
+	/**
+	 * Makes a technical name human readable.
+	 *
+	 * Sequences of underscores or camel cased are replaced by single spaces.
+	 * The first letter of the resulting string is capitalized,
+	 * while all other letters are turned to lowercase.
+	 *
+	 * @author Symfony
+	 *
+	 * @param string $text The text to humanize.
+	 *
+	 * @return string The humanized text.
+	 */
+	public static function humanize($text) {
+		return ucfirst(trim(strtolower(preg_replace(array( '/([A-Z])/', '/[_\s]+/' ), array( '_$1', ' ' ), $text))));
 	}
 
 	#region Deprecated functions

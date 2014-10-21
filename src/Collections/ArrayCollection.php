@@ -653,13 +653,25 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	}
 
 	/**
+	 * Joins the values of this collection to a string
+	 * @param string $delimiter The term to join on
+	 * @return string A string representation of all the elements in the same order,
+	 *                with the delimiter between each element.
+	 */
+	public function join($delimiter)
+	{
+		return implode($delimiter, $this->elements);
+	}
+
+	/**
 	 * Creates a collection by using one for keys and another for its values
 	 * @param CollectionInterface|Traversable|array $keys Collection of keys to be used.
 	 *                                                    Illegal values for key will be converted to strings
 	 * @param CollectionInterface|Traversable|array $values Collection of values to be used
 	 * @return static
 	 */
-	public static function combine($keys, $values) {
+	public static function combine($keys, $values)
+	{
 		return new static(array_combine(static::normalize($keys), static::normalize($values)));
 	}
 
