@@ -122,7 +122,7 @@ interface CollectionInterface extends Countable, IteratorAggregate, ArrayAccess
 	/**
 	 * Gets all keys/indices of the collection.
 	 *
-	 * @return array The keys/indices of the collection, in the order of the corresponding
+	 * @return static The keys/indices of the collection, in the order of the corresponding
 	 *               elements in the collection.
 	 */
 	public function getKeys();
@@ -130,7 +130,7 @@ interface CollectionInterface extends Countable, IteratorAggregate, ArrayAccess
 	/**
 	 * Gets all values of the collection.
 	 *
-	 * @return array The values of all elements in the collection, in the order they
+	 * @return static The values of all elements in the collection, in the order they
 	 *               appear in the collection.
 	 */
 	public function getValues();

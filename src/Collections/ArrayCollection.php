@@ -164,12 +164,12 @@ class ArrayCollection implements CollectionInterface, ISerializable
 
 	public function getKeys()
 	{
-		return array_keys($this->elements);
+		return static::create(array_keys($this->elements));
 	}
 
 	public function getValues()
 	{
-		return array_values($this->elements);
+		return static::create(array_values($this->elements));
 	}
 
 	public function count()
