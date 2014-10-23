@@ -146,13 +146,6 @@ interface CollectionInterface extends Countable, IteratorAggregate, ArrayAccess
 	public function set($key, $value);
 
 	/**
-	 * Gets a native PHP array representation of the collection.
-	 *
-	 * @return array
-	 */
-	public function toArray();
-
-	/**
 	 * Sets the internal iterator to the first element in the collection and returns this element.
 	 *
 	 * @return mixed
