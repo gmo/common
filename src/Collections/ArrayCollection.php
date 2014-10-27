@@ -348,6 +348,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	{
 		if ( ! isset($offset)) {
 			$this->add($value);
+			return;
 		}
 		$this->set($offset, $value);
 	}
