@@ -6,11 +6,15 @@
 	"require-dev": {
 		"psr/log": "1.0.0",
 		"monolog/monolog": "~1.6",
+		"silex/silex": "~1.0",
+		"twig/twig": "~1.8",
 		"phpunit/phpunit": "3.7.*"
 	},
 	"suggest": {
 		"psr/log": "Provides a basic console logger for PSR-3 interface",
-		"monolog/monolog": "Provides serializable formatter"
+		"monolog/monolog": "Provides serializable formatter",
+		"silex/silex": "Provides twig responses",
+		"twig/twig": "Provides twig responses"
 	},
 	"autoload": {
 		"psr-4": {
