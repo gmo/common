@@ -44,23 +44,23 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	/**
 	 * Initializes a new ArrayCollection.
 	 *
-	 * @param CollectionInterface|Traversable|array $elements
+	 * @param CollectionInterface|Traversable|array|mixed|null $elements
 	 */
 	public function __construct($elements = array())
 	{
-		$this->elements = static::normalize($elements);
+		$this->elements = static::normalizeConstructorAgs(func_get_args());
 	}
 
 	/**
 	 * Initializes a new ArrayCollection.
 	 *
-	 * @param CollectionInterface|Traversable|array $elements
+	 * @param CollectionInterface|Traversable|array|mixed|null $elements
 	 *
 	 * @return $this
 	 */
 	public static function create($elements = array())
 	{
-		return new static($elements);
+		return new static(static::normalizeConstructorAgs(func_get_args()));
 	}
 
 	public function toArray()
@@ -676,6 +676,13 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return new static(array_combine(static::normalize($keys), static::normalize($values)));
 	}
 
+	protected static function normalizeConstructorAgs($args) {
+		if (count($args) == 1) {
+			return static::normalize($args[0]);
+		}
+		return static::normalize($args);
+	}
+
 	protected static function normalizeArgs($args)
 	{
 		foreach ($args as &$arg) {
@@ -685,15 +692,19 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	}
 
 	/**
-	 * @param CollectionInterface|Traversable|array $collection
+	 * @param ArrayCollection|Traversable|array $collection
 	 * @return array
 	 */
 	protected static function normalize($collection)
 	{
-		if ($collection instanceof CollectionInterface) {
+		if ($collection instanceof ArrayCollection) {
 			return $collection->toArray();
 		} elseif ($collection instanceof Traversable) {
 			return iterator_to_array($collection, true);
+		} elseif ($collection === null) {
+			return array();
+		} elseif (is_scalar($collection)) {
+			return array($collection);
 		} else {
 			return $collection;
 		}
