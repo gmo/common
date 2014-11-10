@@ -56,7 +56,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	 *
 	 * @param CollectionInterface|Traversable|array|mixed|null $elements
 	 *
-	 * @return $this
+	 * @return static
 	 */
 	public static function create($elements = array())
 	{
@@ -177,18 +177,30 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return count($this->elements);
 	}
 
+	/**
+	 * @inheritdoc
+	 * @return $this
+	 */
 	public function set($key, $value)
 	{
 		$this->elements[$key] = $value;
 		return $this;
 	}
 
+	/**
+	 * @inheritdoc
+	 * @return $this
+	 */
 	public function add($value)
 	{
 		$this->elements[] = $value;
 		return $this;
 	}
 
+	/**
+	 * @inheritdoc
+	 * @return $this
+	 */
 	public function prepend($value)
 	{
 		array_unshift($this->elements, $value);
@@ -233,11 +245,19 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return ! $this->elements;
 	}
 
+	/**
+	 * @inheritdoc
+	 * @return static
+	 */
 	public function map($func)
 	{
 		return static::create(array_map($func, $this->elements));
 	}
 
+	/**
+	 * @inheritdoc
+	 * @return static
+	 */
 	public function filter($p)
 	{
 		if ($p === null) {
@@ -283,12 +303,20 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return array(new static($coll1), new static($coll2));
 	}
 
+	/**
+	 * @inheritdoc
+	 * @return $this
+	 */
 	public function clear()
 	{
 		$this->elements = array();
 		return $this;
 	}
 
+	/**
+	 * @inheritdoc
+	 * @return static
+	 */
 	public function slice($offset, $length = null)
 	{
 		return static::create(array_slice($this->elements, $offset, $length, true));
@@ -362,6 +390,10 @@ class ArrayCollection implements CollectionInterface, ISerializable
 
 	//region Serializable Methods
 
+	/**
+	 * @param mixed $obj
+	 * @return $this
+	 */
 	public static function fromArray($obj)
 	{
 		return static::create($obj);
@@ -372,6 +404,10 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return json_encode($this->toArray(), true);
 	}
 
+	/**
+	 * @param string $json
+	 * @return $this
+	 */
 	public static function fromJson($json)
 	{
 		return static::fromArray(json_decode($json, true));
