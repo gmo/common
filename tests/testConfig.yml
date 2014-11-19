@@ -1,3 +1,18 @@
-authorization:
-  -
-    allow: 1
+default:
+  test:
+    foo: bar
+    hello: world
+
+production:
+  test:
+    hello: world2
+
+staging:
+  test:
+    hello: %production%
+
+# note
+development:
+  test:
+    hello: %staging%
+    error: %asdf%
