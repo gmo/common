@@ -63,6 +63,18 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return new static(static::normalizeConstructorAgs(func_get_args()));
 	}
 
+	/**
+	 * Initializes a new ArrayCollection and recursive converts arrays to collections
+	 *
+	 * @param CollectionInterface|Traversable|array|mixed|null $elements
+	 *
+	 * @return static|ArrayCollection
+	 */
+	public static function createRecursive($elements = array())
+	{
+		return static::convertToCollection(static::normalizeConstructorAgs(func_get_args()));
+	}
+
 	public function toArray()
 	{
 		return $this->elements;
@@ -222,11 +234,27 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	}
 
 	/**
+	 * Replaces elements in this collection from another collection recursively by comparing keys
+	 * @param CollectionInterface|Traversable|array $collection The collection from which elements will be extracted.
+	 * @param CollectionInterface|Traversable|array $_          Optional N-number of collections
+	 * @return $this
+	 */
+	public function replaceRecursive($collection, $_ = null)
+	{
+		$args = static::normalizeArgs(func_get_args());
+		array_unshift($args, $this->elements);
+		$args = static::convertToArray($args);
+		$elements = call_user_func_array('array_replace_recursive', $args);
+		$this->elements = $this->convertToCollection($elements)->toArray();
+		return $this;
+	}
+
+	/**
 	 * Merges elements from another collection into this collection.
-	 * If the collections have string keys, the value from the input
-	 * collection will replace the current value. If the collections
-	 * have numeric keys, the input collection will be appended to
-	 * this collection.
+	 *
+	 * If the collections have string keys, the value from the input collection will replace the current value.
+	 *
+	 * If the collections have numeric keys, the input collection will be appended to this collection.
 	 *
 	 * @param CollectionInterface|Traversable|array $collection The collection from which elements will be extracted.
 	 * @param CollectionInterface|Traversable|array $_          Optional N-number of collections
@@ -237,6 +265,29 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		$args = static::normalizeArgs(func_get_args());
 		array_unshift($args, $this->elements);
 		$this->elements = call_user_func_array('array_merge', $args);
+		return $this;
+	}
+
+	/**
+	 * Merges elements from another collection into this collection recursively.
+	 *
+	 * If the collections have string keys, the values from the collections with the same key will
+	 * merged to a collection for that key.
+	 *
+	 * If the collections have numeric keys, the input collection will be appended to this collection.
+	 *
+	 * @param CollectionInterface|Traversable|array $collection The collection from which elements will be extracted.
+	 * @param CollectionInterface|Traversable|array $_          Optional N-number of collections
+	 * @return $this
+	 */
+	public function mergeRecursive($collection, $_ = null)
+	{
+		$args = static::normalizeArgs(func_get_args());
+		array_unshift($args, $this->elements);
+		$args = static::convertToArray($args);
+		$elements = call_user_func_array('array_merge_recursive', $args);
+		$this->elements = $this->convertToCollection($elements)->toArray();
+
 		return $this;
 	}
 
@@ -744,5 +795,31 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		} else {
 			return $collection;
 		}
+	}
+
+	protected static function convertToCollection($arr)
+	{
+		$collection = new ArrayCollection();
+		foreach ($arr as $key => $value) {
+			if (is_array($value) || $value instanceof ArrayCollection) {
+				$collection[$key] = static::convertToCollection($value);
+			} else {
+				$collection[$key] = $value;
+			}
+		}
+		return $collection;
+	}
+
+	protected static function convertToArray($collection)
+	{
+		$arr = array();
+		foreach ($collection as $key => $value) {
+			if (is_array($value) || $value instanceof ArrayCollection) {
+				$arr[$key] = static::convertToArray($value);
+			} else {
+				$arr[$key] = $value;
+			}
+		}
+		return $arr;
 	}
 }

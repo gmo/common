@@ -5,20 +5,19 @@ use GMO\Common\Collections\ArrayCollection;
 use GMO\Common\Exception\ConfigException;
 use GMO\Common\Path;
 use GMO\Common\String;
+use Symfony\Component\Yaml\Yaml;
 
 abstract class AbstractConfig implements ConfigInterface {
 
+	/** @inheritdoc */
 	public static function getList($section, $key, $default = null) {
-		$value = static::getValue($section, $key, $default);
-		if ($value instanceof ArrayCollection) {
-			return $value;
+		if ($default instanceof \Traversable) {
+			$default = iterator_to_array($default);
 		}
-		if ($value instanceof \Traversable) {
-			$value = iterator_to_array($value);
-		} elseif (!is_array($value)) {
-			throw new ConfigException('Value in config is not a list');
+		if (is_array($default)) {
+			$default = new ArrayCollection($default);
 		}
-		return new ArrayCollection($value);
+		return static::getValue($section, $key, $default);
 	}
 
 	public static function getBool($section, $key, $default = null) {
@@ -44,7 +43,7 @@ abstract class AbstractConfig implements ConfigInterface {
 
 		if ($section === null) {
 			$group = static::$config;
-		} elseif (!isset(static::$config[$section])) {
+		} elseif (!static::$config->containsKey($section)) {
 			if ($default === null) {
 				throw new ConfigException("Config file section: \"$section\" is missing!");
 			} else {
@@ -54,7 +53,7 @@ abstract class AbstractConfig implements ConfigInterface {
 			$group = static::$config[$section];
 		}
 
-		if (!isset($group[$key])) {
+		if (!$group->containsKey($key)) {
 			if ($default === null) {
 				throw new ConfigException("Config file key: \"$key\" is missing!");
 			} else {
@@ -104,25 +103,35 @@ abstract class AbstractConfig implements ConfigInterface {
 		}
 
 		if (static::$config === null) {
-			$file = Path::truePath(static::setConfigFile(), static::getProjectDir());
-			if (!file_exists($file)) {
-				throw new ConfigException("Config file doesn't exist");
-			}
-			$type = pathinfo($file, PATHINFO_EXTENSION);
-			if ($type === "ini") {
-				static::$config = parse_ini_file($file, true);
-			} elseif ($type === "json") {
-				static::$config = json_decode(file_get_contents($file), true);
-			} else {
-				throw new ConfigException("Unknown config file format");
-			}
-			if (!static::$config) {
-				throw new ConfigException("Unable to parse $type file: $file");
-			}
+			static::doSetConfig();
 		}
 	}
 
+	protected static function doSetConfig() {
+		$file = Path::truePath(static::setConfigFile(), static::getProjectDir());
+		if (!file_exists($file)) {
+			throw new ConfigException("Config file doesn't exist");
+		}
+		$type = pathinfo($file, PATHINFO_EXTENSION);
+		if ($type === "ini") {
+			static::$config = parse_ini_file($file, true);
+		} elseif ($type === "json") {
+			static::$config = json_decode(file_get_contents($file), true);
+		} elseif ($type === 'yml') {
+			static::$config = Yaml::parse(file_get_contents($file));
+		} else {
+			throw new ConfigException("Unknown config file format");
+		}
+
+		if (!static::$config) {
+			throw new ConfigException("Unable to parse $type file: $file");
+		}
+
+		static::$config = ArrayCollection::createRecursive(static::$config);
+	}
+
 	protected static $configFile;
+	/** @var ArrayCollection[]|ArrayCollection */
 	protected static $config;
 	protected static $projectDir;
 }

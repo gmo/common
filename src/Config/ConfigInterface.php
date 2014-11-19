@@ -12,7 +12,9 @@ interface ConfigInterface {
 	 * @param string                  $key
 	 * @param array|\Traversable|null $default
 	 * @return ArrayCollection
-	 * @throws ConfigException If key is missing and no default, or the value isn't a list
+	 * @throws ConfigException If key is missing and no default
+	 * @deprecated
+	 * Use {@see ConfigInterface::getValue getValue} instead
 	 */
 	public static function getList($section, $key, $default = null);
 

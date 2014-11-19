@@ -110,7 +110,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 	 * @expectedExceptionMessage Unknown config file format
 	 */
 	public function test_unknown_config_format() {
-		YamlConfig::getSomething();
+		CsvConfig::getSomething();
 	}
 
 }
@@ -158,10 +158,10 @@ class NonexistentConfig extends AbstractConfig {
 	}
 }
 
-class YamlConfig extends AbstractConfig {
+class CsvConfig extends AbstractConfig {
 
 	public static function setProjectDir() { return "../.."; }
-	public static function setConfigFile() { return "tests/testConfig.yml"; }
+	public static function setConfigFile() { return "tests/testConfig.csv"; }
 
 	public static function getSomething() {
 		return static::getValue("nope", "nope");
