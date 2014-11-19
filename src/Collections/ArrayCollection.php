@@ -56,7 +56,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	 *
 	 * @param CollectionInterface|Traversable|array|mixed|null $elements
 	 *
-	 * @return static
+	 * @return static|ArrayCollection
 	 */
 	public static function create($elements = array())
 	{
@@ -191,7 +191,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 
 	/**
 	 * @inheritdoc
-	 * @return $this
+	 * @return $this|ArrayCollection
 	 */
 	public function set($key, $value)
 	{
@@ -201,7 +201,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 
 	/**
 	 * @inheritdoc
-	 * @return $this
+	 * @return $this|ArrayCollection
 	 */
 	public function add($value)
 	{
@@ -211,7 +211,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 
 	/**
 	 * @inheritdoc
-	 * @return $this
+	 * @return $this|ArrayCollection
 	 */
 	public function prepend($value)
 	{
@@ -223,7 +223,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	 * Replaces elements in this collection from another collection by comparing keys
 	 * @param CollectionInterface|Traversable|array $collection The collection from which elements will be extracted.
 	 * @param CollectionInterface|Traversable|array $_          Optional N-number of collections
-	 * @return $this
+	 * @return $this|ArrayCollection
 	 */
 	public function replace($collection, $_ = null)
 	{
@@ -237,7 +237,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	 * Replaces elements in this collection from another collection recursively by comparing keys
 	 * @param CollectionInterface|Traversable|array $collection The collection from which elements will be extracted.
 	 * @param CollectionInterface|Traversable|array $_          Optional N-number of collections
-	 * @return $this
+	 * @return $this|ArrayCollection
 	 */
 	public function replaceRecursive($collection, $_ = null)
 	{
@@ -258,7 +258,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	 *
 	 * @param CollectionInterface|Traversable|array $collection The collection from which elements will be extracted.
 	 * @param CollectionInterface|Traversable|array $_          Optional N-number of collections
-	 * @return $this
+	 * @return $this|ArrayCollection
 	 */
 	public function merge($collection, $_ = null)
 	{
@@ -356,7 +356,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 
 	/**
 	 * @inheritdoc
-	 * @return $this
+	 * @return $this|ArrayCollection
 	 */
 	public function clear()
 	{
@@ -366,7 +366,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 
 	/**
 	 * @inheritdoc
-	 * @return static
+	 * @return static|ArrayCollection
 	 */
 	public function slice($offset, $length = null)
 	{
@@ -376,7 +376,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	/**
 	 * Copies the elements in this collection to a new collection.
 	 *
-	 * @return $this
+	 * @return static|ArrayCollection
 	 */
 	public function copy()
 	{
@@ -386,7 +386,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	/**
 	 * Copies the elements in this collection to a new collection.
 	 *
-	 * @return $this
+	 * @return static|ArrayCollection
 	 */
 	public function __clone() {
 		return $this->copy();
@@ -443,7 +443,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 
 	/**
 	 * @param mixed $obj
-	 * @return $this
+	 * @return static|ArrayCollection
 	 */
 	public static function fromArray($obj)
 	{
@@ -457,7 +457,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 
 	/**
 	 * @param string $json
-	 * @return $this
+	 * @return static|ArrayCollection
 	 */
 	public static function fromJson($json)
 	{
@@ -486,7 +486,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 
 	/**
 	 * Reverses the elements in this collection
-	 * @return $this
+	 * @return $this|ArrayCollection
 	 */
 	public function reverse()
 	{
@@ -496,7 +496,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 
 	/**
 	 * Shuffles elements in this collection
-	 * @return $this
+	 * @return $this|ArrayCollection
 	 */
 	public function shuffle()
 	{
@@ -516,7 +516,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	 * or greater than zero if the first argument is considered to be
 	 * respectively less than, equal to, or greater than the second.
 	 * @param bool|callable $p Sort order or user defined function
-	 * @return $this
+	 * @return $this|ArrayCollection
 	 */
 	public function sortKeys($p = true)
 	{
@@ -542,7 +542,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	 * or greater than zero if the first argument is considered to be
 	 * respectively less than, equal to, or greater than the second.
 	 * @param bool|callable $p Sort order or function
-	 * @return $this
+	 * @return $this|ArrayCollection
 	 */
 	public function sortValues($p = true)
 	{
@@ -559,7 +559,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	/**
 	 * Sort this collection using a "natural order" algorithm
 	 * @param bool $caseSensitive Whether to sort with case sensitivity or not
-	 * @return $this
+	 * @return $this|ArrayCollection
 	 */
 	public function sortNatural($caseSensitive = true)
 	{
@@ -585,7 +585,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	 *                                                      than equal to, or greater than zero if the first argument
 	 *                                                      is considered to be respectively less than, equal to, or
 	 *                                                      greater than the second.
-	 * @return static A collection containing all the entries from this collection that
+	 * @return static|ArrayCollection A collection containing all the entries from this collection that
 	 *                are not present in any of the other input collections
 	 */
 	public function diffKeys($values, $_ = null, $p = null)
@@ -610,7 +610,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	 *                                                      than equal to, or greater than zero if the first argument
 	 *                                                      is considered to be respectively less than, equal to, or
 	 *                                                      greater than the second.
-	 * @return static A collection containing all the entries from this collection that
+	 * @return static|ArrayCollection A collection containing all the entries from this collection that
 	 *                are not present in any of the other input collections
 	 */
 	public function diffValues($values, $_ = null, $p = null)
@@ -635,7 +635,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	 *                                                      than equal to, or greater than zero if the first argument
 	 *                                                      is considered to be respectively less than, equal to, or
 	 *                                                      greater than the second.
-	 * @return static A collection containing all the entries from this collection that
+	 * @return static|ArrayCollection A collection containing all the entries from this collection that
 	 *                are present in all of the other input collections
 	 */
 	public function intersectKeys($values, $_ = null, $p = null)
@@ -660,7 +660,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	 *                                                      than equal to, or greater than zero if the first argument
 	 *                                                      is considered to be respectively less than, equal to, or
 	 *                                                      greater than the second.
-	 * @return static A collection containing all the entries from this collection that
+	 * @return static|ArrayCollection A collection containing all the entries from this collection that
 	 *                are present in all of the other input collections
 	 */
 	public function intersectValues($values, $_ = null, $p = null)
@@ -680,7 +680,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	/**
 	 * Removes duplicate values from this collection
 	 * @param null $flags
-	 * @return $this
+	 * @return $this|ArrayCollection
 	 */
 	public function unique($flags = null)
 	{
@@ -715,7 +715,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	 *
 	 * If a value has several occurrences, the latest key will be used as its value, and all others will be lost.
 	 * @throws \Exception thrown when flip fails
-	 * @return $this
+	 * @return $this|ArrayCollection
 	 */
 	public function flip()
 	{
@@ -733,7 +733,8 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	 * The last chunk may contain less elements.
 	 *
 	 * @param int $size The size of each chunk
-	 * @return static|static[] Returns a multidimensional collection, with each dimension containing size elements
+	 * @return static|static[]|ArrayCollection|ArrayCollection[]
+	 *         Returns a multidimensional collection, with each dimension containing size elements
 	 */
 	public function chunk($size)
 	{
@@ -756,7 +757,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	 * @param CollectionInterface|Traversable|array $keys Collection of keys to be used.
 	 *                                                    Illegal values for key will be converted to strings
 	 * @param CollectionInterface|Traversable|array $values Collection of values to be used
-	 * @return static
+	 * @return static|ArrayCollection
 	 */
 	public static function combine($keys, $values)
 	{
