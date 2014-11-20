@@ -17,7 +17,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function test_get_abs_path_from_config() {
-		$expected = Path::truePath("../testConfig.yml", __DIR__);
+		$expected = Path::truePath("../../testConfig.yml", __DIR__);
 		$this->assertEquals($expected, IniConfig::getYamlFile());
 	}
 
@@ -118,7 +118,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 #region Test Config Classes
 class JsonConfig extends AbstractConfig {
 
-	public static function setProjectDir() { return "../.."; }
+	public static function setProjectDir() { return "../../.."; }
 	public static function setConfigFile() { return "package.json"; }
 
 	public static function getRepoType() {
@@ -128,7 +128,7 @@ class JsonConfig extends AbstractConfig {
 
 class IniConfig extends AbstractConfig {
 
-	public static function setProjectDir() { return "../.."; }
+	public static function setProjectDir() { return "../../.."; }
 	public static function setConfigFile() { return "tests/testConfig.ini"; }
 
 	public static function getAllowedAuthorization() {
@@ -150,7 +150,7 @@ class IniConfig extends AbstractConfig {
 
 class NonexistentConfig extends AbstractConfig {
 
-	public static function setProjectDir() { return "../.."; }
+	public static function setProjectDir() { return "../../.."; }
 	public static function setConfigFile() { return "asdf"; }
 
 	public static function getSomething() {
@@ -160,7 +160,7 @@ class NonexistentConfig extends AbstractConfig {
 
 class CsvConfig extends AbstractConfig {
 
-	public static function setProjectDir() { return "../.."; }
+	public static function setProjectDir() { return "../../.."; }
 	public static function setConfigFile() { return "tests/testConfig.csv"; }
 
 	public static function getSomething() {

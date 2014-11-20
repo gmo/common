@@ -67,13 +67,13 @@ abstract class AbstractConfig implements ConfigInterface {
 	public static function overrideValue($section, $key, $value) {
 		static::setConfig();
 
-		if ($section !== null && !isset(static::$config[$section])) {
-			static::$config[$section] = array();
+		if ($section !== null && !static::$config->containsKey($section)) {
+			static::$config[$section] = new ArrayCollection();
 		}
 		if ($section === null) {
 			static::$config[$key] = $value;
 		} else {
-			static::$config[$section][$key] = $value;
+			static::$config[$section]->set($key, $value);
 		}
 	}
 
