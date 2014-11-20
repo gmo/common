@@ -12,7 +12,7 @@ interface ConfigInterface {
 	 * @param string                  $key
 	 * @param array|\Traversable|null $default
 	 * @return ArrayCollection
-	 * @throws ConfigException If key is missing and no default
+	 * @throws ConfigException If value is missing and no default
 	 * @deprecated
 	 * Use {@see ConfigInterface::getValue getValue} instead
 	 */
@@ -24,7 +24,7 @@ interface ConfigInterface {
 	 * @param string      $key
 	 * @param mixed|null  $default
 	 * @return bool
-	 * @throws ConfigException If key is missing and no default
+	 * @throws ConfigException If value is missing and no default
 	 */
 	public static function getBool($section, $key, $default = null);
 
@@ -35,20 +35,20 @@ interface ConfigInterface {
 	 * @param string      $key
 	 * @param mixed|null  $default
 	 * @return string
-	 * @throws ConfigException If key is missing and no default
+	 * @throws ConfigException If value is missing and no default
 	 * @since 1.11.0
 	 */
 	public static function getPath($section, $key, $default = null);
 
 	/**
 	 * Returns config value. If default isn't specified,
-	 * a ConfigException is thrown when the key is missing.
+	 * a ConfigException is thrown when the value is missing.
 	 * If a default is specified that is returned instead.
 	 * @param string|null $section Section name, null for no section
 	 * @param string      $key
 	 * @param mixed|null  $default
 	 * @return mixed
-	 * @throws ConfigException If key is missing and no default
+	 * @throws ConfigException If value is missing and no default
 	 */
 	public static function getValue($section, $key, $default = null);
 

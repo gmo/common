@@ -45,7 +45,7 @@ abstract class AbstractConfig implements ConfigInterface {
 			$group = static::$config;
 		} elseif (!static::$config->containsKey($section)) {
 			if ($default === null) {
-				throw new ConfigException("Config file section: \"$section\" is missing!");
+				throw new ConfigException("Config section: \"$section\" is missing!");
 			} else {
 				return $default;
 			}
@@ -53,15 +53,14 @@ abstract class AbstractConfig implements ConfigInterface {
 			$group = static::$config[$section];
 		}
 
-		if (!$group->containsKey($key)) {
-			if ($default === null) {
-				throw new ConfigException("Config file key: \"$key\" is missing!");
-			} else {
-				return $default;
-			}
+		$value = $group->get($key);
+		if ($value || is_bool($value)) {
+			return $value;
 		}
-
-		return $group[$key];
+		if ($default === null) {
+			throw new ConfigException("Config key: \"$key\" is missing!");
+		}
+		return $default;
 	}
 
 	public static function overrideValue($section, $key, $value) {
