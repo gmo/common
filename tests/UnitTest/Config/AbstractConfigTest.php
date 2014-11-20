@@ -84,7 +84,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @expectedException \GMO\Common\Exception\ConfigException
-	 * @expectedExceptionMessage Config file key: "listssss" is missing!
+	 * @expectedExceptionMessage Config key: "listssss" is missing!
 	 */
 	public function test_get_nonexistent_list() {
 		IniConfig::getList("LISTS", "listssss");

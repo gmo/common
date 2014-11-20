@@ -21,44 +21,43 @@ abstract class AbstractConfig implements ConfigInterface {
 	}
 
 	public static function getBool($section, $key, $default = null) {
-		$value = static::getValue($section, $key, $default);
-		if (is_string($value)) {
+		static::setConfig();
+
+		if (!static::hasKey($section, $key, $default === null)) {
+			return $default;
+		}
+		$value = static::doGetValue($section, $key);
+		if (static::$configFileType === 'ini' && is_string($value)) {
 			//                                              booleans from ini are converted to 1|0
 			return String::equals($value, "true", false) || String::equals($value, "1");
-		} else {
-			return (bool)$value;
 		}
+		return (bool)$value;
 	}
 
 	public static function getPath($section, $key, $default = null) {
-		$value = static::getValue($section, $key, $default);
-		if (String::equals($value, $default)) {
-			return $value;
+		static::setConfig();
+
+		if (!static::hasKey($section, $key, $default === null)) {
+			return $default;
 		}
+
+		$value = static::doGetValue($section, $key);
 		return static::absPath($value);
 	}
 
 	public static function getValue($section, $key, $default = null) {
 		static::setConfig();
 
-		if ($section === null) {
-			$group = static::$config;
-		} elseif (!static::$config->containsKey($section)) {
-			if ($default === null) {
-				throw new ConfigException("Config section: \"$section\" is missing!");
-			} else {
-				return $default;
-			}
-		} else {
-			$group = static::$config[$section];
+		if (!static::hasKey($section, $key, $default === null)) {
+			return $default;
 		}
 
-		$value = $group->get($key);
+		$value = static::doGetValue($section, $key);
 		if ($value || is_bool($value)) {
 			return $value;
 		}
 		if ($default === null) {
-			throw new ConfigException("Config key: \"$key\" is missing!");
+			throw new ConfigException("Config value for key: \"$key\" is missing!");
 		}
 		return $default;
 	}
@@ -114,10 +113,13 @@ abstract class AbstractConfig implements ConfigInterface {
 		$type = pathinfo($file, PATHINFO_EXTENSION);
 		if ($type === "ini") {
 			static::$config = parse_ini_file($file, true);
+			static::$configFileType = "ini";
 		} elseif ($type === "json") {
 			static::$config = json_decode(file_get_contents($file), true);
+			static::$configFileType = "json";
 		} elseif ($type === 'yml') {
 			static::$config = Yaml::parse(file_get_contents($file));
+			static::$configFileType = "yaml";
 		} else {
 			throw new ConfigException("Unknown config file format");
 		}
@@ -129,6 +131,52 @@ abstract class AbstractConfig implements ConfigInterface {
 		static::$config = ArrayCollection::createRecursive(static::$config);
 	}
 
+	/**
+	 * NOTE: Does not check if section exists.
+	 * @param $section
+	 * @param $key
+	 * @return null
+	 */
+	private static function doGetValue($section, $key) {
+		if (!$section) {
+			return static::$config->get($key);
+		}
+		return static::$config[$section]->get($key);
+	}
+
+	private static function hasKey($section, $key, $throwException = false) {
+		if (!$section) {
+			if (!static::$config->containsKey($key)) {
+				if ($throwException) {
+					throw new ConfigException("Config key: \"$key\" is missing!");
+				}
+				return false;
+			}
+			return true;
+		}
+		if (!static::$config->containsKey($section)) {
+			if ($throwException) {
+				throw new ConfigException("Config section: \"$section\" is missing!");
+			}
+			return false;
+		}
+		if (!static::$config[$section] instanceof ArrayCollection) {
+			if ($throwException) {
+				throw new ConfigException("Config section: \"$section\" is not a collection!");
+			}
+			return false;
+		}
+		if (!static::$config[$section]->containsKey($key)) {
+			if ($throwException) {
+				throw new ConfigException("Config key: \"$key\" is missing!");
+			}
+			return false;
+		}
+
+		return true;
+	}
+
+	protected static $configFileType;
 	protected static $configFile;
 	/** @var ArrayCollection[]|ArrayCollection */
 	protected static $config;
