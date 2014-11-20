@@ -33,6 +33,7 @@ abstract class EnvironmentAwareConfig extends AbstractConfig {
 
 	public static function getEnvironment() { return getenv('PHP_ENV'); }
 
+	/** @inheritdoc */
 	public static function getValue($section, $key, $default = null) {
 		$value = parent::getValue($section, $key, $default);
 
@@ -53,6 +54,7 @@ abstract class EnvironmentAwareConfig extends AbstractConfig {
 		return $value;
 	}
 
+	/** @inheritdoc */
 	protected static function doSetConfig() {
 		parent::doSetConfig();
 

@@ -20,6 +20,7 @@ abstract class AbstractConfig implements ConfigInterface {
 		return static::getValue($section, $key, $default);
 	}
 
+	/** @inheritdoc */
 	public static function getBool($section, $key, $default = null) {
 		static::setConfig();
 
@@ -34,6 +35,7 @@ abstract class AbstractConfig implements ConfigInterface {
 		return (bool)$value;
 	}
 
+	/** @inheritdoc */
 	public static function getPath($section, $key, $default = null) {
 		static::setConfig();
 
@@ -45,6 +47,7 @@ abstract class AbstractConfig implements ConfigInterface {
 		return static::absPath($value);
 	}
 
+	/** @inheritdoc */
 	public static function getValue($section, $key, $default = null) {
 		static::setConfig();
 
@@ -62,6 +65,7 @@ abstract class AbstractConfig implements ConfigInterface {
 		return $default;
 	}
 
+	/** @inheritdoc */
 	public static function overrideValue($section, $key, $value) {
 		static::setConfig();
 
@@ -75,14 +79,12 @@ abstract class AbstractConfig implements ConfigInterface {
 		}
 	}
 
+	/** @inheritdoc */
 	public static function absPath($path) {
 		return Path::truePath($path, static::getProjectDir());
 	}
 
-	/**
-	 * Returns the absolute path to the project directory
-	 * @return string
-	 */
+	/** @inheritdoc */
 	public static function getProjectDir() {
 		if (static::$projectDir === null) {
 			$cls = new \ReflectionClass(get_called_class());
