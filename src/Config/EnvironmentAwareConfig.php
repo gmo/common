@@ -37,7 +37,7 @@ abstract class EnvironmentAwareConfig extends AbstractConfig {
 	public static function getValue($section, $key, $default = null) {
 		$value = parent::getValue($section, $key, $default);
 
-		if (!String::startsWith($value, '%') || !String::endsWith($value, '%')) {
+		if (!is_string($value) || !String::startsWith($value, '%') || !String::endsWith($value, '%')) {
 			return $value;
 		}
 
