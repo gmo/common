@@ -25,9 +25,16 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals("nope", IniConfig::getUnknownFile());
 	}
 
+	public function test_allow_empty_value() {
+		$this->assertSame("", IniConfig::getValue(null, "password", null, true));
+		$this->assertSame("", JsonConfig::getValue(null, "homepage", "", true));
+		$this->assertSame(null, JsonConfig::getValue(null, "bugs", null, true));
+	}
+
 	public function test_get_default_value() {
 		$this->assertSame("defaultValue", IniConfig::getDefaultKey());
 		$this->assertSame("defaultValue", IniConfig::getValue(null, "needed", "defaultValue"));
+		$this->assertSame("defaultValue", IniConfig::getValue(null, "password", "defaultValue", true));
 	}
 
 	public function test_get_bool_string_true() {

@@ -34,8 +34,8 @@ abstract class EnvironmentAwareConfig extends AbstractConfig {
 	public static function getEnvironment() { return getenv('PHP_ENV'); }
 
 	/** @inheritdoc */
-	public static function getValue($section, $key, $default = null) {
-		$value = parent::getValue($section, $key, $default);
+	public static function getValue($section, $key, $default = null, $allowEmpty = false) {
+		$value = parent::getValue($section, $key, $default, $allowEmpty);
 
 		if (!is_string($value) || !String::startsWith($value, '%') || !String::endsWith($value, '%')) {
 			return $value;
@@ -48,7 +48,7 @@ abstract class EnvironmentAwareConfig extends AbstractConfig {
 		}
 
 		static::$config = static::$environments->get($env);
-		$value = static::getValue($section, $key, $default);
+		$value = static::getValue($section, $key, $default, $allowEmpty);
 		static::$config = static::$environments->get(static::$envName);
 
 		return $value;

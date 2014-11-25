@@ -1,6 +1,8 @@
 {
 	"name": "common-library",
 	"description": "A library for common code",
+	"bugs": null,
+	"homepage": "",
 	"devDependencies": {
 		"grunt": "~0.4.1",
 		"grunt-phpunit": "~0.3.0",

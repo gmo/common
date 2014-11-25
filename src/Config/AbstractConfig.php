@@ -48,7 +48,7 @@ abstract class AbstractConfig implements ConfigInterface {
 	}
 
 	/** @inheritdoc */
-	public static function getValue($section, $key, $default = null) {
+	public static function getValue($section, $key, $default = null, $allowEmpty = false) {
 		static::setConfig();
 
 		if (!static::hasKey($section, $key, $default === null)) {
@@ -57,6 +57,12 @@ abstract class AbstractConfig implements ConfigInterface {
 
 		$value = static::doGetValue($section, $key);
 		if ($value || is_bool($value)) {
+			return $value;
+		}
+		if ($allowEmpty) {
+			if ($default !== null) {
+				return $default;
+			}
 			return $value;
 		}
 		if ($default === null) {
@@ -95,11 +101,12 @@ abstract class AbstractConfig implements ConfigInterface {
 	}
 
 	protected static function setConfig() {
-		if (static::$configFile === null) {
-			static::$configFile = static::setConfigFile();
-		}
 		if (static::$configFile !== static::setConfigFile()) {
 			static::$config = null;
+			static::$configFile = null;
+		}
+		if (static::$configFile === null) {
+			static::$configFile = static::setConfigFile();
 		}
 
 		if (static::$config === null) {
