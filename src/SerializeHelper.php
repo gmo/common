@@ -67,14 +67,22 @@ class SerializeHelper {
 	 * @param array $obj
 	 * @throws NotSerializableException If a constructor takes an object that
 	 *                                  does not implement {@see ISerializable}
+	 *                                  or if the class does not exist
 	 * @return $this
 	 */
 	public static function createClassFromArray($className, $obj) {
+		if (!class_exists($className)) {
+			throw new NotSerializableException($className . ' does not exist');
+		}
 		$cls = new \ReflectionClass($className);
 		$refParams = $cls->getConstructor()->getParameters();
 		$params = array();
 		foreach ($refParams as $refParam) {
-			$paramCls = $refParam->getClass();
+			try {
+				$paramCls = $refParam->getClass();
+			} catch (\ReflectionException $e) {
+				throw new NotSerializableException(sprintf('The constructor parameter "%s" of class "%s" is type hinting a nonexistent class', $refParam->getName(), $className));
+			}
 			if (!array_key_exists($refParam->name, $obj)) {
 				$params[] = $refParam->isOptional() ? $refParam->getDefaultValue() : null;
 				continue;
@@ -85,8 +93,11 @@ class SerializeHelper {
 				$timestamp = $obj[$refParam->name];
 				$params[] = DateTime::fromArray($timestamp);
 			} elseif ($paramCls->isSubclassOf('GMO\Common\ISerializable')) {
-				/** @var ISerializable $clsName */
+				/** @var ISerializable|string $clsName */
 				$clsName = $paramCls->name;
+				if (!class_exists($clsName)) {
+					throw new NotSerializableException($className . ' does not exist');
+				}
 				$params[] = $clsName::fromArray($obj[$refParam->name]);
 			} else {
 				throw new NotSerializableException($paramCls->name . ' does not implement GMO\Common\ISerializable');
