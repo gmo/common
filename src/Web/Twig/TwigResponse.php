@@ -43,10 +43,6 @@ class TwigResponse extends Response {
 		return $this;
 	}
 
-	public function render(\Twig_Environment $twig) {
-		$this->setContent($twig->render($this->template, $this->variables->toArray()));
-	}
-
 	/**
 	 * Constructor.
 	 *
