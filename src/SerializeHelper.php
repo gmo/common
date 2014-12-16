@@ -36,6 +36,8 @@ class SerializeHelper {
 				$values[$key] = $value->toArray();
 			} elseif ($value instanceof \DateTime) {
 				$values[$key] = DateTime::castFromBuiltin($value)->toArray();
+			} elseif ($value instanceof \Exception) {
+				$values[$key] = serialize($value);
 			} else {
 				$values[$key] = $value;
 			}
@@ -99,6 +101,8 @@ class SerializeHelper {
 					throw new NotSerializableException($className . ' does not exist');
 				}
 				$params[] = $clsName::fromArray($obj[$refParam->name]);
+			} elseif ($paramCls->isSubclassOf('\Exception') || $paramCls->getName() === 'Exception') {
+				$params[] = unserialize($obj[$refParam->name]);
 			} else {
 				throw new NotSerializableException($paramCls->name . ' does not implement GMO\Common\ISerializable');
 			}
