@@ -18,7 +18,8 @@ class TwigResponseServiceProvider implements ServiceProviderInterface, EventSubs
 		/** @var \Twig_Environment $twig */
 		$twig = $this->app['twig'];
 		$content = $twig->render($response->getTemplate(), $response->getVariables()->toArray());
-		$newResponse = new Response($content, $response->getStatusCode(), $response->headers->all());
+		$newResponse = new Response($content, $response->getStatusCode());
+		$newResponse->headers = $response->headers;
 		$event->setResponse($newResponse);
 	}
 
