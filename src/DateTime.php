@@ -13,7 +13,10 @@ class DateTime extends \DateTime implements ISerializable {
     }
 
 	public static function now($timezone = null) {
-		return new static(null, $timezone);
+		if ($timezone) {
+			return new static(null, $timezone);
+		}
+		return new static();
 	}
 
 	public function toString($format = self::SIMPLE_DATE) {
