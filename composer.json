@@ -2,15 +2,17 @@
 	"name": "gmo/common",
 	"description": "A library for common code",
 	"require": {
-		"symfony/yaml": "~2.5"
-	},
+		"symfony/yaml": "~2.5",
+        "symfony/http-foundation": "~2.6",
+        "firebase/php-jwt": "~1.0"
+    },
 	"require-dev": {
 		"psr/log": "1.0.0",
 		"monolog/monolog": "~1.6",
-		"silex/silex": "~1.0",
+		"silex/silex": "1.2.*@dev",
 		"twig/twig": "~1.8",
 		"phpunit/phpunit": "3.7.*"
-	},
+    },
 	"suggest": {
 		"psr/log": "Provides a basic console logger for PSR-3 interface",
 		"monolog/monolog": "Provides serializable formatter",
