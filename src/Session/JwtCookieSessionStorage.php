@@ -98,7 +98,9 @@ class JwtCookieSessionStorage implements SessionStorageInterface {
 	 * {@inheritdoc}
 	 */
 	public function regenerate($destroy = false, $lifetime = null) {
-		$this->cookieLifetime = $lifetime;
+		if (null !== $lifetime) {
+			ini_set('session.cookie_lifetime', $lifetime);
+		}
 
 		if ($destroy) {
 			$this->metadataBag->stampNew();
@@ -162,7 +164,7 @@ class JwtCookieSessionStorage implements SessionStorageInterface {
 	 */
 	protected function setCookie($cookieData) {
 		if (!headers_sent()) {
-			setcookie($this->cookieName, $cookieData, $this->cookieLifetime, "/", $this->cookieDomain);
+			setcookie($this->cookieName, $cookieData, $this->metadataBag->getLifetime(), '/', $this->cookieDomain);
 		}
 	}
 
@@ -184,7 +186,6 @@ class JwtCookieSessionStorage implements SessionStorageInterface {
 	protected $secret;
 	protected $cookieDomain;
 	protected $values;
-	protected $cookieLifetime = null;
 
 	/**
 	 * Array of SessionBagInterface.
