@@ -21,6 +21,7 @@ namespace GMO\Common\Collections;
 
 use ArrayIterator;
 use GMO\Common\ISerializable;
+use stdClass;
 use Traversable;
 
 /**
@@ -780,7 +781,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	}
 
 	/**
-	 * @param ArrayCollection|Traversable|array $collection
+	 * @param ArrayCollection|Traversable|array|stdClass $collection
 	 * @return array
 	 */
 	protected static function normalize($collection)
@@ -793,6 +794,8 @@ class ArrayCollection implements CollectionInterface, ISerializable
 			return array();
 		} elseif (is_scalar($collection)) {
 			return array($collection);
+		} elseif ($collection instanceof stdClass) {
+			return get_object_vars($collection);
 		} else {
 			return $collection;
 		}
@@ -802,7 +805,11 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	{
 		$collection = new ArrayCollection();
 		foreach ($arr as $key => $value) {
-			if (is_array($value) || $value instanceof ArrayCollection) {
+			if (is_array($value) ||
+				$value instanceof ArrayCollection ||
+				$value instanceof stdClass ||
+				$value instanceof Traversable
+			) {
 				$collection[$key] = static::convertToCollection($value);
 			} else {
 				$collection[$key] = $value;

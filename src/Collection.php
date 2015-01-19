@@ -207,5 +207,25 @@ class Collection {
 		return array_pop($list);
 	}
 
+	/**
+	 * Recursively convert stdClass to arrays
+	 * @link http://www.if-not-true-then-false.com/2009/php-tip-convert-stdclass-object-to-multidimensional-array-and-convert-multidimensional-array-to-stdclass-object/
+	 * @param $object
+	 * @return array
+	 */
+	public static function objectToArray($object) {
+		if (is_object($object)) {
+			// Convert stdClass to array
+			$object = get_object_vars($object);
+		}
+
+		if (is_array($object)) {
+			// recursive call for nested conversion
+			return array_map(array('static', __FUNCTION__), $object);
+		} else {
+			return $object;
+		}
+	}
+
 	private function __construct() { }
 }
