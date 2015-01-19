@@ -22,28 +22,40 @@ class JwtCookieSessionStorage implements SessionStorageInterface {
 		$this->secret = $secret;
 		$this->cookieDomain = $cookieDomain;
 
+		$this->values = $this->parseCookieData($cookieName, $cookies);
+
+		$this->metadataBag = new MetadataBag();
+	}
+
+	/**
+	 * @param $cookieName
+	 * @param $cookies
+	 * @return array
+	 */
+	protected function parseCookieData($cookieName, $cookies) {
 		if ($cookies instanceof ParameterBag) {
-			$this->rawCookie = $cookies->get($cookieName, '');
+			$cookieData = $cookies->get($cookieName, '');
 		} else {
 			$cookies = is_array($cookies) ? $cookies : $_COOKIE;
-			$this->rawCookie = Collection::get($cookies, $cookieName, '');
+			$cookieData = Collection::get($cookies, $cookieName, '');
 		}
 
 		try {
-			$this->values = Collection::objectToArray( JWT::decode($this->rawCookie, $this->secret) );
-		} catch(\Exception $e) {
-			$this->values = array();
+			return Collection::objectToArray(JWT::decode($cookieData, $this->secret));
+		} catch (\Exception $e) {
+			return array();
 		}
-
-		$this->metadataBag = new MetadataBag();
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function start() {
-		$this->started = true;
+		if (headers_sent($file, $line)) {
+			throw new \RuntimeException(sprintf('Failed to start the session because headers have already been sent by "%s" at line %d.', $file, $line));
+		}
 		$this->connectValuesToBags();
+		$this->started = true;
 		return true;
 	}
 
@@ -86,12 +98,13 @@ class JwtCookieSessionStorage implements SessionStorageInterface {
 	 * {@inheritdoc}
 	 */
 	public function regenerate($destroy = false, $lifetime = null) {
+		$this->cookieLifetime = $lifetime;
+
 		if ($destroy) {
 			$this->metadataBag->stampNew();
+			$this->setCookie('');
 		}
 
-		$this->cookieLifetime = $lifetime;
-		$this->setCookie();
 		return true;
 	}
 
@@ -99,8 +112,7 @@ class JwtCookieSessionStorage implements SessionStorageInterface {
 	 * {@inheritdoc}
 	 */
 	public function save() {
-		$this->rawCookie = JWT::encode($this->values, $this->secret);
-		$this->setCookie();
+		$this->setCookie(JWT::encode($this->values, $this->secret));
 	}
 
 	/**
@@ -146,10 +158,12 @@ class JwtCookieSessionStorage implements SessionStorageInterface {
 
 	/**
 	 * Sets the JWT cookie.
+	 * @param string $cookieData
 	 */
-	protected function setCookie() {
-		// Suppress warnings in case it's called after HTTP headers are sent.
-		@setcookie($this->cookieName, $this->rawCookie, $this->cookieLifetime, "/", $this->cookieDomain);
+	protected function setCookie($cookieData) {
+		if (!headers_sent()) {
+			setcookie($this->cookieName, $cookieData, $this->cookieLifetime, "/", $this->cookieDomain);
+		}
 	}
 
 	/**
@@ -169,7 +183,6 @@ class JwtCookieSessionStorage implements SessionStorageInterface {
 	protected $cookieName;
 	protected $secret;
 	protected $cookieDomain;
-	protected $rawCookie;
 	protected $values;
 	protected $cookieLifetime = null;
 
