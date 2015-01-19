@@ -3,6 +3,7 @@ namespace GMO\Common\Session;
 
 use GMO\Common\Collection;
 use JWT;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
 use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
@@ -11,18 +12,25 @@ class JwtCookieSessionStorage implements SessionStorageInterface {
 
 	/**
 	 * Constructor.
-	 * @param string $cookieName
-	 * @param string $secret Secret for encrypting/decrypting the JWT packet in the cookie
-	 * @param string|null $cookieDomain
+	 * @param string                  $cookieName
+	 * @param string                  $secret Secret for encrypting/decrypting the JWT packet in the cookie
+	 * @param string|null             $cookieDomain
+	 * @param ParameterBag|array|null $cookies
 	 */
-	public function __construct($cookieName, $secret, $cookieDomain = null) {
+	public function __construct($cookieName, $secret, $cookieDomain = null, $cookies = null) {
 		$this->cookieName = $cookieName;
 		$this->secret = $secret;
 		$this->cookieDomain = $cookieDomain;
-		$this->rawCookie = Collection::get($_COOKIE, $cookieName, '');
+
+		if ($cookies instanceof ParameterBag) {
+			$this->rawCookie = $cookies->get($cookieName, '');
+		} else {
+			$cookies = is_array($cookies) ? $cookies : $_COOKIE;
+			$this->rawCookie = Collection::get($cookies, $cookieName, '');
+		}
 
 		try {
-			$this->values = $this->objectToArray( JWT::decode($this->rawCookie, $this->secret) );
+			$this->values = Collection::objectToArray( JWT::decode($this->rawCookie, $this->secret) );
 		} catch(\Exception $e) {
 			$this->values = array();
 		}
@@ -77,9 +85,8 @@ class JwtCookieSessionStorage implements SessionStorageInterface {
 	/**
 	 * {@inheritdoc}
 	 */
-
 	public function regenerate($destroy = false, $lifetime = null) {
-            if ($destroy) {
+		if ($destroy) {
 			$this->metadataBag->stampNew();
 		}
 
@@ -157,24 +164,6 @@ class JwtCookieSessionStorage implements SessionStorageInterface {
 			$this->values[$key] = isset($this->values[$key]) ? $this->values[$key] : array();
 			$bag->initialize($this->values[$key]);
 		}
-	}
-
-	/**
-	 * Recursively converts stdClass to array
-	 * @param $object
-	 * @return array
-	 */
-	protected function objectToArray($object) {
-		$array = (array) $object;
-		foreach($array as $key => $val) {
-			if(!is_object($val)) {
-				continue;
-			}
-
-			$array[$key] = $this->objectToArray($val);
-		}
-
-		return $array;
 	}
 
 	protected $cookieName;
