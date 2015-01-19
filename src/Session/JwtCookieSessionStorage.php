@@ -51,9 +51,14 @@ class JwtCookieSessionStorage implements SessionStorageInterface {
 	 * {@inheritdoc}
 	 */
 	public function start() {
+		if ($this->started) {
+			return true;
+		}
+
 		if (headers_sent($file, $line)) {
 			throw new \RuntimeException(sprintf('Failed to start the session because headers have already been sent by "%s" at line %d.', $file, $line));
 		}
+
 		$this->connectValuesToBags();
 		$this->started = true;
 		return true;
