@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
 use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
 
 class JwtCookieSessionStorage implements SessionStorageInterface {
+
 	/**
 	 * Constructor.
 	 * @param string $cookieName
@@ -140,7 +141,7 @@ class JwtCookieSessionStorage implements SessionStorageInterface {
 	 * Sets the JWT cookie.
 	 */
 	protected function setCookie() {
-		// Supresses warnings in case it's called after HTTP headers are sent.
+		// Suppress warnings in case it's called after HTTP headers are sent.
 		@setcookie($this->cookieName, $this->rawCookie, $this->cookieLifetime, "/", $this->cookieDomain);
 	}
 
