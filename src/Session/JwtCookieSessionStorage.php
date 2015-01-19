@@ -84,14 +84,14 @@ class JwtCookieSessionStorage implements SessionStorageInterface {
 	 * {@inheritdoc}
 	 */
 	public function getName() {
-		return $this->name;
+		return $this->cookieName;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function setName($name) {
-		$this->name = $name;
+		$this->cookieName = $name;
 	}
 
 	/**
@@ -195,7 +195,6 @@ class JwtCookieSessionStorage implements SessionStorageInterface {
 
 	/** @var bool */
 	protected $started = false;
-	protected $name;
 	/** @var MetadataBag */
 	protected $metadataBag;
 }
