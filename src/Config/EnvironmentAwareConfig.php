@@ -31,7 +31,13 @@ use GMO\Common\String;
  */
 abstract class EnvironmentAwareConfig extends AbstractConfig {
 
-	public static function getEnvironment() { return getenv('PHP_ENV'); }
+	public static function getEnvironment() {
+		$env = getenv('PHP_ENV');
+		if ($env === false) {
+			throw new ConfigException('"PHP_ENV" is not set');
+		}
+		return $env;
+	}
 
 	/** @inheritdoc */
 	public static function getValue($section, $key, $default = null, $allowEmpty = false) {
