@@ -66,7 +66,7 @@ abstract class AbstractConfig implements ConfigInterface {
 			return $value;
 		}
 		if ($default === null) {
-			throw new ConfigException("Config value for key: \"$key\" is missing!");
+			throw new ConfigException('Config value for key: "'. ($section ? $section . '.' : '') . $key .'" is missing!');
 		}
 		return $default;
 	}
