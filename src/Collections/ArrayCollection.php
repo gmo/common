@@ -81,6 +81,10 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return $this->elements;
 	}
 
+	public function toArrayRecursive() {
+		return static::convertToArray($this->elements);
+	}
+
 	public function first()
 	{
 		return reset($this->elements);
