@@ -296,6 +296,21 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return $this;
 	}
 
+	/**
+	 * Sets default values on this collection
+	 *
+	 * Basically the opposite of merge/replace.
+	 *
+	 * @param CollectionInterface|Traversable|array $collection The collection from which elements will be extracted.
+	 * @return $this|ArrayCollection
+	 */
+	public function defaults($collection) {
+		$defaults = static::normalize($collection);
+		$this->elements = array_replace($defaults, $this->elements);
+
+		return $this;
+	}
+
 	public function isEmpty()
 	{
 		return ! $this->elements;
