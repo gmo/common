@@ -1,12 +1,12 @@
 <?php
-namespace Gmo\Common;
+namespace Gmo\Common\Collections;
 
 /**
  * Class Collection
  * @package GMO\Common
  * @since 1.7.0
  */
-class Collection {
+class Arr {
 
 	/**
 	 * Returns a key's value from a collection or default value if key does not exist
