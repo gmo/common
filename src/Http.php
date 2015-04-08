@@ -110,11 +110,4 @@ class Http {
 		       && (167772160  !== ($ip & 4278190080))  // 10/8
 		       && (2851995648 !== ($ip & 4294901760)); // 169.254/16
 	}
-
-	/**
-	 * @deprecated
-	 */
-	public static function getRemoteIP() {
-		return static::getIp();
-	}
 }

@@ -18,22 +18,6 @@ class Path {
 	}
 
 	/**
-	 * Use {@see Path::truePath()}
-	 * @deprecated Path::truePath()
-	 */
-	public static function toAbsFile($baseDir, $path) {
-		return static::truePath($path, $baseDir);
-	}
-
-	/**
-	 * Use {@see Path::truePath()}
-	 * @deprecated Path::truePath()
-	 */
-	public static function toAbsDir($baseDir, $dir) {
-		return static::truePath($dir, $baseDir);
-	}
-
-	/**
 	 * This function is to replace PHP's extremely buggy realpath().
 	 *
 	 * Both $path and $basePath can be relative or absolute.

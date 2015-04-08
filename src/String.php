@@ -221,43 +221,5 @@ class String {
 		return ucfirst(trim(strtolower(preg_replace(array( '/([A-Z])/', '/[_\s]+/' ), array( '_$1', ' ' ), $text))));
 	}
 
-	#region Deprecated functions
-	/**
-	 * Return whether a term is in a string ignoring case
-	 * @param string $haystack The string to search in
-	 * @param string $needle The search term
-	 * @return bool
-	 * @deprecated Use containsInsensitive() instead
-	 * @TODO Remove in 2.0
-	 */
-	public static function iContains($haystack, $needle) {
-		return static::containsInsensitive($haystack, $needle);
-	}
-
-	/**
-	 * Return whether a string starts with a term ignoring case
-	 * @param string $haystack The string to search in
-	 * @param string $needle The search term
-	 * @return bool
-	 * @deprecated Use startsWithInsensitive() instead
-	 * @TODO Remove in 2.0
-	 */
-	public static function iStartsWith($haystack, $needle) {
-		return static::startsWithInsensitive($haystack, $needle);
-	}
-
-	/**
-	 * Return whether a string ends with a term ignoring case
-	 * @param string $haystack The string to search in
-	 * @param string $needle The search term
-	 * @return bool
-	 * @deprecated Use endsWithInsensitive() instead
-	 * @TODO Remove in 2.0
-	 */
-	public static function iEndsWith($haystack, $needle) {
-		return static::endsWithInsensitive($haystack, $needle);
-	}
-	#endregion
-
 	private function __construct() { }
 }
