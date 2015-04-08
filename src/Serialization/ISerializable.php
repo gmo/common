@@ -24,7 +24,7 @@ namespace {
 	}
 }
 
-namespace Gmo\Common {
+namespace Gmo\Common\Serialization {
 
 	/** @noinspection PhpUndefinedClassInspection */
 

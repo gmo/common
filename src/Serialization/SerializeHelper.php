@@ -1,5 +1,5 @@
 <?php
-namespace Gmo\Common;
+namespace Gmo\Common\Serialization;
 
 use Gmo\Common\Exception\NotSerializableException;
 
