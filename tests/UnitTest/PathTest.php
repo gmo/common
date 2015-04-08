@@ -1,5 +1,5 @@
 <?php
-namespace UnitTest;
+namespace Gmo\Common\UnitTest;
 
 use Gmo\Common\Path;
 

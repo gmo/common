@@ -1,5 +1,5 @@
 <?php
-namespace UnitTest\Config;
+namespace Gmo\Common\UnitTest\Config;
 
 use Gmo\Common\Config\EnvironmentAwareConfig;
 
