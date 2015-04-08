@@ -1,9 +1,9 @@
 <?php
 namespace UnitTest;
 
-use GMO\Common\Collections\ArrayCollection;
-use GMO\Common\Config\AbstractConfig;
-use GMO\Common\Path;
+use Gmo\Common\Collections\ArrayCollection;
+use Gmo\Common\Config\AbstractConfig;
+use Gmo\Common\Path;
 
 class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 

@@ -1,10 +1,10 @@
 <?php
-namespace GMO\Common\Config;
+namespace Gmo\Common\Config;
 
-use GMO\Common\Collections\ArrayCollection;
-use GMO\Common\Exception\ConfigException;
-use GMO\Common\Path;
-use GMO\Common\String;
+use Gmo\Common\Collections\ArrayCollection;
+use Gmo\Common\Exception\ConfigException;
+use Gmo\Common\Path;
+use Gmo\Common\String;
 use Symfony\Component\Yaml\Yaml;
 
 abstract class AbstractConfig implements ConfigInterface {

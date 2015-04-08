@@ -1,7 +1,7 @@
 <?php
-namespace GMO\Common;
+namespace Gmo\Common;
 
-use GMO\Common\Exception\PathException;
+use Gmo\Common\Exception\PathException;
 
 /**
  * Class Path

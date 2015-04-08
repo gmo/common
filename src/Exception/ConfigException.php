@@ -1,5 +1,5 @@
 <?php
-namespace GMO\Common\Exception;
+namespace Gmo\Common\Exception;
 
 /**
  * Class ConfigException

@@ -1,7 +1,7 @@
 <?php
-namespace GMO\Common;
+namespace Gmo\Common;
 
-use GMO\Common\Exception\NotSerializableException;
+use Gmo\Common\Exception\NotSerializableException;
 
 /**
  * This class was refactored from {@see AbstractSerializable} to make it easier when you

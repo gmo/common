@@ -1,7 +1,7 @@
 <?php
 namespace UnitTest;
 
-use GMO\Common\Path;
+use Gmo\Common\Path;
 
 class PathTest extends \PHPUnit_Framework_TestCase {
 

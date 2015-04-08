@@ -1,7 +1,7 @@
 <?php
 namespace UnitTest;
 
-use GMO\Common\AbstractSerializable;
+use Gmo\Common\AbstractSerializable;
 
 class SerializableTest extends \PHPUnit_Framework_TestCase {
 

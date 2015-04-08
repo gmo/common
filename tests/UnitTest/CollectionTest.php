@@ -1,7 +1,7 @@
 <?php
 namespace UnitTest;
 
-use GMO\Common\Collection;
+use Gmo\Common\Collection;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase {
 

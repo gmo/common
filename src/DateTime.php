@@ -1,5 +1,5 @@
 <?php
-namespace GMO\Common;
+namespace Gmo\Common;
 
 class DateTime extends \DateTime implements ISerializable {
 

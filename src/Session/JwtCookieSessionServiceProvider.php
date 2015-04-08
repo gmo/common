@@ -1,5 +1,5 @@
 <?php
-namespace GMO\Common\Session;
+namespace Gmo\Common\Session;
 
 use Silex\Application;
 use Silex\Provider\SessionServiceProvider;

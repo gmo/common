@@ -1,7 +1,7 @@
 <?php
-namespace GMO\Common\Web\Twig;
+namespace Gmo\Common\Web\Twig;
 
-use GMO\Common\Collections\ArrayCollection;
+use Gmo\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Response;
 
 class TwigResponse extends Response {

@@ -1,7 +1,7 @@
 <?php
-namespace GMO\Common;
+namespace Gmo\Common;
 
-use GMO\Common\Collections\ArrayCollection;
+use Gmo\Common\Collections\ArrayCollection;
 
 /**
  * Class String

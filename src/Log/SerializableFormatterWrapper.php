@@ -1,9 +1,9 @@
 <?php
-namespace GMO\Common\Log;
+namespace Gmo\Common\Log;
 
-use GMO\Common\Collection;
-use GMO\Common\DateTime;
-use GMO\Common\ISerializable;
+use Gmo\Common\Collection;
+use Gmo\Common\DateTime;
+use Gmo\Common\ISerializable;
 use Monolog\Formatter\FormatterInterface;
 
 class SerializableFormatterWrapper implements FormatterInterface {

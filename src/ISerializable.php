@@ -24,7 +24,7 @@ namespace {
 	}
 }
 
-namespace GMO\Common {
+namespace Gmo\Common {
 
 	/** @noinspection PhpUndefinedClassInspection */
 

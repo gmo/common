@@ -1,7 +1,7 @@
 <?php
 namespace UnitTest\Config;
 
-use GMO\Common\Config\EnvironmentAwareConfig;
+use Gmo\Common\Config\EnvironmentAwareConfig;
 
 class EnvironmentAwareConfigTest extends \PHPUnit_Framework_TestCase {
 

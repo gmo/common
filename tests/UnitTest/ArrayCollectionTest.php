@@ -1,7 +1,7 @@
 <?php
 namespace UnitTest;
 
-use GMO\Common\Collections\ArrayCollection;
+use Gmo\Common\Collections\ArrayCollection;
 
 class ArrayCollectionTest extends \PHPUnit_Framework_TestCase {
 
