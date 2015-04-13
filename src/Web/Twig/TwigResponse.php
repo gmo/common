@@ -61,24 +61,13 @@ class TwigResponse extends Response implements RenderableInterface {
 		return $this;
 	}
 
-	public function setContent($content) {
-		if (!$content) {
-			return $this;
-		}
-		if (!$this->rendered) {
-			throw new \LogicException('Should not set content before response is rendered');
-		}
-		parent::setContent($content);
-		$this->rendered = true;
-		return $this;
-	}
-
 	public function render(Environment $twig) {
 		$templates = ArrayCollection::create($this->template)
 			->map(function ($template) {
 				return String::endsWith($template, '.twig') ? $template : $template . '.twig';
 			});
 		$this->setContent($twig->resolveTemplate($templates->toArray())->render($this->variables->toArray()));
+		$this->rendered = true;
 	}
 
 	public function isRendered() {
