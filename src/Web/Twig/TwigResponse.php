@@ -73,13 +73,6 @@ class TwigResponse extends Response implements RenderableInterface {
 		return $this;
 	}
 
-	public function getContent() {
-		if (!$this->rendered) {
-			throw new \LogicException('Should not get content before response is rendered');
-		}
-		return parent::getContent();
-	}
-
 	public function render(Environment $twig) {
 		$templates = ArrayCollection::create($this->template)
 			->map(function ($template) {
