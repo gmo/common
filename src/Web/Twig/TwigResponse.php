@@ -62,7 +62,7 @@ class TwigResponse extends Response implements RenderableInterface {
 	}
 
 	public function setContent($content) {
-		if (!$this->rendered) {
+		if ($content && !$this->rendered) {
 			throw new \LogicException('Should not set content before response is rendered');
 		}
 		parent::setContent($content);
