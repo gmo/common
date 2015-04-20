@@ -784,6 +784,10 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return new static(array_combine(static::normalize($keys), static::normalize($values)));
 	}
 
+	public static function isTraversable($object) {
+		return is_array($object) || $object instanceof \Traversable;
+	}
+
 	protected static function normalizeConstructorAgs($args) {
 		if (count($args) == 1) {
 			return static::normalize($args[0]);
@@ -824,11 +828,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	{
 		$collection = new ArrayCollection();
 		foreach ($arr as $key => $value) {
-			if (is_array($value) ||
-				$value instanceof ArrayCollection ||
-				$value instanceof stdClass ||
-				$value instanceof Traversable
-			) {
+			if (static::isTraversable($value) || $value instanceof stdClass) {
 				$collection[$key] = static::convertToCollection($value);
 			} else {
 				$collection[$key] = $value;
@@ -841,7 +841,7 @@ class ArrayCollection implements CollectionInterface, ISerializable
 	{
 		$arr = array();
 		foreach ($collection as $key => $value) {
-			if (is_array($value) || $value instanceof ArrayCollection) {
+			if (static::isTraversable($value)) {
 				$arr[$key] = static::convertToArray($value);
 			} else {
 				$arr[$key] = $value;

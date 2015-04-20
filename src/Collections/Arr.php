@@ -227,5 +227,9 @@ class Arr {
 		}
 	}
 
+	public static function isTraversable($object) {
+		return is_array($object) || $object instanceof \Traversable;
+	}
+
 	private function __construct() { }
 }
