@@ -1,5 +1,5 @@
 <?php
-namespace Routing;
+namespace GMO\Common\Web\Routing;
 
 use Silex\RedirectableUrlMatcher;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;

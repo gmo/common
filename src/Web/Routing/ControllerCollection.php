@@ -1,8 +1,7 @@
 <?php
-namespace Routing;
+namespace GMO\Common\Web\Routing;
 
 use GMO\Common\String;
-use GMO\Common\Web\Routing\DefaultControllerAwareInterface;
 use Silex;
 
 /**

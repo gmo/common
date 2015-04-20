@@ -1,5 +1,5 @@
 <?php
-namespace Routing;
+namespace GMO\Common\Web\Routing;
 
 use Psr\Log\LoggerInterface;
 use Silex\Application;
