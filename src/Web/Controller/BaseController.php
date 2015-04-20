@@ -3,6 +3,7 @@ namespace GMO\Common\Web\Controller;
 
 use Silex\Application;
 use Silex\ControllerProviderInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -58,6 +59,19 @@ class BaseController implements ControllerProviderInterface {
 	 */
 	public function getSession() {
 		return $this->app['session'];
+	}
+
+	/**
+	 * Convert some data into a JSON response.
+	 *
+	 * @param mixed $data    The response data
+	 * @param int   $status  The response status code
+	 * @param array $headers An array of response headers
+	 *
+	 * @return JsonResponse
+	 */
+	public function json($data = array(), $status = 200, array $headers = array()) {
+		return new JsonResponse($data, $status, $headers);
 	}
 
 	/** @var Application */
