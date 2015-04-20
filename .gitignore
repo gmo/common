@@ -2,3 +2,4 @@ vendor
 atlassian-ide-plugin.xml
 tap-files/
 .idea
+composer.lock
