@@ -1,5 +1,5 @@
 <?php
-namespace Log;
+namespace GMO\Common\Log;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
