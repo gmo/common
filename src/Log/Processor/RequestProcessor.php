@@ -15,6 +15,7 @@ class RequestProcessor {
 			'host' => $request->getHost(),
 			'path' =>  $request->getPathInfo(),
 			'query' => $request->query->all(),
+			'userAgent' => $request->server->get('HTTP_USER_AGENT'),
 		];
 		if ($request->isMethod('POST')) {
 			$params['body'] = $request->request->all();
