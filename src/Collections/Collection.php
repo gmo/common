@@ -139,7 +139,7 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	 * @return boolean TRUE if the collection contains an item with the specified key/index,
 	 *                 FALSE otherwise.
 	 */
-	public function containsKey($key)
+	public function has($key)
 	{
 		return isset($this->items[$key]) || array_key_exists($key, $this->items);
 	}
@@ -152,7 +152,7 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	 *
 	 * @return boolean TRUE if the collection contains the item, FALSE otherwise.
 	 */
-	public function contains($item)
+	public function hasItem($item)
 	{
 		return in_array($item, $this->items, true);
 	}
@@ -519,7 +519,7 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 
 	public function offsetExists($offset)
 	{
-		return $this->containsKey($offset);
+		return $this->has($offset);
 	}
 
 	public function offsetGet($offset)
