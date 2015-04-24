@@ -40,26 +40,26 @@ use Traversable;
 class ArrayCollection implements CollectionInterface, SerializableInterface
 {
 	/** @var array An array containing the entries of this collection. */
-	protected $elements;
+	protected $items;
 
 	/**
 	 * Initializes a new ArrayCollection.
 	 *
-	 * @param CollectionInterface|Traversable|array|mixed|null $elements
+	 * @param CollectionInterface|Traversable|array|mixed|null $items
 	 */
-	public function __construct($elements = array())
+	public function __construct($items = array())
 	{
-		$this->elements = static::normalizeConstructorAgs(func_get_args());
+		$this->items = static::normalizeConstructorAgs(func_get_args());
 	}
 
 	/**
 	 * Initializes a new ArrayCollection.
 	 *
-	 * @param CollectionInterface|Traversable|array|mixed|null $elements
+	 * @param CollectionInterface|Traversable|array|mixed|null $items
 	 *
 	 * @return static|ArrayCollection
 	 */
-	public static function create($elements = array())
+	public static function create($items = array())
 	{
 		return new static(static::normalizeConstructorAgs(func_get_args()));
 	}
@@ -67,54 +67,54 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	/**
 	 * Initializes a new ArrayCollection and recursive converts arrays to collections
 	 *
-	 * @param CollectionInterface|Traversable|array|mixed|null $elements
+	 * @param CollectionInterface|Traversable|array|mixed|null $items
 	 *
 	 * @return static|ArrayCollection
 	 */
-	public static function createRecursive($elements = array())
+	public static function createRecursive($items = array())
 	{
 		return static::convertToCollection(static::normalizeConstructorAgs(func_get_args()));
 	}
 
 	public function toArray()
 	{
-		return $this->elements;
+		return $this->items;
 	}
 
 	public function toArrayRecursive() {
-		return static::convertToArray($this->elements);
+		return static::convertToArray($this->items);
 	}
 
 	public function first()
 	{
-		return reset($this->elements);
+		return reset($this->items);
 	}
 
 	public function last()
 	{
-		return end($this->elements);
+		return end($this->items);
 	}
 
 	public function key()
 	{
-		return key($this->elements);
+		return key($this->items);
 	}
 
 	public function next()
 	{
-		return next($this->elements);
+		return next($this->items);
 	}
 
 	public function current()
 	{
-		return current($this->elements);
+		return current($this->items);
 	}
 
 	public function remove($key)
 	{
-		if (isset($this->elements[$key]) || array_key_exists($key, $this->elements)) {
-			$removed = $this->elements[$key];
-			unset($this->elements[$key]);
+		if (isset($this->items[$key]) || array_key_exists($key, $this->items)) {
+			$removed = $this->items[$key];
+			unset($this->items[$key]);
 
 			return $removed;
 		}
@@ -125,11 +125,11 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	/** @inheritdoc */
 	public function removeElement($element)
 	{
-		$key = array_search($element, $this->elements, true);
+		$key = array_search($element, $this->items, true);
 
 		if ($key !== false) {
-			$value = $this->elements[$key];
-			unset($this->elements[$key]);
+			$value = $this->items[$key];
+			unset($this->items[$key]);
 			return $value;
 		}
 
@@ -148,17 +148,17 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 
 	public function containsKey($key)
 	{
-		return isset($this->elements[$key]) || array_key_exists($key, $this->elements);
+		return isset($this->items[$key]) || array_key_exists($key, $this->items);
 	}
 
 	public function contains($element)
 	{
-		return in_array($element, $this->elements, true);
+		return in_array($element, $this->items, true);
 	}
 
 	public function exists($p)
 	{
-		foreach ($this->elements as $key => $element) {
+		foreach ($this->items as $key => $element) {
 			if ($p($key, $element)) {
 				return true;
 			}
@@ -168,30 +168,30 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 
 	public function indexOf($element)
 	{
-		return array_search($element, $this->elements, true);
+		return array_search($element, $this->items, true);
 	}
 
 	public function get($key, $default = null)
 	{
-		if (isset($this->elements[$key])) {
-			return $this->elements[$key];
+		if (isset($this->items[$key])) {
+			return $this->items[$key];
 		}
 		return $default;
 	}
 
 	public function getKeys()
 	{
-		return static::create(array_keys($this->elements));
+		return static::create(array_keys($this->items));
 	}
 
 	public function getValues()
 	{
-		return static::create(array_values($this->elements));
+		return static::create(array_values($this->items));
 	}
 
 	public function count()
 	{
-		return count($this->elements);
+		return count($this->items);
 	}
 
 	/**
@@ -200,7 +200,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 */
 	public function set($key, $value)
 	{
-		$this->elements[$key] = $value;
+		$this->items[$key] = $value;
 		return $this;
 	}
 
@@ -210,7 +210,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 */
 	public function add($value)
 	{
-		$this->elements[] = $value;
+		$this->items[] = $value;
 		return $this;
 	}
 
@@ -220,7 +220,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 */
 	public function prepend($value)
 	{
-		array_unshift($this->elements, $value);
+		array_unshift($this->items, $value);
 		return $this;
 	}
 
@@ -233,8 +233,8 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	public function replace($collection, $_ = null)
 	{
 		$args = static::normalizeArgs(func_get_args());
-		array_unshift($args, $this->elements);
-		$this->elements = call_user_func_array('array_replace', $args);
+		array_unshift($args, $this->items);
+		$this->items = call_user_func_array('array_replace', $args);
 		return $this;
 	}
 
@@ -247,10 +247,10 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	public function replaceRecursive($collection, $_ = null)
 	{
 		$args = static::normalizeArgs(func_get_args());
-		array_unshift($args, $this->elements);
+		array_unshift($args, $this->items);
 		$args = static::convertToArray($args);
-		$elements = call_user_func_array('array_replace_recursive', $args);
-		$this->elements = $this->convertToCollection($elements)->toArray();
+		$items = call_user_func_array('array_replace_recursive', $args);
+		$this->items = $this->convertToCollection($items)->toArray();
 		return $this;
 	}
 
@@ -268,8 +268,8 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	public function merge($collection, $_ = null)
 	{
 		$args = static::normalizeArgs(func_get_args());
-		array_unshift($args, $this->elements);
-		$this->elements = call_user_func_array('array_merge', $args);
+		array_unshift($args, $this->items);
+		$this->items = call_user_func_array('array_merge', $args);
 		return $this;
 	}
 
@@ -288,10 +288,10 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	public function mergeRecursive($collection, $_ = null)
 	{
 		$args = static::normalizeArgs(func_get_args());
-		array_unshift($args, $this->elements);
+		array_unshift($args, $this->items);
 		$args = static::convertToArray($args);
-		$elements = call_user_func_array('array_merge_recursive', $args);
-		$this->elements = $this->convertToCollection($elements)->toArray();
+		$items = call_user_func_array('array_merge_recursive', $args);
+		$this->items = $this->convertToCollection($items)->toArray();
 
 		return $this;
 	}
@@ -306,14 +306,14 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 */
 	public function defaults($collection) {
 		$defaults = static::normalize($collection);
-		$this->elements = array_replace($defaults, $this->elements);
+		$this->items = array_replace($defaults, $this->items);
 
 		return $this;
 	}
 
 	public function isEmpty()
 	{
-		return ! $this->elements;
+		return ! $this->items;
 	}
 
 	/**
@@ -322,7 +322,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 */
 	public function map($func)
 	{
-		return static::create(array_map($func, $this->elements));
+		return static::create(array_map($func, $this->items));
 	}
 
 	/**
@@ -332,16 +332,16 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	public function filter($p)
 	{
 		if ($p === null) {
-			return static::create(array_filter($this->elements));
+			return static::create(array_filter($this->items));
 		}
 		$func = new \ReflectionFunction($p);
 		$params = $func->getParameters();
 		if (count($params) === 1 && $params[0]->getName() !== 'key') {
-			return static::create(array_filter($this->elements, $p));
+			return static::create(array_filter($this->items, $p));
 		}
 
 		$newElements = new static();
-		foreach ($this->elements as $key => $value) {
+		foreach ($this->items as $key => $value) {
 			if ($p($key, $value)) {
 				$newElements->set($key, $value);
 			}
@@ -352,7 +352,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 
 	public function forAll($p)
 	{
-		foreach ($this->elements as $key => $element) {
+		foreach ($this->items as $key => $element) {
 			if ( ! $p($key, $element)) {
 				return false;
 			}
@@ -364,7 +364,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	public function partition($p)
 	{
 		$coll1 = $coll2 = array();
-		foreach ($this->elements as $key => $element) {
+		foreach ($this->items as $key => $element) {
 			if ($p($key, $element)) {
 				$coll1[$key] = $element;
 			} else {
@@ -380,7 +380,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 */
 	public function clear()
 	{
-		$this->elements = array();
+		$this->items = array();
 		return $this;
 	}
 
@@ -390,7 +390,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 */
 	public function slice($offset, $length = null)
 	{
-		return static::create(array_slice($this->elements, $offset, $length, true));
+		return static::create(array_slice($this->items, $offset, $length, true));
 	}
 
 	/**
@@ -400,7 +400,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 */
 	public function copy()
 	{
-		return new static($this->elements);
+		return new static($this->items);
 	}
 
 	/**
@@ -426,7 +426,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 
 	public function getIterator()
 	{
-		return new ArrayIterator($this->elements);
+		return new ArrayIterator($this->items);
 	}
 
 	//endregion
@@ -492,7 +492,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	public function unserialize($serialized)
 	{
 		$cls = $this->fromJson($serialized);
-		$this->elements = $cls->toArray();
+		$this->items = $cls->toArray();
 	}
 
 	public function jsonSerialize()
@@ -510,7 +510,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 */
 	public function reverse()
 	{
-		$this->elements = array_reverse($this->elements, true);
+		$this->items = array_reverse($this->items, true);
 		return $this;
 	}
 
@@ -520,7 +520,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 */
 	public function shuffle()
 	{
-		shuffle($this->elements);
+		shuffle($this->items);
 		return $this;
 	}
 
@@ -541,11 +541,11 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	public function sortKeys($p = true)
 	{
 		if (is_callable($p)) {
-			uksort($this->elements, $p);
+			uksort($this->items, $p);
 		} elseif ($p) {
-			ksort($this->elements);
+			ksort($this->items);
 		} else {
-			krsort($this->elements);
+			krsort($this->items);
 		}
 		return $this;
 	}
@@ -567,11 +567,11 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	public function sortValues($p = true)
 	{
 		if (is_callable($p)) {
-			usort($this->elements, $p);
+			usort($this->items, $p);
 		} elseif ($p) {
-			sort($this->elements);
+			sort($this->items);
 		} else {
-			rsort($this->elements);
+			rsort($this->items);
 		}
 		return $this;
 	}
@@ -584,9 +584,9 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	public function sortNatural($caseSensitive = true)
 	{
 		if ($caseSensitive) {
-			natsort($this->elements);
+			natsort($this->items);
 		} else {
-			natcasesort($this->elements);
+			natcasesort($this->items);
 		}
 		return $this;
 	}
@@ -611,7 +611,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	public function diffKeys($values, $_ = null, $p = null)
 	{
 		$args = static::normalizeArgs(func_get_args());
-		array_unshift($args, $this->elements);
+		array_unshift($args, $this->items);
 		$p = end($args);
 		if (is_callable($p)) {
 			return new static(call_user_func_array('array_diff_ukey', $args));
@@ -636,7 +636,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	public function diffValues($values, $_ = null, $p = null)
 	{
 		$args = static::normalizeArgs(func_get_args());
-		array_unshift($args, $this->elements);
+		array_unshift($args, $this->items);
 		$p = end($args);
 		if (is_callable($p)) {
 			return new static(call_user_func_array('array_udiff', $args));
@@ -661,7 +661,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	public function intersectKeys($values, $_ = null, $p = null)
 	{
 		$args = static::normalizeArgs(func_get_args());
-		array_unshift($args, $this->elements);
+		array_unshift($args, $this->items);
 		$p = end($args);
 		if (is_callable($p)) {
 			return new static(call_user_func_array('array_intersect_ukey', $args));
@@ -686,7 +686,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	public function intersectValues($values, $_ = null, $p = null)
 	{
 		$args = static::normalizeArgs(func_get_args());
-		array_unshift($args, $this->elements);
+		array_unshift($args, $this->items);
 		$p = end($args);
 		if (is_callable($p)) {
 			return new static(call_user_func_array('array_uintersect', $args));
@@ -704,7 +704,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 */
 	public function unique($flags = null)
 	{
-		$this->elements = array_unique($this->elements, $flags);
+		$this->items = array_unique($this->items, $flags);
 		return $this;
 	}
 
@@ -714,7 +714,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 */
 	public function sum()
 	{
-		return array_sum($this->elements);
+		return array_sum($this->items);
 	}
 
 	/**
@@ -727,7 +727,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 */
 	public function reduce($func, $initial = null)
 	{
-		return array_reduce($this->elements, $func, $initial);
+		return array_reduce($this->items, $func, $initial);
 	}
 
 	/**
@@ -739,11 +739,11 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 */
 	public function flip()
 	{
-		$arr = array_flip($this->elements);
+		$arr = array_flip($this->items);
 		if (!$arr) {
 			throw new \Exception('Failed to flip collection');
 		}
-		$this->elements = $arr;
+		$this->items = $arr;
 		return $this;
 	}
 
@@ -758,7 +758,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 */
 	public function chunk($size)
 	{
-		return static::create(array_map(array($this, 'create'), array_chunk($this->elements, $size, true)));
+		return static::create(array_map(array($this, 'create'), array_chunk($this->items, $size, true)));
 	}
 
 	/**
@@ -769,7 +769,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 */
 	public function join($delimiter)
 	{
-		return implode($delimiter, $this->elements);
+		return implode($delimiter, $this->items);
 	}
 
 	/**
