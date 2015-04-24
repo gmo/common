@@ -21,7 +21,7 @@ class LogstashHandler extends RedisHandler {
 	 */
 	public function __construct($redis, $appName, $key, $level = Logger::DEBUG, $bubble = true) {
 		$this->appName = $appName;
-		parent::__construct($redis->redis, $key, $level, $bubble);
+		parent::__construct($redis->getClient(), $key, $level, $bubble);
 	}
 
 	protected $appName;

@@ -2,12 +2,12 @@
 	"name": "gmo/common",
 	"description": "A library for common code",
 	"require": {
-		"symfony/yaml": "~2.5",
+		"symfony/yaml": "~2.6",
 		"symfony/http-foundation": "~2.6",
 		"firebase/php-jwt": "~1.0"
 	},
 	"require-dev": {
-		"gmo/cache": "~1.0",
+		"gmo/cache": "~1.0@dev",
 		"psr/log": "1.0.0",
 		"monolog/monolog": "~1.6",
 		"silex/silex": "1.2.*@dev",
