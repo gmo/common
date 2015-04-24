@@ -19,25 +19,18 @@
 
 namespace Gmo\Common\Collections;
 
+use ArrayAccess;
 use ArrayIterator;
+use Countable;
 use Gmo\Common\Serialization\SerializableInterface;
+use IteratorAggregate;
 use stdClass;
 use Traversable;
 
 /**
  * An ArrayCollection is a Collection implementation that wraps a regular PHP array.
- *
- * GMO Modifications:
- *  Implementing SerializableInterface
- *  Modified public functions to take a callable rather than {@see \Closure}
- * 	Added default parameter to get()
- *
- * @since  2.0
- * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author Jonathan Wage <jonwage@gmail.com>
- * @author Roman Borschel <roman@code-factory.org>
  */
-class ArrayCollection implements CollectionInterface, SerializableInterface
+class ArrayCollection implements Countable, IteratorAggregate, ArrayAccess, SerializableInterface
 {
 	/** @var array An array containing the entries of this collection. */
 	protected $items;
@@ -45,7 +38,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	/**
 	 * Initializes a new ArrayCollection.
 	 *
-	 * @param CollectionInterface|Traversable|array|mixed|null $items
+	 * @param ArrayCollection|Traversable|array|mixed|null $items
 	 */
 	public function __construct($items = array())
 	{
@@ -55,7 +48,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	/**
 	 * Initializes a new ArrayCollection.
 	 *
-	 * @param CollectionInterface|Traversable|array|mixed|null $items
+	 * @param ArrayCollection|Traversable|array|mixed|null $items
 	 *
 	 * @return static|ArrayCollection
 	 */
@@ -67,7 +60,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	/**
 	 * Initializes a new ArrayCollection and recursive converts arrays to collections
 	 *
-	 * @param CollectionInterface|Traversable|array|mixed|null $items
+	 * @param ArrayCollection|Traversable|array|mixed|null $items
 	 *
 	 * @return static|ArrayCollection
 	 */
@@ -85,31 +78,33 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 		return static::convertToArray($this->items);
 	}
 
+	/**
+	 * Returns the first item in the collection.
+	 *
+	 * @return mixed
+	 */
 	public function first()
 	{
 		return reset($this->items);
 	}
 
+	/**
+	 * Returns the last item in the collection.
+	 *
+	 * @return mixed
+	 */
 	public function last()
 	{
 		return end($this->items);
 	}
 
-	public function key()
-	{
-		return key($this->items);
-	}
-
-	public function next()
-	{
-		return next($this->items);
-	}
-
-	public function current()
-	{
-		return current($this->items);
-	}
-
+	/**
+	 * Removes the item at the specified index from the collection.
+	 *
+	 * @param string|integer $key The kex/index of the item to remove.
+	 *
+	 * @return mixed The removed item or NULL, if the collection did not contain the item.
+	 */
 	public function remove($key)
 	{
 		if (isset($this->items[$key]) || array_key_exists($key, $this->items)) {
@@ -122,10 +117,16 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 		return null;
 	}
 
-	/** @inheritdoc */
-	public function removeElement($element)
+	/**
+	 * Removes and returns the specified element from the collection, if it is found.
+	 *
+	 * @param mixed $item The item to remove.
+	 *
+	 * @return mixed The removed item or NULL, if the collection did not contain the item.
+	 */
+	public function removeElement($item)
 	{
-		$key = array_search($element, $this->items, true);
+		$key = array_search($item, $this->items, true);
 
 		if ($key !== false) {
 			$value = $this->items[$key];
@@ -146,16 +147,39 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 		return $this->removeElement($this->last());
 	}
 
+	/**
+	 * Checks whether the collection contains an item with the specified key/index.
+	 *
+	 * @param string|integer $key The key/index to check for.
+	 *
+	 * @return boolean TRUE if the collection contains an item with the specified key/index,
+	 *                 FALSE otherwise.
+	 */
 	public function containsKey($key)
 	{
 		return isset($this->items[$key]) || array_key_exists($key, $this->items);
 	}
 
-	public function contains($element)
+	/**
+	 * Checks whether an item is contained in the collection.
+	 * This is an O(n) operation, where n is the size of the collection.
+	 *
+	 * @param mixed $item The item to search for.
+	 *
+	 * @return boolean TRUE if the collection contains the item, FALSE otherwise.
+	 */
+	public function contains($item)
 	{
-		return in_array($element, $this->items, true);
+		return in_array($item, $this->items, true);
 	}
 
+	/**
+	 * Tests for the existence of an item that satisfies the given predicate.
+	 *
+	 * @param callable $p The predicate. Function is passed key, value.
+	 *
+	 * @return boolean TRUE if the predicate is TRUE for at least one item, FALSE otherwise.
+	 */
 	public function exists($p)
 	{
 		foreach ($this->items as $key => $element) {
@@ -166,11 +190,28 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 		return false;
 	}
 
-	public function indexOf($element)
+	/**
+	 * Gets the index/key of a given item. The comparison of two items is strict,
+	 * that means not only the value but also the type must match.
+	 * For objects this means reference equality.
+	 *
+	 * @param mixed $item The item to search for.
+	 *
+	 * @return int|string|bool The key/index of the item or FALSE if the item was not found.
+	 */
+	public function indexOf($item)
 	{
-		return array_search($element, $this->items, true);
+		return array_search($item, $this->items, true);
 	}
 
+	/**
+	 * Gets the item at the specified key/index.
+	 *
+	 * @param string|integer $key     The key/index of the item to retrieve.
+	 * @param mixed|null     $default The default value to return if not found
+	 *
+	 * @return mixed
+	 */
 	public function get($key, $default = null)
 	{
 		if (isset($this->items[$key])) {
@@ -179,11 +220,23 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 		return $default;
 	}
 
+	/**
+	 * Gets all keys/indices of the collection.
+	 *
+	 * @return static The keys/indices of the collection, in the order of the corresponding
+	 *                items in the collection.
+	 */
 	public function getKeys()
 	{
 		return static::create(array_keys($this->items));
 	}
 
+	/**
+	 * Gets all values of the collection.
+	 *
+	 * @return static The values of all items in the collection, in the order they
+	 *                appear in the collection.
+	 */
 	public function getValues()
 	{
 		return static::create(array_values($this->items));
@@ -195,7 +248,11 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	}
 
 	/**
-	 * @inheritdoc
+	 * Sets an item in the collection at the specified key/index.
+	 *
+	 * @param string|integer $key   The key/index of the item to set.
+	 * @param mixed          $value The item to set.
+	 *
 	 * @return $this|ArrayCollection
 	 */
 	public function set($key, $value)
@@ -205,12 +262,15 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	}
 
 	/**
-	 * @inheritdoc
+	 * Adds an item at the end of the collection.
+	 *
+	 * @param mixed $item The item to add.
+	 *
 	 * @return $this|ArrayCollection
 	 */
-	public function add($value)
+	public function add($item)
 	{
-		$this->items[] = $value;
+		$this->items[] = $item;
 		return $this;
 	}
 
@@ -226,8 +286,8 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 
 	/**
 	 * Replaces elements in this collection from another collection by comparing keys
-	 * @param CollectionInterface|Traversable|array $collection The collection from which elements will be extracted.
-	 * @param CollectionInterface|Traversable|array $_          Optional N-number of collections
+	 * @param ArrayCollection|Traversable|array $collection The collection from which elements will be extracted.
+	 * @param ArrayCollection|Traversable|array $_          Optional N-number of collections
 	 * @return $this|ArrayCollection
 	 */
 	public function replace($collection, $_ = null)
@@ -240,8 +300,8 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 
 	/**
 	 * Replaces elements in this collection from another collection recursively by comparing keys
-	 * @param CollectionInterface|Traversable|array $collection The collection from which elements will be extracted.
-	 * @param CollectionInterface|Traversable|array $_          Optional N-number of collections
+	 * @param ArrayCollection|Traversable|array $collection The collection from which elements will be extracted.
+	 * @param ArrayCollection|Traversable|array $_          Optional N-number of collections
 	 * @return $this|ArrayCollection
 	 */
 	public function replaceRecursive($collection, $_ = null)
@@ -261,8 +321,8 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 *
 	 * If the collections have numeric keys, the input collection will be appended to this collection.
 	 *
-	 * @param CollectionInterface|Traversable|array $collection The collection from which elements will be extracted.
-	 * @param CollectionInterface|Traversable|array $_          Optional N-number of collections
+	 * @param ArrayCollection|Traversable|array $collection The collection from which elements will be extracted.
+	 * @param ArrayCollection|Traversable|array $_          Optional N-number of collections
 	 * @return $this|ArrayCollection
 	 */
 	public function merge($collection, $_ = null)
@@ -281,8 +341,8 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 *
 	 * If the collections have numeric keys, the input collection will be appended to this collection.
 	 *
-	 * @param CollectionInterface|Traversable|array $collection The collection from which elements will be extracted.
-	 * @param CollectionInterface|Traversable|array $_          Optional N-number of collections
+	 * @param ArrayCollection|Traversable|array $collection The collection from which elements will be extracted.
+	 * @param ArrayCollection|Traversable|array $_          Optional N-number of collections
 	 * @return $this
 	 */
 	public function mergeRecursive($collection, $_ = null)
@@ -301,7 +361,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 *
 	 * Basically the opposite of merge/replace.
 	 *
-	 * @param CollectionInterface|Traversable|array $collection The collection from which elements will be extracted.
+	 * @param ArrayCollection|Traversable|array $collection The collection from which elements will be extracted.
 	 * @return $this|ArrayCollection
 	 */
 	public function defaults($collection) {
@@ -311,13 +371,22 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 		return $this;
 	}
 
+	/**
+	 * Checks whether the collection is empty (contains no items).
+	 *
+	 * @return boolean TRUE if the collection is empty, FALSE otherwise.
+	 */
 	public function isEmpty()
 	{
-		return ! $this->items;
+		return !$this->items;
 	}
 
 	/**
-	 * @inheritdoc
+	 * Applies the given public function to each element in the collection and returns
+	 * a new collection with the items returned by the public function.
+	 *
+	 * @param callable $func Function is passed value.
+	 *
 	 * @return static
 	 */
 	public function map($func)
@@ -326,8 +395,13 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	}
 
 	/**
-	 * @inheritdoc
-	 * @return static
+	 * Returns all the items of this collection that satisfy the predicate p.
+	 * The order of the items is preserved.
+	 * If no predicate, all items that equal false will be removed.
+	 *
+	 * @param callable|null $p The predicate used for filtering. Function can be passed value, key, or key/value.
+	 *
+	 * @return static A collection with the results of the filter operation.
 	 */
 	public function filter($p)
 	{
@@ -350,10 +424,17 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 
 	}
 
+	/**
+	 * Tests whether the given predicate p holds for all items of this collection.
+	 *
+	 * @param callable $p The predicate. Function is passed key, value.
+	 *
+	 * @return boolean TRUE, if the predicate yields TRUE for all items, FALSE otherwise.
+	 */
 	public function forAll($p)
 	{
-		foreach ($this->items as $key => $element) {
-			if ( ! $p($key, $element)) {
+		foreach ($this->items as $key => $item) {
+			if (!$p($key, $item)) {
 				return false;
 			}
 		}
@@ -361,6 +442,16 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 		return true;
 	}
 
+	/**
+	 * Partitions this collection in two collections according to a predicate.
+	 * Keys are preserved in the resulting collections.
+	 *
+	 * @param callable $p The predicate on which to partition. Function is passed key, value.
+	 *
+	 * @return array An array with two items. The first item contains the collection
+	 *               of elements where the predicate returned TRUE, the second item
+	 *               contains the collection of items where the predicate returned FALSE.
+	 */
 	public function partition($p)
 	{
 		$coll1 = $coll2 = array();
@@ -375,7 +466,8 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	}
 
 	/**
-	 * @inheritdoc
+	 * Clears the collection, removing all items.
+	 *
 	 * @return $this|ArrayCollection
 	 */
 	public function clear()
@@ -385,7 +477,15 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	}
 
 	/**
-	 * @inheritdoc
+	 * Extracts a slice of $length items starting at position $offset from the Collection.
+	 *
+	 * If $length is null it returns all items from $offset to the end of the Collection.
+	 * Keys have to be preserved by this method. Calling this method will only return the
+	 * selected slice and NOT change the items contained in the collection slice is called on.
+	 *
+	 * @param int      $offset The offset to start from.
+	 * @param int|null $length The maximum number of items to return, or null for no limit.
+	 *
 	 * @return static|ArrayCollection
 	 */
 	public function slice($offset, $length = null)
@@ -394,7 +494,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	}
 
 	/**
-	 * Copies the elements in this collection to a new collection.
+	 * Copies the items in this collection to a new collection.
 	 *
 	 * @return static|ArrayCollection
 	 */
@@ -598,8 +698,8 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	/**
 	 * Computes the difference of collections using keys for comparison
 	 *
-	 * @param CollectionInterface|Traversable|array $values Collection to check against
-	 * @param CollectionInterface|Traversable|array $_      Optional N-number of collections
+	 * @param ArrayCollection|Traversable|array $values Collection to check against
+	 * @param ArrayCollection|Traversable|array $_      Optional N-number of collections
 	 * @param callable|null                         $p      Optionally pass a function to compare with.
 	 *                                                      Function is passed a, b and must return an integer less
 	 *                                                      than equal to, or greater than zero if the first argument
@@ -623,8 +723,8 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	/**
 	 * Computes the difference of collections using values for comparison
 	 *
-	 * @param CollectionInterface|Traversable|array $values Collection to check against
-	 * @param CollectionInterface|Traversable|array $_      Optional N-number of collections
+	 * @param ArrayCollection|Traversable|array $values Collection to check against
+	 * @param ArrayCollection|Traversable|array $_      Optional N-number of collections
 	 * @param callable|null                         $p      Optionally pass a function to compare with.
 	 *                                                      Function is passed a, b and must return an integer less
 	 *                                                      than equal to, or greater than zero if the first argument
@@ -648,8 +748,8 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	/**
 	 * Computes the intersection of collections using keys for comparison
 	 *
-	 * @param CollectionInterface|Traversable|array $values Collection to check against
-	 * @param CollectionInterface|Traversable|array $_      Optional N-number of collections
+	 * @param ArrayCollection|Traversable|array $values Collection to check against
+	 * @param ArrayCollection|Traversable|array $_      Optional N-number of collections
 	 * @param callable|null                         $p      Optionally pass a function to compare with.
 	 *                                                      Function is passed a, b and must return an integer less
 	 *                                                      than equal to, or greater than zero if the first argument
@@ -673,8 +773,8 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	/**
 	 * Computes the intersection of collections using values for comparison
 	 *
-	 * @param CollectionInterface|Traversable|array $values Collection to check against
-	 * @param CollectionInterface|Traversable|array $_      Optional N-number of collections
+	 * @param ArrayCollection|Traversable|array $values Collection to check against
+	 * @param ArrayCollection|Traversable|array $_      Optional N-number of collections
 	 * @param callable|null                         $p      Optionally pass a function to compare with.
 	 *                                                      Function is passed a, b and must return an integer less
 	 *                                                      than equal to, or greater than zero if the first argument
@@ -774,9 +874,9 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 
 	/**
 	 * Creates a collection by using one for keys and another for its values
-	 * @param CollectionInterface|Traversable|array $keys Collection of keys to be used.
+	 * @param ArrayCollection|Traversable|array $keys Collection of keys to be used.
 	 *                                                    Illegal values for key will be converted to strings
-	 * @param CollectionInterface|Traversable|array $values Collection of values to be used
+	 * @param ArrayCollection|Traversable|array $values Collection of values to be used
 	 * @return static|ArrayCollection
 	 */
 	public static function combine($keys, $values)
