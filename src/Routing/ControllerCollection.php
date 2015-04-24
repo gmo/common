@@ -1,7 +1,7 @@
 <?php
 namespace Gmo\Common\Routing;
 
-use Gmo\Common\String;
+use Gmo\Common\Str;
 use Silex;
 
 /**
@@ -24,7 +24,7 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 		}
 		if ($to === null && $this->defaultControllerMethod) {
 			$to = [$this->defaultControllerClass, $this->defaultControllerMethod];
-		} elseif (is_string($to) && String::startsWith($to, '::')) {
+		} elseif (is_string($to) && Str::startsWith($to, '::')) {
 			$to = [$this->defaultControllerClass, substr($to, 2)];
 		}
 		return parent::match($pattern, $to);

@@ -13,8 +13,8 @@ class Path {
 
 	public static function isAbsolute($path) {
 		return substr($path, 0, 1) === "/"
-		       && !String::contains($path, './')
-		       && !String::contains($path, '..');
+		       && !Str::contains($path, './')
+		       && !Str::contains($path, '..');
 	}
 
 	/**
@@ -40,7 +40,7 @@ class Path {
 			$basePath = rtrim($basePath, DIRECTORY_SEPARATOR);
 			$path = $basePath . DIRECTORY_SEPARATOR . $path;
 		}
-		$abs = String::startsWith($path, '/');
+		$abs = Str::startsWith($path, '/');
 		// resolve path parts (single dot, double dot and double delimiters)
 		$path = str_replace(array( '/', '\\' ), DIRECTORY_SEPARATOR, $path);
 		$parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');

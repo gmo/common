@@ -4,7 +4,7 @@ namespace Gmo\Common\Config;
 use Gmo\Common\Collections\ArrayCollection;
 use Gmo\Common\Exception\ConfigException;
 use Gmo\Common\Path;
-use Gmo\Common\String;
+use Gmo\Common\Str;
 use Symfony\Component\Yaml\Yaml;
 
 abstract class AbstractConfig implements ConfigInterface {
@@ -30,7 +30,7 @@ abstract class AbstractConfig implements ConfigInterface {
 		$value = static::doGetValue($section, $key);
 		if (static::$configFileType === 'ini' && is_string($value)) {
 			//                                              booleans from ini are converted to 1|0
-			return String::equals($value, "true", false) || String::equals($value, "1");
+			return Str::equals($value, "true", false) || Str::equals($value, "1");
 		}
 		return (bool)$value;
 	}

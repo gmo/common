@@ -4,7 +4,7 @@ namespace Gmo\Common;
 use Gmo\Common\Collections\ArrayCollection;
 
 /**
- * Class String
+ * Class Str
  * @package GMO\Common
  * @since 1.15.0 Added remove* and className methods
  * @since 1.8.0 Added equals method
@@ -13,7 +13,7 @@ use Gmo\Common\Collections\ArrayCollection;
  *              Renamed case-insensitive functions
  * @since 1.2.0
  */
-class String {
+class Str {
 
 	/**
 	 * Return whether a term is in a string
@@ -201,7 +201,7 @@ class String {
 		} elseif (is_object($cls)) {
 			$cls = get_class($cls);
 		}
-		return String::splitLast($cls, "\\");
+		return Str::splitLast($cls, "\\");
 	}
 
 	/**

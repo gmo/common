@@ -3,7 +3,7 @@ namespace Gmo\Common\Config;
 
 use Gmo\Common\Collections\ArrayCollection;
 use Gmo\Common\Exception\ConfigException;
-use Gmo\Common\String;
+use Gmo\Common\Str;
 
 /**
  * This config groups values by environment.
@@ -43,7 +43,7 @@ abstract class EnvironmentAwareConfig extends AbstractConfig {
 	public static function getValue($section, $key, $default = null, $allowEmpty = false) {
 		$value = parent::getValue($section, $key, $default, $allowEmpty);
 
-		if (!is_string($value) || !String::startsWith($value, '%') || !String::endsWith($value, '%')) {
+		if (!is_string($value) || !Str::startsWith($value, '%') || !Str::endsWith($value, '%')) {
 			return $value;
 		}
 
