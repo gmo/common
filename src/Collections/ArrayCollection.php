@@ -20,7 +20,7 @@
 namespace Gmo\Common\Collections;
 
 use ArrayIterator;
-use Gmo\Common\ISerializable;
+use Gmo\Common\Serialization\SerializableInterface;
 use stdClass;
 use Traversable;
 
@@ -28,7 +28,7 @@ use Traversable;
  * An ArrayCollection is a Collection implementation that wraps a regular PHP array.
  *
  * GMO Modifications:
- *  Implementing ISerializable
+ *  Implementing SerializableInterface
  *  Modified public functions to take a callable rather than {@see \Closure}
  * 	Added default parameter to get()
  *
@@ -37,7 +37,7 @@ use Traversable;
  * @author Jonathan Wage <jonwage@gmail.com>
  * @author Roman Borschel <roman@code-factory.org>
  */
-class ArrayCollection implements CollectionInterface, ISerializable
+class ArrayCollection implements CollectionInterface, SerializableInterface
 {
 	/** @var array An array containing the entries of this collection. */
 	protected $elements;

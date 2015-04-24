@@ -1,7 +1,10 @@
 <?php
 namespace Gmo\Common;
 
-class DateTime extends \DateTime implements ISerializable {
+use Gmo\Common\Serialization\SerializableInterface;
+use Gmo\Common\Serialization\SerializeHelper;
+
+class DateTime extends \DateTime implements SerializableInterface {
 
 	const SIMPLE_DATE = "Y-m-d H:i:s";
 

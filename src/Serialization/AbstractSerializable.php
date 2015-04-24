@@ -1,9 +1,9 @@
 <?php
 namespace Gmo\Common\Serialization;
 
-use Gmo\Common\Exception\NotSerializableException;
+use Gmo\Common\Serialization\Exception\NotSerializableException;
 
-abstract class AbstractSerializable implements ISerializable {
+abstract class AbstractSerializable implements SerializableInterface {
 
 	/**
 	 * If overriding this, be sure to include "class" with the fully qualified class name
@@ -21,13 +21,13 @@ abstract class AbstractSerializable implements ISerializable {
 	 *
 	 * 1) Constructor parameters that are objects need to be type hinted
 	 *
-	 * 2) Constructor parameters that are objects need to implement {@see ISerializable}
+	 * 2) Constructor parameters that are objects need to implement {@see SerializableInterface}
 	 *
 	 * 3) Constructor parameter names need to match the class variable names
 	 *
 	 * @param array $obj
 	 * @throws NotSerializableException If a constructor takes an object that
-	 *                                  does not implement {@see ISerializable}
+	 *                                  does not implement {@see SerializableInterface}
 	 * @return $this
 	 */
 	public static function fromArray($obj) {

@@ -1,11 +1,12 @@
 <?php
 namespace Gmo\Common\Serialization;
 
-use Gmo\Common\Exception\NotSerializableException;
+use Gmo\Common\DateTime;
+use Gmo\Common\Serialization\Exception\NotSerializableException;
 
 /**
  * This class was refactored from {@see AbstractSerializable} to make it easier when you
- * need to implement {@see ISerializable} without extending {@see AbstractSerializable}
+ * need to implement {@see SerializableInterface} without extending {@see AbstractSerializable}
  * @package GMO\Common
  * @since 1.14.0
  */
@@ -13,7 +14,7 @@ class SerializeHelper {
 
 	/**
 	 * This loops through a given an object's variables and
-	 * serializes {@see ISerializable} and {@see \DateTime} objects
+	 * serializes {@see SerializableInterface} and {@see \DateTime} objects
 	 *
 	 * Example:
 	 * <pre>
@@ -32,7 +33,7 @@ class SerializeHelper {
 		);
 
 		foreach ($objVars as $key => $value) {
-			if ($value instanceof ISerializable) {
+			if ($value instanceof SerializableInterface) {
 				$values[$key] = $value->toArray();
 			} elseif ($value instanceof \DateTime) {
 				$values[$key] = DateTime::castFromBuiltin($value)->toArray();
@@ -61,14 +62,14 @@ class SerializeHelper {
 	 *
 	 * 1) Constructor parameters that are objects need to be type hinted
 	 *
-	 * 2) Constructor parameters that are objects need to implement {@see ISerializable}
+	 * 2) Constructor parameters that are objects need to implement {@see SerializableInterface}
 	 *
 	 * 3) Constructor parameter names need to match the class variable names
 	 *
 	 * @param string $className
 	 * @param array $obj
 	 * @throws NotSerializableException If a constructor takes an object that
-	 *                                  does not implement {@see ISerializable}
+	 *                                  does not implement {@see SerializableInterface}
 	 *                                  or if the class does not exist
 	 * @return $this
 	 */
@@ -95,7 +96,7 @@ class SerializeHelper {
 				$timestamp = $obj[$refParam->name];
 				$params[] = DateTime::fromArray($timestamp);
 			} elseif ($paramCls->isSubclassOf('GMO\Common\ISerializable')) {
-				/** @var ISerializable|string $clsName */
+				/** @var SerializableInterface|string $clsName */
 				$clsName = $paramCls->name;
 				if (!class_exists($clsName)) {
 					throw new NotSerializableException($className . ' does not exist');

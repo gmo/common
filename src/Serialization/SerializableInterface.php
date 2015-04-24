@@ -2,8 +2,9 @@
 namespace {
 	if (!interface_exists('JsonSerializable')) {
 		/** @noinspection PhpUndefinedClassInspection */
+		/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 		/**
-		 * This is a stub interface for PHP &gt;= 5.3
+		 * This is a stub interface for PHP &lt; 5.4
 		 *
 		 * Objects implementing JsonSerializable
 		 * can customize their JSON representation when encoded with
@@ -26,9 +27,8 @@ namespace {
 
 namespace Gmo\Common\Serialization {
 
-	/** @noinspection PhpUndefinedClassInspection */
-
-	interface ISerializable extends \JsonSerializable, \Serializable {
+	/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
+	interface SerializableInterface extends \JsonSerializable, \Serializable {
 
 		/**
 		 * @return array

@@ -1,7 +1,7 @@
 <?php
 namespace Gmo\Common\UnitTest;
 
-use Gmo\Common\AbstractSerializable;
+use Gmo\Common\Serialization\AbstractSerializable;
 
 class SerializableTest extends \PHPUnit_Framework_TestCase {
 
@@ -112,8 +112,8 @@ class SerializableTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @expectedException \GMO\Common\Exception\NotSerializableException
-	 * @expectedExceptionMessage UnitTest\Herp does not implement GMO\Common\ISerializable
+	 * @expectedException \Gmo\Common\Serialization\Exception\NotSerializableException
+	 * @expectedExceptionMessage UnitTest\Herp does not implement GMO\Common\SerializableInterface
 	 */
 	public function testNotSerializable() {
 		$derp = new Derp(new Herp());

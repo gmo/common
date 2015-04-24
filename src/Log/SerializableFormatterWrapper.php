@@ -3,7 +3,7 @@ namespace Gmo\Common\Log;
 
 use Gmo\Common\Collection;
 use Gmo\Common\DateTime;
-use Gmo\Common\ISerializable;
+use Gmo\Common\Serialization\SerializableInterface;
 use Monolog\Formatter\FormatterInterface;
 
 class SerializableFormatterWrapper implements FormatterInterface {
@@ -42,7 +42,7 @@ class SerializableFormatterWrapper implements FormatterInterface {
             return DateTime::fromArray($data);
         }
 
-        if ($data instanceof ISerializable) {
+        if ($data instanceof SerializableInterface) {
             $data = $data->toArray();
         }
 
