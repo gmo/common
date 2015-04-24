@@ -102,13 +102,13 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	}
 
 	/**
-	 * Removes and returns the specified element from the collection, if it is found.
+	 * Removes and returns the specified item from the collection, if it is found.
 	 *
 	 * @param mixed $item The item to remove.
 	 *
 	 * @return mixed The removed item or NULL, if the collection did not contain the item.
 	 */
-	public function removeElement($item)
+	public function removeItem($item)
 	{
 		$key = array_search($item, $this->items, true);
 
@@ -123,12 +123,12 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 
 	public function removeFirst()
 	{
-		return $this->removeElement($this->first());
+		return $this->removeItem($this->first());
 	}
 
 	public function removeLast()
 	{
-		return $this->removeElement($this->last());
+		return $this->removeItem($this->last());
 	}
 
 	/**
@@ -166,8 +166,8 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	 */
 	public function exists($p)
 	{
-		foreach ($this->items as $key => $element) {
-			if ($p($key, $element)) {
+		foreach ($this->items as $key => $item) {
+			if ($p($key, $item)) {
 				return true;
 			}
 		}
@@ -269,8 +269,8 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	}
 
 	/**
-	 * Replaces elements in this collection from another collection by comparing keys
-	 * @param Collection|Traversable|array $collection The collection from which elements will be extracted.
+	 * Replaces items in this collection from another collection by comparing keys
+	 * @param Collection|Traversable|array $collection The collection from which items will be extracted.
 	 * @param Collection|Traversable|array $_          Optional N-number of collections
 	 * @return $this|Collection
 	 */
@@ -283,8 +283,8 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	}
 
 	/**
-	 * Replaces elements in this collection from another collection recursively by comparing keys
-	 * @param Collection|Traversable|array $collection The collection from which elements will be extracted.
+	 * Replaces items in this collection from another collection recursively by comparing keys
+	 * @param Collection|Traversable|array $collection The collection from which items will be extracted.
 	 * @param Collection|Traversable|array $_          Optional N-number of collections
 	 * @return $this|Collection
 	 */
@@ -299,13 +299,13 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	}
 
 	/**
-	 * Merges elements from another collection into this collection.
+	 * Merges items from another collection into this collection.
 	 *
 	 * If the collections have string keys, the value from the input collection will replace the current value.
 	 *
 	 * If the collections have numeric keys, the input collection will be appended to this collection.
 	 *
-	 * @param Collection|Traversable|array $collection The collection from which elements will be extracted.
+	 * @param Collection|Traversable|array $collection The collection from which items will be extracted.
 	 * @param Collection|Traversable|array $_          Optional N-number of collections
 	 * @return $this|Collection
 	 */
@@ -318,14 +318,14 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	}
 
 	/**
-	 * Merges elements from another collection into this collection recursively.
+	 * Merges items from another collection into this collection recursively.
 	 *
 	 * If the collections have string keys, the values from the collections with the same key will
 	 * merged to a collection for that key.
 	 *
 	 * If the collections have numeric keys, the input collection will be appended to this collection.
 	 *
-	 * @param Collection|Traversable|array $collection The collection from which elements will be extracted.
+	 * @param Collection|Traversable|array $collection The collection from which items will be extracted.
 	 * @param Collection|Traversable|array $_          Optional N-number of collections
 	 * @return $this
 	 */
@@ -345,7 +345,7 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	 *
 	 * Basically the opposite of merge/replace.
 	 *
-	 * @param Collection|Traversable|array $collection The collection from which elements will be extracted.
+	 * @param Collection|Traversable|array $collection The collection from which items will be extracted.
 	 * @return $this|Collection
 	 */
 	public function defaults($collection) {
@@ -366,7 +366,7 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	}
 
 	/**
-	 * Applies the given public function to each element in the collection and returns
+	 * Applies the given public function to each item in the collection and returns
 	 * a new collection with the items returned by the public function.
 	 *
 	 * @param callable $func Function is passed value.
@@ -398,13 +398,13 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 			return static::create(array_filter($this->items, $p));
 		}
 
-		$newElements = new static();
+		$newItems = new static();
 		foreach ($this->items as $key => $value) {
 			if ($p($key, $value)) {
-				$newElements->set($key, $value);
+				$newItems->set($key, $value);
 			}
 		}
-		return $newElements;
+		return $newItems;
 
 	}
 
@@ -433,17 +433,17 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	 * @param callable $p The predicate on which to partition. Function is passed key, value.
 	 *
 	 * @return array An array with two items. The first item contains the collection
-	 *               of elements where the predicate returned TRUE, the second item
+	 *               of items where the predicate returned TRUE, the second item
 	 *               contains the collection of items where the predicate returned FALSE.
 	 */
 	public function partition($p)
 	{
 		$coll1 = $coll2 = array();
-		foreach ($this->items as $key => $element) {
-			if ($p($key, $element)) {
-				$coll1[$key] = $element;
+		foreach ($this->items as $key => $item) {
+			if ($p($key, $item)) {
+				$coll1[$key] = $item;
 			} else {
-				$coll2[$key] = $element;
+				$coll2[$key] = $item;
 			}
 		}
 		return array(new static($coll1), new static($coll2));
@@ -488,7 +488,7 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	}
 
 	/**
-	 * Copies the elements in this collection to a new collection.
+	 * Copies the items in this collection to a new collection.
 	 *
 	 * @return static|Collection
 	 */
@@ -589,7 +589,7 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	//region Sorting Methods
 
 	/**
-	 * Reverses the elements in this collection
+	 * Reverses the items in this collection
 	 * @return $this|Collection
 	 */
 	public function reverse()
@@ -599,7 +599,7 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	}
 
 	/**
-	 * Shuffles elements in this collection
+	 * Shuffles items in this collection
 	 * @return $this|Collection
 	 */
 	public function shuffle()
@@ -611,9 +611,9 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	/**
 	 * Sort this collection by keys
 	 *
-	 * If $p is true, elements will be sorted from lowest to highest.
+	 * If $p is true, items will be sorted from lowest to highest.
 	 *
-	 * If $p is false, elements will be sorted in reverse order.
+	 * If $p is false, items will be sorted in reverse order.
 	 *
 	 * If $p is callable, it will be called to compare the keys.
 	 * The comparison function must return an integer less than, equal to,
@@ -637,9 +637,9 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	/**
 	 * Sort this collection by values
 	 *
-	 * If $p is true, elements will be sorted from lowest to highest.
+	 * If $p is true, items will be sorted from lowest to highest.
 	 *
-	 * If $p is false, elements will be sorted in reverse order.
+	 * If $p is false, items will be sorted in reverse order.
 	 *
 	 * If $p is callable, it will be called to compare the values.
 	 * The comparison function must return an integer less than, equal to,
@@ -834,11 +834,11 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	/**
 	 * Split this collection into chunks.
 	 *
-	 * The last chunk may contain less elements.
+	 * The last chunk may contain less items.
 	 *
 	 * @param int $size The size of each chunk
 	 * @return static|static[]|Collection|Collection[]
-	 *         Returns a multidimensional collection, with each dimension containing size elements
+	 *         Returns a multidimensional collection, with each dimension containing size items
 	 */
 	public function chunk($size)
 	{
@@ -848,8 +848,8 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	/**
 	 * Joins the values of this collection to a string
 	 * @param string $delimiter The term to join on
-	 * @return string A string representation of all the elements in the same order,
-	 *                with the delimiter between each element.
+	 * @return string A string representation of all the items in the same order,
+	 *                with the delimiter between each item.
 	 */
 	public function join($delimiter)
 	{
