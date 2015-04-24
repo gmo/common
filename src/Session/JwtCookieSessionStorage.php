@@ -1,7 +1,7 @@
 <?php
 namespace Gmo\Common\Session;
 
-use Gmo\Common\Collection;
+use Gmo\Common\Collections\Arr;
 use JWT;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;
@@ -37,11 +37,11 @@ class JwtCookieSessionStorage implements SessionStorageInterface {
 			$cookieData = $cookies->get($cookieName, '');
 		} else {
 			$cookies = is_array($cookies) ? $cookies : $_COOKIE;
-			$cookieData = Collection::get($cookies, $cookieName, '');
+			$cookieData = Arr::get($cookies, $cookieName, '');
 		}
 
 		try {
-			return Collection::objectToArray(JWT::decode($cookieData, $this->secret));
+			return Arr::objectToArray(JWT::decode($cookieData, $this->secret));
 		} catch (\Exception $e) {
 			return array();
 		}

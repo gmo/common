@@ -1,6 +1,8 @@
 <?php
 namespace Gmo\Common;
 
+use Gmo\Common\Collections\Arr;
+
 /**
  * Class Http
  * @package GMO\Common
@@ -41,7 +43,7 @@ class Http {
 			}
 		}
 
-		return Collection::get($_SERVER, 'REMOTE_ADDR');
+		return Arr::get($_SERVER, 'REMOTE_ADDR');
 	}
 
 	/**
