@@ -210,7 +210,7 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	 * @return static The keys/indices of the collection, in the order of the corresponding
 	 *                items in the collection.
 	 */
-	public function getKeys()
+	public function keys()
 	{
 		return static::create(array_keys($this->items));
 	}
@@ -221,7 +221,7 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	 * @return static The values of all items in the collection, in the order they
 	 *                appear in the collection.
 	 */
-	public function getValues()
+	public function values()
 	{
 		return static::create(array_values($this->items));
 	}
