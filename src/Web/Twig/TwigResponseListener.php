@@ -1,5 +1,5 @@
 <?php
-namespace GMO\Common\Web\Twig;
+namespace Gmo\Common\Web\Twig;
 
 use Silex\Application;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
