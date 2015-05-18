@@ -78,6 +78,11 @@ abstract class AbstractConfig implements ConfigInterface {
 		if ($section !== null && !static::$config->containsKey($section)) {
 			static::$config[$section] = new ArrayCollection();
 		}
+
+		if (ArrayCollection::isTraversable($value)) {
+			$value = ArrayCollection::createRecursive($value);
+		}
+
 		if ($section === null) {
 			static::$config[$key] = $value;
 		} else {
