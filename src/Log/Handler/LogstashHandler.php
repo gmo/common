@@ -8,8 +8,15 @@ use Monolog\Logger;
 
 class LogstashHandler extends RedisHandler {
 
+	/**
+	 * @param string $contextPrefix
+	 */
+	public function setContextPrefix($contextPrefix) {
+		$this->contextPrefix = $contextPrefix;
+	}
+
 	protected function getDefaultFormatter() {
-		return new LogstashFormatter($this->appName, null, null, 'ctxt.', LogstashFormatter::V1);
+		return new LogstashFormatter($this->appName, null, null, $this->contextPrefix, LogstashFormatter::V1);
 	}
 
 	/**
@@ -25,4 +32,5 @@ class LogstashHandler extends RedisHandler {
 	}
 
 	protected $appName;
+	protected $contextPrefix = 'ctxt.';
 }
