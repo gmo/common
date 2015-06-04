@@ -12,11 +12,25 @@ class LogstashHandler extends RedisHandler {
 	 * @param string $contextPrefix
 	 */
 	public function setContextPrefix($contextPrefix) {
+		if ($this->frozen) {
+			throw new \LogicException('Context prefix cannot be set after formatter has been created');
+		}
 		$this->contextPrefix = $contextPrefix;
 	}
 
+	/**
+	 * @param string $extraPrefix
+	 */
+	public function setExtraPrefix($extraPrefix) {
+		if ($this->frozen) {
+			throw new \LogicException('Extra prefix cannot be set after formatter has been created');
+		}
+		$this->extraPrefix = $extraPrefix;
+	}
+
 	protected function getDefaultFormatter() {
-		return new LogstashFormatter($this->appName, null, null, $this->contextPrefix, LogstashFormatter::V1);
+		$this->frozen = true;
+		return new LogstashFormatter($this->appName, null, $this->extraPrefix, $this->contextPrefix, LogstashFormatter::V1);
 	}
 
 	/**
@@ -32,5 +46,7 @@ class LogstashHandler extends RedisHandler {
 	}
 
 	protected $appName;
+	protected $frozen = false;
 	protected $contextPrefix = 'ctxt.';
+	protected $extraPrefix = null;
 }
