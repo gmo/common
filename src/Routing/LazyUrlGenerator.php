@@ -1,5 +1,5 @@
 <?php
-namespace GMO\Common\Web\Routing;
+namespace Gmo\Common\Routing;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
