@@ -51,7 +51,7 @@ abstract class AbstractConfig implements ConfigInterface {
 	public static function getValue($section, $key, $default = null, $allowEmpty = false) {
 		static::setConfig();
 
-		if (!static::hasKey($section, $key, $default === null)) {
+		if (!static::hasKey($section, $key, $default === null && !$allowEmpty)) {
 			return $default;
 		}
 
@@ -78,6 +78,11 @@ abstract class AbstractConfig implements ConfigInterface {
 		if ($section !== null && !static::$config->containsKey($section)) {
 			static::$config[$section] = new ArrayCollection();
 		}
+
+		if (ArrayCollection::isTraversable($value)) {
+			$value = ArrayCollection::createRecursive($value);
+		}
+
 		if ($section === null) {
 			static::$config[$key] = $value;
 		} else {
