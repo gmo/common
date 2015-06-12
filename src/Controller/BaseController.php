@@ -55,13 +55,6 @@ class BaseController implements ControllerProviderInterface {
 	}
 
 	/**
-	 * @return Session
-	 */
-	public function getSession() {
-		return $this->app['session'];
-	}
-
-	/**
 	 * Convert some data into a JSON response.
 	 *
 	 * @param mixed $data    The response data
@@ -72,6 +65,13 @@ class BaseController implements ControllerProviderInterface {
 	 */
 	public function json($data = array(), $status = 200, array $headers = array()) {
 		return new JsonResponse($data, $status, $headers);
+	}
+
+	/**
+	 * @return Session
+	 */
+	public function getSession() {
+		return $this->app['session'];
 	}
 
 	/** @var Application */
