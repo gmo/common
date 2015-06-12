@@ -4,9 +4,6 @@ namespace Gmo\Common\Collections;
 
 use ArrayAccess;
 use ArrayIterator;
-use Countable;
-use Gmo\Common\Serialization\SerializableInterface;
-use IteratorAggregate;
 use stdClass;
 use Traversable;
 
@@ -16,7 +13,7 @@ use Traversable;
  * Generally, methods that modify a single item of the collection return the same collection
  * and those that _can_ modify multiple items return a new collection.
  */
-class Collection implements Countable, IteratorAggregate, ArrayAccess, SerializableInterface
+class Collection implements ListInterface, HashInterface
 {
 	/** @var array An array containing the entries of this collection. */
 	protected $items;
@@ -649,7 +646,7 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	 * @param bool|callable $p Sort order or function
 	 * @return $this|Collection
 	 */
-	public function sortValues($p = true)
+	public function sort($p = true)
 	{
 		if (is_callable($p)) {
 			usort($this->items, $p);
@@ -718,7 +715,7 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	 * @return static|Collection A collection containing all the entries from this collection that
 	 *                are not present in any of the other input collections
 	 */
-	public function diffValues($values, $_ = null, $p = null)
+	public function diff($values, $_ = null, $p = null)
 	{
 		$args = static::normalizeArgs(func_get_args());
 		array_unshift($args, $this->items);
@@ -768,7 +765,7 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	 * @return static|Collection A collection containing all the entries from this collection that
 	 *                are present in all of the other input collections
 	 */
-	public function intersectValues($values, $_ = null, $p = null)
+	public function intersect($values, $_ = null, $p = null)
 	{
 		$args = static::normalizeArgs(func_get_args());
 		array_unshift($args, $this->items);
