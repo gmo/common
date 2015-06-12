@@ -873,6 +873,14 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 		return is_array($object) || $object instanceof \Traversable;
 	}
 
+	public static function isArrayAccessible($object) {
+		return is_array($object) || $object instanceof \ArrayAccess;
+	}
+
+	public static function className() {
+		return get_called_class();
+	}
+
 	protected static function normalizeConstructorAgs($args) {
 		if (count($args) == 1) {
 			return static::normalize($args[0]);
@@ -911,7 +919,7 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 
 	protected static function convertToCollection($arr)
 	{
-		$collection = new Collection();
+		$collection = new static();
 		foreach ($arr as $key => $value) {
 			if (static::isTraversable($value) || $value instanceof stdClass) {
 				$collection[$key] = static::convertToCollection($value);
