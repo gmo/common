@@ -12,7 +12,9 @@ use Traversable;
 
 /**
  * An Collection wraps a regular PHP array.
- * This does not implement a fluent interface.
+ *
+ * Generally, methods that modify a single item of the collection return the same collection
+ * and those that _can_ modify multiple items return a new collection.
  */
 class Collection implements Countable, IteratorAggregate, ArrayAccess, SerializableInterface
 {
@@ -242,7 +244,6 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, Serializa
 	public function set($key, $value)
 	{
 		$this->items[$key] = $value;
-		return $this;
 	}
 
 	/**
