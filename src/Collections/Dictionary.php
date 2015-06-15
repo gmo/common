@@ -1,7 +1,7 @@
 <?php
 namespace Gmo\Common\Collections;
 
-interface HashInterface extends CollectionInterface
+interface Dictionary extends CollectionInterface
 {
 	public function keys();
 

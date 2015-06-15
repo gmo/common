@@ -1,7 +1,10 @@
 <?php
 namespace Gmo\Common\Collections;
 
-interface ListInterface extends CollectionInterface
+/**
+ * Because List is a reserved word
+ */
+interface Sequence extends CollectionInterface
 {
 	public function first();
 
