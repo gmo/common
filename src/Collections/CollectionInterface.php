@@ -6,21 +6,13 @@ use Countable;
 use Gmo\Common\Serialization\SerializableInterface;
 use IteratorAggregate;
 
-interface CollectionInterface extends Countable, IteratorAggregate, ArrayAccess, SerializableInterface
+interface CollectionInterface extends SimpleAccess, Countable, IteratorAggregate, ArrayAccess, SerializableInterface
 {
-	public function remove($key);
+	public function hasItem($item);
 
 	public function removeItem($item);
 
-	public function has($key);
-
-	public function hasItem($item);
-
 	public function exists($p);
-
-	public function get($key, $default = null);
-
-	public function set($key, $value);
 
 	public function count();
 

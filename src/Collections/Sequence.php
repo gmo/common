@@ -18,7 +18,7 @@ interface Sequence extends CollectionInterface
 
 	public function add($item);
 
-	public function prepend($value);
+	public function prepend($item);
 
 	public function merge($collection);
 
