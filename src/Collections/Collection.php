@@ -13,7 +13,7 @@ use Traversable;
  * Generally, methods that modify a single item of the collection return the same collection
  * and those that _can_ modify multiple items return a new collection.
  */
-class Collection implements Sequence, Dictionary
+class Collection implements ListInterface, HashMapInterface
 {
 	/** @var array An array containing the entries of this collection. */
 	protected $items;
