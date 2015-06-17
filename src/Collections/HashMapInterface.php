@@ -20,6 +20,4 @@ interface HashMapInterface extends CollectionInterface
 	public function intersectKeys($values, $p = null);
 
 	public function flip();
-
-	public static function combine($keys, $values);
 }
