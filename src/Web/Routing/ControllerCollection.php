@@ -3,12 +3,15 @@ namespace GMO\Common\Web\Routing;
 
 use GMO\Common\String;
 use Silex;
+use Silex\Controller;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * Extended ControllerCollection for these reasons:
  *
  * - Allow a route that starts with :: to go to the method specified in the current class.
  * - Allow a null route to default to specified class method.
+ * - Split flush method to make it easier to override
  * - Remove trailing slash from flushed routes
  */
 class ControllerCollection extends Silex\ControllerCollection implements DefaultControllerAwareInterface {
@@ -31,22 +34,36 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 	}
 
 	/**
-	 * When mounting a controller class with a prefix most times you have a route with a blank path.
-	 * That is the only route that flushes to include an (unwanted) trailing slash.
+	 * {@inheritdoc}
 	 *
-	 * This fixes that trailing slash.
-	 *
-	 * @param string $prefix
-	 * @return \Symfony\Component\Routing\RouteCollection
+	 * This is similar logic to parent class just broken up into
+	 * multiple methods to make it easier to override.
 	 */
 	public function flush($prefix = '')
 	{
-		$routes = parent::flush($prefix);
-		foreach ($routes->all() as $name => $route) {
-			if (substr($route->getPath(), -1) === '/') {
-				$route->setPath(rtrim($route->getPath(), '/'));
+		$routes = new RouteCollection();
+
+		// Same logic as the first part of RouteCollection::addPrefix
+		$prefix = trim(trim($prefix), '/');
+		if (!empty($prefix)) {
+			$prefix = '/' . $prefix;
+		}
+
+		foreach ($this->controllers as $controller) {
+			if ($controller instanceof Controller) {
+				$this->flushController($routes, $controller, $prefix);
+			} elseif ($controller instanceof Silex\ControllerCollection) {
+				$this->flushControllerCollection($routes, $controller);
+			} else {
+				throw new \LogicException('Controllers need to be Controller or ControllerCollection instances');
 			}
 		}
+
+		// RouteCollection::addPrefix is intentionally not called here.
+		// The prefix should be added in flushController method.
+
+		$this->controllers = array();
+
 		return $routes;
 	}
 
@@ -56,6 +73,53 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 
 	public function setDefaultControllerMethod($method) {
 		$this->defaultControllerMethod = $method;
+	}
+
+	/**
+	 * Add the Controller to the RouteCollection and freeze it
+	 *
+	 * @param RouteCollection $routes
+	 * @param Controller      $controller
+	 * @param string          $prefix
+	 */
+	protected function flushController(RouteCollection $routes, Controller $controller, $prefix) {
+		// When mounting a controller class with a prefix most times you have a route with a blank path.
+		// That is the only route that flushes to include an (unwanted) trailing slash.
+		// This fixes that trailing slash.
+		$controller->getRoute()->setPath(rtrim($prefix . $controller->getRoute()->getPath(), '/'));
+
+		$this->generateControllerName($routes, $controller, $prefix);
+		$routes->add($controller->getRouteName(), $controller->getRoute());
+		$controller->freeze();
+	}
+
+	/**
+	 * Add the ControllerCollection to the RouteCollection
+	 *
+	 * @param RouteCollection            $routes
+	 * @param Silex\ControllerCollection $collection
+	 */
+	protected function flushControllerCollection(RouteCollection $routes, Silex\ControllerCollection $collection) {
+		$routes->addCollection($collection->flush($collection->prefix));
+	}
+
+	/**
+	 * Generate route name for controller if one does not exist
+	 *
+	 * Note: same code as in {@see Silex\ControllerCollection::flush}
+	 *
+	 * @param RouteCollection $routes
+	 * @param Controller      $controller
+	 * @param string          $prefix
+	 */
+	protected function generateControllerName(RouteCollection $routes, Controller $controller, $prefix) {
+		if (!$name = $controller->getRouteName()) {
+			$name = $controller->generateRouteName($prefix);
+			while($routes->get($name)) {
+				$name .= '_';
+			}
+			$controller->bind($name);
+		}
 	}
 
 	protected $defaultControllerClass;
