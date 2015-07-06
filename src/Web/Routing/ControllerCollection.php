@@ -43,17 +43,13 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 	{
 		$routes = new RouteCollection();
 
-		// Same logic as the first part of RouteCollection::addPrefix
-		$prefix = trim(trim($prefix), '/');
-		if (!empty($prefix)) {
-			$prefix = '/' . $prefix;
-		}
+		$prefix = $this->normalizePrefix($prefix);
 
 		foreach ($this->controllers as $controller) {
 			if ($controller instanceof Controller) {
 				$this->flushController($routes, $controller, $prefix);
 			} elseif ($controller instanceof Silex\ControllerCollection) {
-				$this->flushControllerCollection($routes, $controller);
+				$this->flushControllerCollection($routes, $controller, $prefix);
 			} else {
 				throw new \LogicException('Controllers need to be Controller or ControllerCollection instances');
 			}
@@ -98,9 +94,26 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 	 *
 	 * @param RouteCollection            $routes
 	 * @param Silex\ControllerCollection $collection
+	 * @param string                     $prefix
 	 */
-	protected function flushControllerCollection(RouteCollection $routes, Silex\ControllerCollection $collection) {
-		$routes->addCollection($collection->flush($collection->prefix));
+	protected function flushControllerCollection(RouteCollection $routes, Silex\ControllerCollection $collection, $prefix) {
+		$prefix .= $this->normalizePrefix($collection->prefix);
+		$routes->addCollection($collection->flush($prefix));
+	}
+
+	/**
+	 * Same logic as the first part of {@see RouteCollection::addPrefix}
+	 *
+	 * @param $prefix
+	 *
+	 * @return string
+	 */
+	protected function normalizePrefix($prefix) {
+		$prefix = trim(trim($prefix), '/');
+		if (!empty($prefix)) {
+			$prefix = '/' . $prefix;
+		}
+		return $prefix;
 	}
 
 	/**
