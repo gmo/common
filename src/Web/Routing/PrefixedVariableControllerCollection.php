@@ -1,6 +1,7 @@
 <?php
 namespace GMO\Common\Web\Routing;
 
+use Silex;
 use Silex\Controller;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -9,7 +10,9 @@ use Symfony\Component\Routing\RouteCollection;
  * 1) Prefix all routes with a variable
  * 2) Create a separate variable-less route for each route
  *
- * The bound route name is on the route with the prefix
+ * The bound route name is on the route with the prefix.
+ *
+ * Note:
  */
 abstract class PrefixedVariableControllerCollection extends ControllerCollection {
 
@@ -40,5 +43,19 @@ abstract class PrefixedVariableControllerCollection extends ControllerCollection
 
 	protected function getVariablePrefix($prefix) {
 		return sprintf('/{%s}%s', $this->getVariableName(), $prefix);
+	}
+
+	/**
+	 * Flushes the sub-collection with current class logic instead of its own
+	 *
+	 * @param RouteCollection            $routes
+	 * @param Silex\ControllerCollection $collection
+	 * @param string                     $prefix
+	 * @return RouteCollection
+	 */
+	protected function flushControllerCollection(RouteCollection $routes, Silex\ControllerCollection $collection, $prefix) {
+		$prefix .= $this->normalizePrefix($collection->prefix);
+		$routes->addCollection($this->doFlush($collection, $prefix));
+		return $this->doFlush($collection, $prefix);
 	}
 }

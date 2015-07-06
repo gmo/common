@@ -36,16 +36,31 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 	/**
 	 * {@inheritdoc}
 	 *
-	 * This is similar logic to parent class just broken up into
-	 * multiple methods to make it easier to override.
+	 * Logic has been moved to doFlush to allow it to
+	 * be used for sub-collections as well.
 	 */
-	public function flush($prefix = '')
-	{
+	public function flush($prefix = '') {
+		return $this->doFlush($this, $prefix);
+	}
+
+	/**
+	 * Persists and freezes staged controllers.
+	 *
+	 * Note: This is similar logic to parent class just broken up into
+	 * multiple methods to make it easier to override.
+	 *
+	 * Note: This method has no side effects.
+	 *
+	 * @param Silex\ControllerCollection $collection
+	 * @param string                     $prefix
+	 * @return RouteCollection
+	 */
+	protected function doFlush(Silex\ControllerCollection $collection, $prefix = '') {
 		$routes = new RouteCollection();
 
 		$prefix = $this->normalizePrefix($prefix);
 
-		foreach ($this->controllers as $controller) {
+		foreach ($collection->controllers as $controller) {
 			if ($controller instanceof Controller) {
 				$this->flushController($routes, $controller, $prefix);
 			} elseif ($controller instanceof Silex\ControllerCollection) {
@@ -58,7 +73,7 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 		// RouteCollection::addPrefix is intentionally not called here.
 		// The prefix should be added in flushController method.
 
-		$this->controllers = array();
+		$collection->controllers = array();
 
 		return $routes;
 	}
