@@ -784,6 +784,17 @@ class ArrayCollection implements CollectionInterface, ISerializable
 		return new static(array_combine(static::normalize($keys), static::normalize($values)));
 	}
 
+	/**
+	 * Magic method for displaying object properties.
+	 *
+	 * Only useful for development.
+	 *
+	 * @internal
+	 */
+	public function __debugInfo() {
+		return $this->elements;
+	}
+
 	public static function isTraversable($object) {
 		return is_array($object) || $object instanceof \Traversable;
 	}
