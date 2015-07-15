@@ -65,9 +65,10 @@ abstract class EnvironmentAwareConfig extends AbstractConfig {
 		parent::doSetConfig();
 
 		/** @var ArrayCollection|null $default */
-		if (!$default = static::$config->remove('default')) {
+		if (!static::$config->containsKey('default')) {
 			throw new ConfigException('Config needs to have a default environment');
 		}
+		$default = new ArrayCollection(static::$config['default']);
 
 		static::$envName = static::getEnvironment();
 
