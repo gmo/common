@@ -42,7 +42,7 @@ class ExceptionToJsonListener implements EventSubscriberInterface {
 
 	public static function getSubscribedEvents() {
 		return [
-			KernelEvents::EXCEPTION => ['onKernelException', -8],
+			KernelEvents::EXCEPTION => ['onKernelException', -7],
 		];
 	}
 }
