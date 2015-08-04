@@ -29,7 +29,7 @@ class ExceptionToJsonListener implements EventSubscriberInterface {
 		$response = new JsonResponse([
 			'success'   => false,
 			'errorType' => $errorType ?: 'Unknown',
-			'code'      => $ex->getStatusCode(),
+			'code'      => $statusCode,
 			'message'   => $ex->getMessage(),
 		]);
 		$response->setStatusCode($statusCode, $errorType ?: null);
