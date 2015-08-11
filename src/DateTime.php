@@ -1,6 +1,9 @@
 <?php
 namespace GMO\Common;
 
+/**
+ * @deprecated Use {@see Carbon\Carbon Carbon} instead
+ */
 class DateTime extends \DateTime implements ISerializable {
 
 	const SIMPLE_DATE = "Y-m-d H:i:s";
