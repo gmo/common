@@ -53,9 +53,9 @@ abstract class PrefixedVariableControllerCollection extends ControllerCollection
 	 * @param string                     $prefix
 	 * @return RouteCollection
 	 */
-	protected function flushControllerCollection(RouteCollection $routes, Silex\ControllerCollection $collection, $prefix) {
+	protected function flushSubCollection(RouteCollection $routes, Silex\ControllerCollection $collection, $prefix) {
 		$prefix .= $this->normalizePrefix($collection->prefix);
-		$routes->addCollection($this->doFlush($collection, $prefix));
-		return $this->doFlush($collection, $prefix);
+		$routes->addCollection($this->flushCollection($collection, $prefix));
+		return $this->flushCollection($collection, $prefix);
 	}
 }

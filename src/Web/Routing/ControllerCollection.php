@@ -35,18 +35,15 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 
 	/**
 	 * {@inheritdoc}
-	 *
-	 * Logic has been moved to doFlush to allow it to
-	 * be used for sub-collections as well.
 	 */
 	public function flush($prefix = '') {
-		return $this->doFlush($this, $prefix);
+		return $this->flushCollection($this, $prefix);
 	}
 
 	/**
 	 * Persists and freezes staged controllers.
 	 *
-	 * Note: This is similar logic to parent class just broken up into
+	 * Note: This is similar logic to {@see \Silex\ControllerCollection::doFlush} just broken up into
 	 * multiple methods to make it easier to override.
 	 *
 	 * Note: This method has no side effects.
@@ -55,7 +52,7 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 	 * @param string                     $prefix
 	 * @return RouteCollection
 	 */
-	protected function doFlush(Silex\ControllerCollection $collection, $prefix = '') {
+	protected function flushCollection(Silex\ControllerCollection $collection, $prefix = '') {
 		$routes = new RouteCollection();
 
 		$prefix = $this->normalizePrefix($prefix);
@@ -64,7 +61,7 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 			if ($controller instanceof Controller) {
 				$this->flushController($routes, $controller, $prefix);
 			} elseif ($controller instanceof Silex\ControllerCollection) {
-				$this->flushControllerCollection($routes, $controller, $prefix);
+				$this->flushSubCollection($routes, $controller, $prefix);
 			} else {
 				throw new \LogicException('Controllers need to be Controller or ControllerCollection instances');
 			}
@@ -111,7 +108,7 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 	 * @param Silex\ControllerCollection $collection
 	 * @param string                     $prefix
 	 */
-	protected function flushControllerCollection(RouteCollection $routes, Silex\ControllerCollection $collection, $prefix) {
+	protected function flushSubCollection(RouteCollection $routes, Silex\ControllerCollection $collection, $prefix) {
 		$prefix .= $this->normalizePrefix($collection->prefix);
 		$routes->addCollection($collection->flush($prefix));
 	}
