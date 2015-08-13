@@ -37,7 +37,7 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 	 * {@inheritdoc}
 	 */
 	public function flush($prefix = '') {
-		return $this->flushCollection($this, $prefix);
+		return $this->flushCollection($prefix, $this, new RouteCollection());
 	}
 
 	/**
@@ -48,27 +48,24 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 	 *
 	 * Note: This method has no side effects.
 	 *
-	 * @param Silex\ControllerCollection $collection
-	 * @param string                     $prefix
+	 * @param string               $prefix
+	 * @param ControllerCollection $collection
+	 * @param RouteCollection      $routes
+	 *
 	 * @return RouteCollection
 	 */
-	protected function flushCollection(Silex\ControllerCollection $collection, $prefix = '') {
-		$routes = new RouteCollection();
-
+	protected function flushCollection($prefix, ControllerCollection $collection, RouteCollection $routes) {
 		$prefix = $this->normalizePrefix($prefix);
 
 		foreach ($collection->controllers as $controller) {
 			if ($controller instanceof Controller) {
-				$this->flushController($routes, $controller, $prefix);
-			} elseif ($controller instanceof Silex\ControllerCollection) {
-				$this->flushSubCollection($routes, $controller, $prefix);
+				$this->flushController($prefix, $controller, $routes);
+			} elseif ($controller instanceof ControllerCollection) {
+				$this->flushSubCollection($prefix, $controller, $routes);
 			} else {
 				throw new \LogicException('Controllers need to be Controller or ControllerCollection instances');
 			}
 		}
-
-		// RouteCollection::addPrefix is intentionally not called here.
-		// The prefix should be added in flushController method.
 
 		$collection->controllers = array();
 
@@ -86,11 +83,11 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 	/**
 	 * Add the Controller to the RouteCollection and freeze it
 	 *
-	 * @param RouteCollection $routes
-	 * @param Controller      $controller
 	 * @param string          $prefix
+	 * @param Controller      $controller
+	 * @param RouteCollection $routes
 	 */
-	protected function flushController(RouteCollection $routes, Controller $controller, $prefix) {
+	protected function flushController($prefix, Controller $controller, RouteCollection $routes) {
 		// When mounting a controller class with a prefix most times you have a route with a blank path.
 		// That is the only route that flushes to include an (unwanted) trailing slash.
 		// This fixes that trailing slash.
@@ -104,13 +101,13 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 	/**
 	 * Add the ControllerCollection to the RouteCollection
 	 *
-	 * @param RouteCollection            $routes
-	 * @param Silex\ControllerCollection $collection
-	 * @param string                     $prefix
+	 * @param string               $prefix
+	 * @param ControllerCollection $collection
+	 * @param RouteCollection      $routes
 	 */
-	protected function flushSubCollection(RouteCollection $routes, Silex\ControllerCollection $collection, $prefix) {
+	protected function flushSubCollection($prefix, ControllerCollection $collection, RouteCollection $routes) {
 		$prefix .= $this->normalizePrefix($collection->prefix);
-		$routes->addCollection($collection->flush($prefix));
+		$routes->addCollection($collection->flushCollection($prefix, $collection, $routes));
 	}
 
 	/**

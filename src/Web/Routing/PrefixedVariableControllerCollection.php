@@ -26,7 +26,7 @@ abstract class PrefixedVariableControllerCollection extends ControllerCollection
 	 */
 	abstract protected function getVariableName();
 
-	protected function flushController(RouteCollection $routes, Controller $controller, $prefix) {
+	protected function flushController($prefix, Controller $controller, RouteCollection $routes) {
 		if ($this->variableRequirement) {
 			$controller->assert($this->getVariableName(), $this->variableRequirement);
 		}
@@ -34,8 +34,8 @@ abstract class PrefixedVariableControllerCollection extends ControllerCollection
 		// Clone current controller for unprefixed route
 		$unprefixedController = new Controller(clone $controller->getRoute());
 
-		parent::flushController($routes, $controller, $this->getVariablePrefix($prefix));
-		parent::flushController($routes, $unprefixedController, $prefix);
+		parent::flushController($this->getVariablePrefix($prefix), $controller, $routes);
+		parent::flushController($prefix, $unprefixedController, $routes);
 
 		// Set real route name that will be used if route is matched
 		$unprefixedController->getRoute()->setDefault(sprintf('_prefixed_route', $this->getVariableName()), $controller->getRouteName());
@@ -48,14 +48,12 @@ abstract class PrefixedVariableControllerCollection extends ControllerCollection
 	/**
 	 * Flushes the sub-collection with current class logic instead of its own
 	 *
-	 * @param RouteCollection            $routes
-	 * @param Silex\ControllerCollection $collection
-	 * @param string                     $prefix
-	 * @return RouteCollection
+	 * @param string               $prefix
+	 * @param ControllerCollection $collection
+	 * @param RouteCollection      $routes
 	 */
-	protected function flushSubCollection(RouteCollection $routes, Silex\ControllerCollection $collection, $prefix) {
+	protected function flushSubCollection($prefix, ControllerCollection $collection, RouteCollection $routes) {
 		$prefix .= $this->normalizePrefix($collection->prefix);
-		$routes->addCollection($this->flushCollection($collection, $prefix));
-		return $this->flushCollection($collection, $prefix);
+		$routes->addCollection($this->flushCollection($prefix, $collection, $routes));
 	}
 }
