@@ -26,6 +26,10 @@ abstract class PrefixedVariableControllerCollection extends ControllerCollection
 	 */
 	abstract protected function getVariableName();
 
+	protected function getVariablePrefix($prefix) {
+		return sprintf('/{%s}%s', $this->getVariableName(), $prefix);
+	}
+
 	protected function flushController($prefix, Controller $controller, RouteCollection $routes) {
 		if ($this->variableRequirement) {
 			$controller->assert($this->getVariableName(), $this->variableRequirement);
@@ -39,10 +43,6 @@ abstract class PrefixedVariableControllerCollection extends ControllerCollection
 
 		// Set real route name that will be used if route is matched
 		$unprefixedController->getRoute()->setDefault(sprintf('_prefixed_route', $this->getVariableName()), $controller->getRouteName());
-	}
-
-	protected function getVariablePrefix($prefix) {
-		return sprintf('/{%s}%s', $this->getVariableName(), $prefix);
 	}
 
 	/**

@@ -33,6 +33,14 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 		return parent::match($pattern, $to);
 	}
 
+	public function setDefaultControllerClass($class) {
+		$this->defaultControllerClass = $class;
+	}
+
+	public function setDefaultControllerMethod($method) {
+		$this->defaultControllerMethod = $method;
+	}
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -70,14 +78,6 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 		$collection->controllers = array();
 
 		return $routes;
-	}
-
-	public function setDefaultControllerClass($class) {
-		$this->defaultControllerClass = $class;
-	}
-
-	public function setDefaultControllerMethod($method) {
-		$this->defaultControllerMethod = $method;
 	}
 
 	/**
