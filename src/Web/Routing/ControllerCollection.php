@@ -99,7 +99,7 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 		// This fixes that trailing slash.
 		$controller->getRoute()->setPath(rtrim($prefix . $controller->getRoute()->getPath(), '/'));
 
-		$this->generateControllerName($routes, $controller, $prefix);
+		$this->generateControllerName($routes, $controller);
 		$routes->add($controller->getRouteName(), $controller->getRoute());
 		$controller->freeze();
 	}
@@ -138,11 +138,10 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 	 *
 	 * @param RouteCollection $routes
 	 * @param Controller      $controller
-	 * @param string          $prefix
 	 */
-	protected function generateControllerName(RouteCollection $routes, Controller $controller, $prefix) {
+	protected function generateControllerName(RouteCollection $routes, Controller $controller) {
 		if (!$name = $controller->getRouteName()) {
-			$name = $controller->generateRouteName($prefix);
+			$name = $controller->generateRouteName('');
 			while($routes->get($name)) {
 				$name .= '_';
 			}
