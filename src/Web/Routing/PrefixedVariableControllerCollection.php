@@ -54,6 +54,6 @@ abstract class PrefixedVariableControllerCollection extends ControllerCollection
 	 */
 	protected function flushSubCollection($prefix, ControllerCollection $collection, RouteCollection $routes) {
 		$prefix .= $this->normalizePrefix($collection->prefix);
-		$routes->addCollection($this->flushCollection($prefix, $collection, $routes));
+		$this->flushCollection($prefix, $collection, $routes);
 	}
 }

@@ -107,7 +107,7 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 	 */
 	protected function flushSubCollection($prefix, ControllerCollection $collection, RouteCollection $routes) {
 		$prefix .= $this->normalizePrefix($collection->prefix);
-		$routes->addCollection($collection->flushCollection($prefix, $collection, $routes));
+		$collection->flushCollection($prefix, $collection, $routes);
 	}
 
 	/**
