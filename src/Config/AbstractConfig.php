@@ -120,29 +120,36 @@ abstract class AbstractConfig implements ConfigInterface {
 	}
 
 	protected static function doSetConfig() {
+		$file = static::getConfigFile();
+		static::$config = static::readConfig($file);
+		static::$configFileType = $file->getExtension();
+	}
+
+	protected static function getConfigFile() {
 		$file = Path::truePath(static::setConfigFile(), static::getProjectDir());
-		if (!file_exists($file)) {
+		return new \SplFileInfo($file);
+	}
+
+	protected static function readConfig(\SplFileInfo $file) {
+		if (!$file->isReadable()) {
 			throw new ConfigException("Config file doesn't exist");
 		}
-		$type = pathinfo($file, PATHINFO_EXTENSION);
-		if ($type === "ini") {
-			static::$config = parse_ini_file($file, true);
-			static::$configFileType = "ini";
-		} elseif ($type === "json") {
-			static::$config = json_decode(file_get_contents($file), true);
-			static::$configFileType = "json";
+		$type = $file->getExtension();
+		if ($type === 'ini') {
+			$config = parse_ini_file($file, true);
+		} elseif ($type === 'json') {
+			$config = json_decode(file_get_contents($file), true);
 		} elseif ($type === 'yml') {
-			static::$config = Yaml::parse(file_get_contents($file));
-			static::$configFileType = "yaml";
+			$config = Yaml::parse(file_get_contents($file));
 		} else {
-			throw new ConfigException("Unknown config file format");
+			throw new ConfigException('Unknown config file format');
 		}
 
-		if (!static::$config) {
+		if (!$config) {
 			throw new ConfigException("Unable to parse $type file: $file");
 		}
 
-		static::$config = ArrayCollection::createRecursive(static::$config);
+		return ArrayCollection::createRecursive($config);
 	}
 
 	/**

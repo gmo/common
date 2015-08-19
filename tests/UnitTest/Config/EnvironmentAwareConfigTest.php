@@ -43,17 +43,11 @@ class EnvironmentAwareConfigTest extends \PHPUnit_Framework_TestCase {
 		TestConfig::getValue('test', 'error');
 	}
 
-	public static function setUpBeforeClass() {
-		parent::setUpBeforeClass();
-		static::$originalEnvironment = getenv('PHP_ENV');
+	public function testSpecificEnvironmentFiles() {
+		TestConfig::setEnvironment('development');
+		$value = TestConfig::getValue(null, 'password');
+		$this->assertSame('password1', $value);
 	}
-
-	public static function tearDownAfterClass() {
-		putenv('PHP_ENV=' . static::$originalEnvironment);
-		parent::tearDownAfterClass();
-	}
-
-	static $originalEnvironment;
 }
 
 

@@ -90,6 +90,19 @@ abstract class EnvironmentAwareConfig extends AbstractConfig {
 			$parsed->add($name);
 		}
 
+		// Merge in separate environment specific files
+		$rootFile = static::getConfigFile();
+		$pos = strrpos($rootFile->getPathname(), '.');
+		$pathTemplate = substr_replace($rootFile->getPathname(), '.%s.', $pos, 1);
+		foreach (static::$environments as $name => $config) {
+			// config.yml -> config.production.yml
+			$file = new \SplFileInfo(sprintf($pathTemplate, $name));
+			if ($file->isReadable()) {
+				$envConfig = static::readConfig($file);
+				$config->replaceRecursive($envConfig);
+			}
+		}
+
 		// Set config to config for environment name or default
 		static::$config = static::$environments->get(static::$envName) ?: static::$environments->get('default');
 	}

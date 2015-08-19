@@ -18,3 +18,4 @@ development:
   test:
     hello: %staging%
     error: %asdf%
+  password: override this
