@@ -10,9 +10,11 @@ production:
 staging:
   test:
     hello: %production%
+    key: staging_key
 
 # note
 development:
+  _extends: staging
   test:
     hello: %staging%
     error: %asdf%

@@ -17,6 +17,12 @@ class EnvironmentAwareConfigTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame('world2', $value);
 	}
 
+	public function testEnvironmentExtendsParent() {
+		TestConfig::setEnvironment('development');
+		$value = TestConfig::getValue('test', 'key');
+		$this->assertSame('staging_key', $value);
+	}
+
 	public function testUnknownEnvironmentUsesDefault() {
 		TestConfig::setEnvironment('asdf');
 		$value = TestConfig::getValue('test', 'hello');
@@ -53,8 +59,14 @@ class EnvironmentAwareConfigTest extends \PHPUnit_Framework_TestCase {
 
 class TestConfig extends EnvironmentAwareConfig {
 
+	protected static $env;
+
+	public static function getEnvironment() {
+		return static::$env;
+	}
+
 	public static function setEnvironment($env) {
-		putenv("PHP_ENV=$env");
+		static::$env = $env;
 		static::doSetConfig();
 	}
 
