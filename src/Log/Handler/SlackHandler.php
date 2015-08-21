@@ -86,10 +86,21 @@ class SlackHandler extends SlackHandlerBase {
 
 		$data['attachments'] = json_decode($data['attachments'], true);
 
+		$fields = &$data['attachments'][0]['fields'];
+
+		// Add channel to fields
+		array_splice($fields, 2, 0, array(
+			array(
+				'title' => 'Channel',
+				'value' => $record['channel'],
+				'short' => false,
+			)
+		));
+
 		// Set short property for the fields it applies too.
 		// This tells slack to put multiple on one row.
 		$shortLength = 40;
-		foreach ($data['attachments'][0]['fields'] as $index => &$field) {
+		foreach ($fields as $index => &$field) {
 			if ($index === 0) {
 				continue; // Never make Message short
 			}

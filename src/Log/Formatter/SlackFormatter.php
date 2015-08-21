@@ -13,10 +13,7 @@ class SlackFormatter extends NormalizerFormatter {
 	 * {@inheritdoc}
 	 */
 	protected function normalizeException(Exception $e) {
-		$data = get_class($e);
-		if (!empty($e->getMessage())) {
-			$data .= ': ' . $e->getMessage();
-		}
-		return $data;
+		$msg = $e->getMessage();
+		return get_class($e) . (!empty($msg) ? ': ' . $msg : '');
 	}
 }
