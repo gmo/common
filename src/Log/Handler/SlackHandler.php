@@ -14,18 +14,26 @@ use Monolog\Logger;
 class SlackHandler extends SlackHandlerBase {
 
 	/**
-	 * {@inheritdoc}
+	 * @param string      $token                  Slack API token
+	 * @param string      $channel                Slack channel/user (encoded ID or name)
+	 * @param string      $username               Name of a bot
+	 * @param int         $level                  The minimum logging level at which this handler will be triggered
+	 * @param bool        $bubble                 Whether the messages that are handled can bubble up the stack or not
+	 * @param bool        $includeContextAndExtra Whether the attachment should include context and extra data
+	 * @param string|null $iconEmoji              The emoji name to use (or null)
+	 * @param bool        $useAttachment          Whether the message should be added to Slack as attachment (plain text otherwise)
+	 * @param bool        $useShortAttachment     Whether the the context/extra messages added to Slack as attachments are in a short style
 	 */
 	public function __construct(
 		$token,
 		$channel,
 		$username = 'Logger',
-		$useAttachment = true,
-		$iconEmoji = 'page_with_curl',
 		$level = Logger::CRITICAL,
 		$bubble = true,
-		$useShortAttachment = false,
-		$includeContextAndExtra = true
+		$includeContextAndExtra = true,
+		$iconEmoji = 'page_with_curl',
+		$useAttachment = true,
+		$useShortAttachment = false
 	) {
 		parent::__construct(
 			$token,
@@ -33,7 +41,7 @@ class SlackHandler extends SlackHandlerBase {
 			$username,
 			$useAttachment,
 			$iconEmoji,
-			$level,
+			$level ?: Logger::CRITICAL,
 			$bubble,
 			$useShortAttachment,
 			$includeContextAndExtra
