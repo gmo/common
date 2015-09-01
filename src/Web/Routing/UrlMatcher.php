@@ -14,9 +14,6 @@ class UrlMatcher extends RedirectableUrlMatcher {
 		try {
 			return parent::match($pathinfo);
 		} catch (ResourceNotFoundException $e) {
-			if (!in_array($this->context->getMethod(), array('HEAD', 'GET'))) {
-				throw $e;
-			}
 		}
 
 		// Try matching the route with trailing slash
