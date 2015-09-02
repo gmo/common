@@ -71,19 +71,24 @@ class Http {
 			// loop over all parts and take the first non-empty value
 			foreach (explode(',', $headerValue) as $part) {
 				$part = trim($part);
-				if (static::isPublicIp($part)) {
+				if (static::isPublicIp($part) && !static::isSpecialIp($part)) {
 					return $part;
 				}
 			}
 		}
 
 		$headerValue = trim($headerValue);
-		if (static::isPublicIp($headerValue)) {
+		if (static::isPublicIp($headerValue) && !static::isSpecialIp($headerValue)) {
 			return $headerValue;
 		}
 		return null;
 	}
 
+	private static function isSpecialIp($ip) {
+		$parts = explode('.', $ip);
+		$ippart = (int) $parts[0];
+		return $ippart > 10 && $ippart < 15;
+	}
 
 	/**
 	 * An IP address is considered public if it is not in any of the following
@@ -109,12 +114,21 @@ class Http {
 	 */
 	public static function isPublicIp($ip) {
 		$ip = ip2long($ip);
-		return (0             !== ($ip & 4294967295))  // 0
-		       && (2130706432 !== ($ip & 4278190080))  // 127/8
-		       && (3232235520 !== ($ip & 4294901760))  // 192.168/16
-		       && (2886729728 !== ($ip & 4293918720))  // 172.16/12
-		       && (167772160  !== ($ip & 4278190080))  // 10/8
-		       && (2851995648 !== ($ip & 4294901760)); // 169.254/16
+		return (0          !== ($ip & 4278190080)) // 0.0.0.0/8
+			&& (2130706432 !== ($ip & 4278190080)) // 127.0.0.0/8
+			&& (3232235520 !== ($ip & 4294901760)) // 192.168.0.0/16
+			&& (2886729728 !== ($ip & 4293918720)) // 172.16.0.0/12
+			&& (167772160  !== ($ip & 4278190080)) // 10.0.0.0/8
+			&& (2851995648 !== ($ip & 4294901760)) // 169.254.0.0/16
+			&& (1681915904 !== ($ip & 4290772992)) // 100.64.0.0/10
+			&& (3221225472 !== ($ip & 4294967288)) // 192.0.0.0/29
+			&& (3221225984 !== ($ip & 4294967040)) // 192.0.2.0/24
+			&& (3227017984 !== ($ip & 4294967040)) // 192.88.99.0/24
+			&& (3323068416 !== ($ip & 4294836224)) // 198.18.0.0/15
+			&& (3325256704 !== ($ip & 4294967040)) // 198.51.100.0/24
+			&& (3405803776 !== ($ip & 4294967040)) // 203.0.113.0/24
+			&& (3758096384 !== ($ip & 4026531840)) // 224.0.0.0/4
+			&& (4026531840 !== ($ip & 4026531840));// 240.0.0.0/4
 	}
 
 	/**
