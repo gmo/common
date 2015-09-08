@@ -117,6 +117,9 @@ class String {
 	 *                         and a negative limit is used.
 	 */
 	public static function split($string, $delimiter, $limit = null) {
+		if (empty($delimiter)) {
+			return new ArrayCollection();
+		}
 		$parts = $limit === null ? explode($delimiter, $string) : explode($delimiter, $string, $limit);
 		return new ArrayCollection($parts ?: array());
 	}
@@ -164,11 +167,7 @@ class String {
 	 * @return string
 	 */
 	public static function removeFirst($string, $value, $caseSensitive = true) {
-		$pos = $caseSensitive ? strpos($string, $value) : stripos($string, $value);
-		if ($pos === false) {
-			return $string;
-		}
-		return substr_replace($string, '', $pos, strlen($value));
+		return static::replaceFirst($string, $value, '', $caseSensitive);
 	}
 
 	/**
@@ -181,11 +180,47 @@ class String {
 	 * @return string
 	 */
 	public static function removeLast($string, $value, $caseSensitive = true) {
-		$pos = $caseSensitive ? strrpos($string, $value) : strripos($string, $value);
+		return static::replaceLast($string, $value, '', $caseSensitive);
+	}
+
+	/**
+	 * Replaces the first occurrence of $from with $to in the given $subject.
+	 *
+	 * If $from is not found in the $subject, the $subject is returned.
+	 *
+	 * @param string $subject       The string to search in
+	 * @param string $from          What to search the subject for
+	 * @param string $to            What to replace $from with
+	 * @param bool   $caseSensitive Whether finding $from in the subject is case sensitive
+	 *
+	 * @return string
+	 */
+	public static function replaceFirst($subject, $from, $to, $caseSensitive = true) {
+		$pos = $caseSensitive ? strpos($subject, $from) : stripos($subject, $from);
 		if ($pos === false) {
-			return $string;
+			return $subject;
 		}
-		return substr_replace($string, '', $pos, strlen($value));
+		return substr_replace($subject, $to, $pos, strlen($from));
+	}
+
+	/**
+	 * Replaces the last occurrence of $from with $to in the given $subject.
+	 *
+	 * If $from is not found in the $subject, the $subject is returned.
+	 *
+	 * @param string $subject       The string to search in
+	 * @param string $from          What to search the subject for
+	 * @param string $to            What to replace $from with
+	 * @param bool   $caseSensitive Whether finding $from in the subject is case sensitive
+	 *
+	 * @return string
+	 */
+	public static function replaceLast($subject, $from, $to, $caseSensitive = true) {
+		$pos = $caseSensitive ? strrpos($subject, $from) : strripos($subject, $from);
+		if ($pos === false) {
+			return $subject;
+		}
+		return substr_replace($subject, $to, $pos, strlen($from));
 	}
 
 	/**
