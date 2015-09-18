@@ -3,6 +3,7 @@ namespace GMO\Common\Web\Routing;
 
 use Silex;
 use Silex\Controller;
+use Silex\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
@@ -19,6 +20,11 @@ abstract class PrefixedVariableControllerCollection extends ControllerCollection
 	/** @var string|null The requirement for the variable */
 	protected $variableRequirement = null;
 
+	public function __construct(Route $defaultRoute, $variableRequirement = null) {
+		parent::__construct($defaultRoute);
+		$this->variableRequirement = $variableRequirement;
+	}
+
 	/**
 	 * Returns the variable name
 	 *
@@ -26,13 +32,18 @@ abstract class PrefixedVariableControllerCollection extends ControllerCollection
 	 */
 	abstract protected function getVariableName();
 
+	protected function getVariableRequirement() {
+		return $this->variableRequirement;
+	}
+
 	protected function getVariablePrefix($prefix) {
 		return sprintf('/{%s}%s', $this->getVariableName(), $prefix);
 	}
 
 	protected function flushController($prefix, Controller $controller, RouteCollection $routes) {
-		if ($this->variableRequirement) {
-			$controller->assert($this->getVariableName(), $this->variableRequirement);
+		$requirement = $this->getVariableRequirement();
+		if ($requirement) {
+			$controller->assert($this->getVariableName(), $requirement);
 		}
 
 		// Clone current controller for unprefixed route

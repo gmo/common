@@ -13,8 +13,7 @@ use Silex\Route;
 class LocaleControllerCollection extends PrefixedVariableControllerCollection {
 
 	public function __construct(Route $defaultRoute, $supportedLocales = array()) {
-		parent::__construct($defaultRoute);
-		$this->variableRequirement = implode('|', $supportedLocales);
+		parent::__construct($defaultRoute, implode('|', $supportedLocales));
 	}
 
 	/**
