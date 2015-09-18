@@ -12,8 +12,15 @@ use Silex\Route;
  */
 class LocaleControllerCollection extends PrefixedVariableControllerCollection {
 
-	public function __construct(Route $defaultRoute, $supportedLocales = array()) {
-		parent::__construct($defaultRoute, implode('|', $supportedLocales));
+	/**
+	 * LocaleControllerCollection constructor.
+	 *
+	 * @param Route        $defaultRoute
+	 * @param array|string $supportedLocales Regex requirement for locale, or a list of locales
+	 */
+	public function __construct(Route $defaultRoute, $supportedLocales = '[a-zA-Z]{2}') {
+		$requirement = is_array($supportedLocales) ? implode('|', $supportedLocales) : $supportedLocales;
+		parent::__construct($defaultRoute, $requirement);
 	}
 
 	/**
