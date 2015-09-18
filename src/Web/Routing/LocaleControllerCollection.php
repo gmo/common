@@ -12,13 +12,16 @@ use Silex\Route;
  */
 class LocaleControllerCollection extends PrefixedVariableControllerCollection {
 
+	const SHORT_REGEX = '[a-zA-Z]{2}';
+	const LONG_REGEX = '[a-zA-Z]{2}(?:[-_][a-zA-Z]{2})?';
+
 	/**
 	 * LocaleControllerCollection constructor.
 	 *
 	 * @param Route        $defaultRoute
 	 * @param array|string $supportedLocales Regex requirement for locale, or a list of locales
 	 */
-	public function __construct(Route $defaultRoute, $supportedLocales = '[a-zA-Z]{2}') {
+	public function __construct(Route $defaultRoute, $supportedLocales = self::SHORT_REGEX) {
 		$requirement = is_array($supportedLocales) ? implode('|', $supportedLocales) : $supportedLocales;
 		parent::__construct($defaultRoute, $requirement);
 	}
