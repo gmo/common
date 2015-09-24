@@ -1,37 +1,23 @@
 <?php
 namespace GMO\Common\Web\Routing;
 
-use Silex\RedirectableUrlMatcher;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Matcher\UrlMatcher as UrlMatcherBase;
 use Symfony\Component\Routing\Route;
 
 /**
- * Matches routes with or without trailing slash but does not redirect for performance
+ * {@inheritdoc}
+ *
+ * Trailing slash is removed before matching.
  */
-class UrlMatcher extends RedirectableUrlMatcher {
+class UrlMatcher extends UrlMatcherBase {
 
 	public function match($pathinfo) {
-		try {
-			return parent::match($pathinfo);
-		} catch (ResourceNotFoundException $e) {
+		// Remove trailing slash
+		if ($pathinfo !== '/') {
+			$pathinfo = rtrim($pathinfo, '/');
 		}
 
-		// Try matching the route with trailing slash
-		if ('/' !== substr($pathinfo, -1)) {
-			try {
-				return parent::match($pathinfo.'/');
-			} catch (ResourceNotFoundException $e2) {
-				throw $e;
-			}
-		}
-
-		// Try matching the route without trailing slash
-		$withoutTrailingSlash = substr($pathinfo, 0, -1);
-		try {
-			return parent::match($withoutTrailingSlash);
-		} catch (ResourceNotFoundException $e2) {
-			throw $e;
-		}
+		return parent::match($pathinfo);
 	}
 
 	/**
