@@ -13,28 +13,55 @@ use Symfony\Component\HttpFoundation\ParameterBag as ParameterBagBase;
  */
 class ParameterBag extends ParameterBagBase {
 
+	protected $required = false;
+
 	/**
-	 * Returns a required parameter by name.
+	 * Sets the next parameter retrieved to be required.
 	 *
-	 * @param string $key
+	 * @return $this
+	 */
+	public function required() {
+		$this->required = true;
+
+		return $this;
+	}
+
+	/**
+	 * Returns a parameter by name.
 	 *
-	 * @throws Exception\MissingParameterException If the parameter does not exist.
-	 * @throws Exception\InvalidParameterException If the parameter is empty.
+	 * @param string $key     The key
+	 * @param mixed  $default The default value if the parameter key does not exist
+	 * @param bool   $deep    If true, a path like foo[bar] will find deeper items
+	 *
+	 * @throws Exception\MissingParameterException If the parameter is required and does not exist.
+	 * @throws Exception\InvalidParameterException If the parameter is required and empty.
 	 *
 	 * @return mixed
 	 */
-	public function getRequired($key) {
+	public function get($key, $default = null, $deep = false) {
+		if (!$this->required) {
+			return parent::get($key, $default, $deep);
+		}
+		$this->required = false;
+
 		if (!$this->has($key)) {
 			throw new Exception\MissingParameterException($key);
 		}
 
-		$value = $this->get($key);
+		$value = parent::get($key);
 
 		if (empty($value)) {
 			throw new Exception\InvalidParameterException($key, '%s should not be empty');
 		}
 
 		return $value;
+	}
+
+	/**
+	 * @deprecated
+	 */
+	public function getRequired($key) {
+		return $this->required()->get($key);
 	}
 
 	/**
@@ -48,7 +75,7 @@ class ParameterBag extends ParameterBagBase {
 	 */
 	public function getApiKey($keyName = 'key') {
 		try {
-			return $this->getRequired($keyName);
+			return $this->required()->get($keyName);
 		} catch (Exception\MissingParameterException $e) {
 			throw new Exception\NoKeyException($keyName);
 		}
