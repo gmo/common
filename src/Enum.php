@@ -33,6 +33,11 @@ abstract class Enum extends AbstractSerializable {
 		$this->value = $value;
 	}
 
+	/**
+	 * @param mixed $value
+	 *
+	 * @return static
+	 */
 	public static function create($value) {
 		$class = get_called_class();
 		if (!array_key_exists($class, self::$instances)) {
