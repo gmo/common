@@ -161,6 +161,28 @@ abstract class Enum extends AbstractSerializable {
 	}
 
 	/**
+	 * Magic method for is-ers.
+	 *
+	 *     $enum = MyEnum::FOO();
+	 *     $test = $enum->isFoo(); // returns true
+	 *
+	 * @param string $name
+	 * @param array $args
+	 *
+	 * @return bool
+	 */
+	public function __call($name, $args) {
+		if (String::startsWith($name, 'is', false)) {
+			$key = 'static::' . strtoupper(substr($name, 2));
+			if (defined($key)) {
+				return $this->value === constant($key);
+			}
+		}
+
+		throw new \BadMethodCallException("No method '$name' in class" . get_called_class());
+	}
+
+	/**
 	 * {@inheritdoc}
 	 */
 	public function toArray() {
