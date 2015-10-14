@@ -41,7 +41,7 @@ abstract class Enum extends AbstractSerializable {
 	public static function create($value) {
 		$class = get_called_class();
 		if (!array_key_exists($class, self::$instances)) {
-			self::$instances[$class] = [];
+			self::$instances[$class] = array();
 		}
 		if (!array_key_exists($value, self::$instances[$class])) {
 			self::$instances[$class][$value] = new static($value);
@@ -88,7 +88,7 @@ abstract class Enum extends AbstractSerializable {
 	 * @return array Constant name in key, Enum instance in value
 	 */
 	public static function values() {
-		$values = [];
+		$values = array();
 		foreach (static::toList() as $key => $value) {
 			$values[$key] = new static($value);
 		}
