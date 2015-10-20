@@ -69,6 +69,7 @@ class ParameterBag extends ParameterBagBase {
 	 *
 	 * @param string $keyName
 	 *
+	 * @throws Exception\InvalidKeyException
 	 * @throws Exception\NoKeyException
 	 *
 	 * @return mixed
@@ -78,6 +79,8 @@ class ParameterBag extends ParameterBagBase {
 			return $this->required()->get($keyName);
 		} catch (Exception\MissingParameterException $e) {
 			throw new Exception\NoKeyException($keyName);
+		} catch (Exception\InvalidParameterException $e) {
+			throw new Exception\InvalidKeyException($keyName);
 		}
 	}
 
