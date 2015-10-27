@@ -91,14 +91,14 @@ class ParameterBag extends ParameterBagBase {
 	 *
 	 * @param string                 $key     The key
 	 * @param Carbon|int|string|null $default The default value if the parameter key doesn't exist or is empty
-	 * @param string                 $tz      The timezone to create the Carbon instances with. Default: UTC
+	 * @param string                 $tz      The timezone to create the Carbon instances with.
 	 *
 	 * @throws Exception\InvalidParameterException If the parameter value fails to parse
 	 * @throws LogicException If Carbon is not installed
 	 *
 	 * @return Carbon|null A Carbon timestamp or null if the key was empty and default is null
 	 */
-	public function getTimestamp($key, $default = null, $tz = 'UTC') {
+	public function getTimestamp($key, $default = null, $tz = null) {
 		if (!class_exists('\Carbon\Carbon')) {
 			throw new LogicException('Carbon library is not installed');
 		}
