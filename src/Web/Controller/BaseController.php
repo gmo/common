@@ -22,9 +22,7 @@ class BaseController implements ControllerProviderInterface {
 	 * @return string
 	 */
 	public function generateUrl($name, $params = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH) {
-		/** @var UrlGeneratorInterface $generator */
-		$generator = $this->app['url_generator'];
-		return $generator->generate($name, $params, $referenceType);
+		return $this->app['url_generator']->generate($name, $params, $referenceType);
 	}
 
 	/**
