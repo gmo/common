@@ -41,7 +41,7 @@ class BaseController implements ControllerProviderInterface {
 	/**
 	 * Returns a RedirectResponse to the given route with the given parameters.
 	 *
-	 * @param string $route      The name of the route
+	 * @param string $route      #Route The name of the route
 	 * @param array  $parameters An array of parameters
 	 * @param int    $status     The status code to use for the Response
 	 *
