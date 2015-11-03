@@ -26,9 +26,9 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 			return parent::match($pattern, $to);
 		}
 		if ($to === null && $this->defaultControllerMethod) {
-			$to = [$this->defaultControllerClass, $this->defaultControllerMethod];
+			$to = array($this->defaultControllerClass, $this->defaultControllerMethod);
 		} elseif (is_string($to) && String::startsWith($to, '::')) {
-			$to = [$this->defaultControllerClass, substr($to, 2)];
+			$to = array($this->defaultControllerClass, substr($to, 2));
 		}
 		return parent::match($pattern, $to);
 	}
