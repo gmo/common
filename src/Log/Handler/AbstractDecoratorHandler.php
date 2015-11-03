@@ -1,6 +1,6 @@
 <?php
 
-namespace GMO\Common\Log;
+namespace GMO\Common\Log\Handler;
 
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\HandlerInterface;
