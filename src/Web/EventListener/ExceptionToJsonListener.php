@@ -26,12 +26,12 @@ class ExceptionToJsonListener implements EventSubscriberInterface {
 		}
 
 		$errorType = Str::removeLast(Str::className($ex), 'Exception');
-		$response = new JsonResponse([
+		$response = new JsonResponse(array(
 			'success'   => false,
 			'errorType' => $errorType ?: 'Unknown',
 			'code'      => $statusCode,
 			'message'   => $ex->getMessage(),
-		]);
+		));
 		$response->setStatusCode($statusCode, $errorType ?: null);
 		$event->setResponse($response);
 	}
@@ -41,8 +41,8 @@ class ExceptionToJsonListener implements EventSubscriberInterface {
 	}
 
 	public static function getSubscribedEvents() {
-		return [
-			KernelEvents::EXCEPTION => ['onKernelException', -7],
-		];
+		return array(
+			KernelEvents::EXCEPTION => array('onKernelException', -7),
+		);
 	}
 }

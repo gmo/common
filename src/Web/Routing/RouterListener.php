@@ -31,10 +31,10 @@ class RouterListener implements ServiceProviderInterface, EventSubscriberInterfa
 	}
 
 	protected function logRoute(ParameterBag $attributes) {
-		$this->logger->debug('Matched route', [
+		$this->logger->debug('Matched route', array(
 			'route' => $attributes->get('_route'),
 			'parameters' => $attributes->get('_route_params'),
-		]);
+		));
 	}
 
 	/**
@@ -46,9 +46,10 @@ class RouterListener implements ServiceProviderInterface, EventSubscriberInterfa
 	}
 
 	public function register(Application $app) {
-		$app['dispatcher'] = $app->share($app->extend('dispatcher', function (EventDispatcher $dispatcher, $app) {
-			$this->removeOldListener($dispatcher);
-			$this->addNewListener($dispatcher, $app);
+		$self = $this;
+		$app['dispatcher'] = $app->share($app->extend('dispatcher', function (EventDispatcher $dispatcher, $app) use ($self) {
+			$self->removeOldListener($dispatcher);
+			$self->addNewListener($dispatcher, $app);
 			return $dispatcher;
 		}));
 	}
@@ -86,10 +87,10 @@ class RouterListener implements ServiceProviderInterface, EventSubscriberInterfa
 	}
 
 	public static function getSubscribedEvents() {
-		return [
-			KernelEvents::REQUEST => ['onKernelRequest', 32],
-			KernelEvents::FINISH_REQUEST => ['onKernelFinishRequest', 0],
-		];
+		return array(
+			KernelEvents::REQUEST => array('onKernelRequest', 32),
+			KernelEvents::FINISH_REQUEST => array('onKernelFinishRequest', 0),
+		);
 	}
 
 	public function setLogger(LoggerInterface $logger) {

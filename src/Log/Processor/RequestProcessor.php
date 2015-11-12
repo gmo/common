@@ -10,13 +10,13 @@ class RequestProcessor {
 			return $record;
 		}
 
-		$params = [
+		$params = array(
 			'method' => $request->getMethod(),
 			'host' => $request->getHost(),
 			'path' =>  $request->getPathInfo(),
 			'query' => $request->query->all(),
 			'userAgent' => $request->server->get('HTTP_USER_AGENT'),
-		];
+		);
 		if ($request->isMethod('POST')) {
 			$params['body'] = $request->request->all();
 		}

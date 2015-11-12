@@ -44,14 +44,14 @@ class HttpLogListener implements EventSubscriberInterface {
 		$response = $event->getResponse();
 
 		if ($response instanceof RedirectResponse) {
-			$this->logger->info('Sending redirect', [
+			$this->logger->info('Sending redirect', array(
 				'target' => $response->getTargetUrl(),
 				'code' => $response->getStatusCode(),
-			]);
+			));
 		} else {
-			$this->logger->debug('Sending response', [
+			$this->logger->debug('Sending response', array(
 				'code' => $response->getStatusCode(),
-			]);
+			));
 		}
 	}
 
@@ -69,17 +69,17 @@ class HttpLogListener implements EventSubscriberInterface {
 		if ($e instanceof MethodNotAllowedHttpException) {
 			/** @var \Symfony\Component\Routing\Exception\MethodNotAllowedException $previous */
 			$previous = $e->getPrevious();
-			$this->logger->warning('Method not allowed', [
+			$this->logger->warning('Method not allowed', array(
 				'allowed' => $previous->getAllowedMethods(),
-			]);
+			));
 			return;
 		}
 
 		$message = $e->getMessage();
 		$level = LogLevel::CRITICAL;
-		$context = [
+		$context = array(
 			'exception' => $e,
-		];
+		);
 		if ($e instanceof HttpExceptionInterface) {
 			$code = $e->getStatusCode();
 			$context['statusCode'] = $code;
@@ -92,15 +92,15 @@ class HttpLogListener implements EventSubscriberInterface {
 	}
 
 	public static function getSubscribedEvents() {
-		return [
-			KernelEvents::REQUEST => ['onKernelRequest', 0],
-			KernelEvents::RESPONSE => ['onKernelResponse', 0],
+		return array(
+			KernelEvents::REQUEST => array('onKernelRequest', 0),
+			KernelEvents::RESPONSE => array('onKernelResponse', 0),
 			/*
 			 * Priority -4 is used to come after those from SecurityServiceProvider (0)
 			 * but before the error handlers added with Silex\Application::error (defaults to -8)
 			 */
-			KernelEvents::EXCEPTION => ['onKernelException', -4],
-		];
+			KernelEvents::EXCEPTION => array('onKernelException', -4),
+		);
 	}
 
 	public function setLogger(LoggerInterface $logger) {

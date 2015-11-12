@@ -74,7 +74,7 @@ abstract class EnvironmentAwareConfig extends AbstractConfig {
 
 		static::$envName = static::getEnvironment();
 
-		$parsed = new ArrayCollection(['default']);
+		$parsed = new ArrayCollection(array('default'));
 
 		// Merge in parent configs for each environment, specified with "_extends" key
 		foreach (static::$environments as $name => $config) {
