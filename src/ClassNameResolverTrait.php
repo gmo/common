@@ -9,7 +9,7 @@ trait ClassNameResolverTrait
      *
      * @return string
      */
-    public function className()
+    public static function className()
     {
         return get_called_class();
     }
