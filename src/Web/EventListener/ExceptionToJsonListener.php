@@ -1,7 +1,7 @@
 <?php
 namespace GMO\Common\Web\EventListener;
 
-use GMO\Common\String;
+use GMO\Common\Str;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +25,7 @@ class ExceptionToJsonListener implements EventSubscriberInterface {
 			$statusCode = $ex->getStatusCode();
 		}
 
-		$errorType = String::removeLast(String::className($ex), 'Exception');
+		$errorType = Str::removeLast(Str::className($ex), 'Exception');
 		$response = new JsonResponse([
 			'success'   => false,
 			'errorType' => $errorType ?: 'Unknown',
@@ -37,7 +37,7 @@ class ExceptionToJsonListener implements EventSubscriberInterface {
 	}
 
 	protected function isApplicable(Request $request) {
-		return String::startsWith($request->getPathInfo(), '/api/', false);
+		return Str::startsWith($request->getPathInfo(), '/api/', false);
 	}
 
 	public static function getSubscribedEvents() {

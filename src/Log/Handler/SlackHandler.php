@@ -2,7 +2,7 @@
 namespace GMO\Common\Log\Handler;
 
 use GMO\Common\Log\Formatter\SlackFormatter;
-use GMO\Common\String;
+use GMO\Common\Str;
 use Monolog\Handler\SlackHandler as SlackHandlerBase;
 use Monolog\Logger;
 
@@ -108,7 +108,7 @@ class SlackHandler extends SlackHandlerBase {
 				$field['short'] = true;
 			}
 
-			$field['title'] = String::humanize($field['title']);
+			$field['title'] = Str::humanize($field['title']);
 		}
 
 		$data['attachments'] = json_encode($data['attachments']);

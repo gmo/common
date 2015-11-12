@@ -172,7 +172,7 @@ abstract class Enum extends AbstractSerializable {
 	 * @return bool
 	 */
 	public function __call($name, $args) {
-		if (String::startsWith($name, 'is', false)) {
+		if (Str::startsWith($name, 'is', false)) {
 			$key = 'static::' . strtoupper(substr($name, 2));
 			if (defined($key)) {
 				return $this->value === constant($key);

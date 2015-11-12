@@ -2,7 +2,7 @@
 namespace GMO\Common\Web\Twig;
 
 use GMO\Common\Collections\ArrayCollection;
-use GMO\Common\String;
+use GMO\Common\Str;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment as Environment;
 
@@ -64,7 +64,7 @@ class TwigResponse extends Response implements RenderableInterface {
 	public function render(Environment $twig) {
 		$templates = ArrayCollection::create($this->template)
 			->map(function ($template) {
-				return String::endsWith($template, '.twig') ? $template : $template . '.twig';
+				return Str::endsWith($template, '.twig') ? $template : $template . '.twig';
 			});
 		$this->setContent($twig->resolveTemplate($templates->toArray())->render($this->variables->toArray()));
 		$this->rendered = true;

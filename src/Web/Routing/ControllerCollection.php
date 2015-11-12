@@ -1,7 +1,7 @@
 <?php
 namespace GMO\Common\Web\Routing;
 
-use GMO\Common\String;
+use GMO\Common\Str;
 use Silex;
 use Silex\Controller;
 use Symfony\Component\Routing\RouteCollection;
@@ -27,7 +27,7 @@ class ControllerCollection extends Silex\ControllerCollection implements Default
 		}
 		if ($to === null && $this->defaultControllerMethod) {
 			$to = array($this->defaultControllerClass, $this->defaultControllerMethod);
-		} elseif (is_string($to) && String::startsWith($to, '::')) {
+		} elseif (is_string($to) && Str::startsWith($to, '::')) {
 			$to = array($this->defaultControllerClass, substr($to, 2));
 		}
 		return parent::match($pattern, $to);
