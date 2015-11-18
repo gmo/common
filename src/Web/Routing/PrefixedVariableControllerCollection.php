@@ -42,7 +42,7 @@ abstract class PrefixedVariableControllerCollection extends ControllerCollection
 
 	protected function flushController($prefix, Controller $controller, RouteCollection $routes) {
 		$requirement = $this->getVariableRequirement();
-		if ($requirement) {
+		if ($requirement && !$controller->getRoute()->hasRequirement($this->getVariableName())) {
 			$controller->assert($this->getVariableName(), $requirement);
 		}
 
