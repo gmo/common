@@ -16,12 +16,14 @@ class ParameterBag extends ParameterBagBase {
 	protected $required = false;
 
 	/**
-	 * Sets the next parameter retrieved to be required.
+	 * Sets the next parameter retrieved to be required or not.
+	 *
+	 * @param bool $required
 	 *
 	 * @return $this
 	 */
-	public function required() {
-		$this->required = true;
+	public function required($required = true) {
+		$this->required = (bool) $required;
 
 		return $this;
 	}
