@@ -53,8 +53,20 @@ abstract class EnvironmentAwareConfig extends AbstractConfig {
 			throw new ConfigException("Config file does not contain the environment: \"$env\" requested by $location");
 		}
 
+		$value = static::getValueFromEnv($env, $section, $key, $default, $allowEmpty);
+
+		return $value;
+	}
+
+	public static function getValueFromEnv($env, $section, $key, $default = null, $allowEmpty = false)
+	{
 		static::$config = static::$environments->get($env);
-		$value = static::getValue($section, $key, $default, $allowEmpty);
+		try {
+			$value = static::getValue($section, $key, $default, $allowEmpty);
+		} catch (ConfigException $e) {
+			static::$config = static::$environments->get(static::$envName);
+			throw $e;
+		}
 		static::$config = static::$environments->get(static::$envName);
 
 		return $value;
