@@ -1,7 +1,6 @@
 <?php
 namespace GMO\Common\Log\Formatter;
 
-use Exception;
 use Monolog\Formatter\NormalizerFormatter;
 
 /**
@@ -10,9 +9,11 @@ use Monolog\Formatter\NormalizerFormatter;
 class SlackFormatter extends NormalizerFormatter {
 
 	/**
-	 * {@inheritdoc}
+	 * @param \Exception|\Throwable $e
+	 *
+	 * @return string
 	 */
-	protected function normalizeException(Exception $e) {
+	protected function normalizeException($e) {
 		$msg = $e->getMessage();
 		return get_class($e) . (!empty($msg) ? ': ' . $msg : '');
 	}
