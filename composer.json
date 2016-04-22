@@ -1,5 +1,6 @@
 {
 	"name": "gmo/common",
+	"license": "MIT",
 	"description": "A library for common code",
 	"require": {
 		"php": ">=5.3.3",
