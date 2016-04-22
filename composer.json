@@ -3,8 +3,8 @@
 	"description": "A library for common code",
 	"require": {
 		"php": ">=5.3.3",
-		"symfony/yaml": "~2.5",
-		"symfony/http-foundation": "~2.6",
+		"symfony/yaml": "^2.5 || ^3.0",
+		"symfony/http-foundation": "^2.6 || ^3.0",
 		"firebase/php-jwt": "~1.0"
 	},
 	"require-dev": {
