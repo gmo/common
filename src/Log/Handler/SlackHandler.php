@@ -3,6 +3,7 @@ namespace GMO\Common\Log\Handler;
 
 use GMO\Common\Log\Formatter\SlackFormatter;
 use GMO\Common\Str;
+use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\SlackHandler as SlackHandlerBase;
 use Monolog\Logger;
 
@@ -12,6 +13,9 @@ use Monolog\Logger;
  * Subclassing to tweak formatting and change defaults
  */
 class SlackHandler extends SlackHandlerBase {
+
+	/** @var LineFormatter */
+	private $lineFormatter;
 
 	/**
 	 * @param string      $token                  Slack API token
@@ -46,6 +50,7 @@ class SlackHandler extends SlackHandlerBase {
 			$useShortAttachment,
 			$includeContextAndExtra
 		);
+		$this->lineFormatter = new LineFormatter();
 	}
 
 	/**
@@ -113,5 +118,23 @@ class SlackHandler extends SlackHandlerBase {
 
 		$data['attachments'] = json_encode($data['attachments']);
 		return $data;
+	}
+
+	/**
+	 * Stringifies an array of key/value pairs to be used in attachment fields
+	 *
+	 * @param  array  $fields
+	 * @return string
+	 */
+	protected function stringify($fields)
+	{
+		$string = '';
+		foreach ($fields as $var => $val) {
+			$string .= $var.': '.$this->lineFormatter->stringify($val)." | ";
+		}
+
+		$string = rtrim($string, " |");
+
+		return $string;
 	}
 }
