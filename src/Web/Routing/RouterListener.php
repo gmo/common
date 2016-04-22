@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\EventListener\RouterListener as RouterListenerBase;
 
@@ -78,7 +79,11 @@ class RouterListener implements ServiceProviderInterface, EventSubscriberInterfa
 		$urlMatcher = new LazyUrlMatcher(function () use ($app) {
 			return $app['url_matcher'];
 		});
-		$this->wrappedRouter = new RouterListenerBase($urlMatcher, $app['request_context'], null, $app['request_stack']);
+		if (Kernel::VERSION_ID >= 20800) {
+			$this->wrappedRouter = new RouterListenerBase($urlMatcher, $app['request_stack'], $app['request_context']);
+		} else {
+			$this->wrappedRouter = new RouterListenerBase($urlMatcher, $app['request_context'], null, $app['request_stack']);
+		}
 		$dispatcher->addSubscriber($this);
 	}
 
