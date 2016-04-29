@@ -4,8 +4,27 @@ namespace GMO\Common\Log\Handler;
 use Monolog\Formatter\LogstashFormatter;
 use Monolog\Handler\RedisHandler;
 use Monolog\Logger;
+use Predis\Connection\ConnectionException;
+use Predis\Response\ServerException;
 
 class LogstashHandler extends RedisHandler {
+
+	/**
+	 * @inheritdoc
+	 *
+	 * Bubble down if there is an error writing to redis server,
+	 * this way a another handler can be used on error.
+	 */
+	public function handle(array $record)
+	{
+		try {
+			return parent::handle($record);
+		} catch (ServerException $e) {
+		} catch (ConnectionException $e) {
+		}
+
+		return false;
+	}
 
 	/**
 	 * @param string $contextPrefix
