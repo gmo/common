@@ -45,6 +45,8 @@ class ParseException extends \RuntimeException
             $message = 'It appears you have an extra trailing comma';
         }
 
+        $message = 'JSON parsing failed: ' . $message;
+
         return new static($message, $line, $snippet);
     }
 
