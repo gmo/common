@@ -3,6 +3,7 @@ namespace GMO\Common\Config;
 
 use GMO\Common\Collections\ArrayCollection;
 use GMO\Common\Exception\ConfigException;
+use GMO\Common\Json;
 use GMO\Common\Path;
 use GMO\Common\Str;
 use Symfony\Component\Yaml\Yaml;
@@ -138,7 +139,7 @@ abstract class AbstractConfig implements ConfigInterface {
 		if ($type === 'ini') {
 			$config = parse_ini_file($file, true);
 		} elseif ($type === 'json') {
-			$config = json_decode(file_get_contents($file), true);
+			$config = Json::parse(file_get_contents($file), true);
 		} elseif ($type === 'yml') {
 			$config = Yaml::parse(file_get_contents($file));
 		} else {

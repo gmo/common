@@ -1,6 +1,7 @@
 <?php
 namespace GMO\Common\Log\Handler;
 
+use GMO\Common\Json;
 use GMO\Common\Log\Formatter\SlackFormatter;
 use GMO\Common\Str;
 use Monolog\Formatter\LineFormatter;
@@ -89,7 +90,7 @@ class SlackHandler extends SlackHandlerBase {
 
 		$data = parent::prepareContentData($record);
 
-		$data['attachments'] = json_decode($data['attachments'], true);
+		$data['attachments'] = Json::parse($data['attachments']);
 
 		$fields = &$data['attachments'][0]['fields'];
 
@@ -116,7 +117,7 @@ class SlackHandler extends SlackHandlerBase {
 			$field['title'] = Str::humanize($field['title']);
 		}
 
-		$data['attachments'] = json_encode($data['attachments']);
+		$data['attachments'] = Json::dump($data['attachments']);
 		return $data;
 	}
 
