@@ -3,10 +3,12 @@
 	"license": "MIT",
 	"description": "A library for common code",
 	"require": {
+		"firebase/php-jwt": "~1.0",
 		"php": ">=5.3.3",
-		"symfony/yaml": "^2.5 || ^3.0",
+		"seld/jsonlint": "^1.4",
 		"symfony/http-foundation": "^2.6 || ^3.0",
-		"firebase/php-jwt": "~1.0"
+		"symfony/polyfill-php55": "^1.0",
+		"symfony/yaml": "^2.5 || ^3.0"
 	},
 	"require-dev": {
 		"gmo/cache": "~1.0",
