@@ -2,6 +2,9 @@
 
 namespace Gmo\Common;
 
+/**
+ * @deprecated
+ */
 trait ClassNameResolverTrait
 {
     /**

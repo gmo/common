@@ -1,6 +1,9 @@
 <?php
 namespace GMO\Common;
 
+/**
+ * @deprecated
+ */
 interface ClassNameResolverInterface {
 
 	/**

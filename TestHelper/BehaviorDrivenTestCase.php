@@ -1,6 +1,9 @@
 <?php
 namespace GMO\TestHelper;
 
+/**
+ * @deprecated
+ */
 abstract class BehaviorDrivenTestCase extends \PHPUnit_Framework_TestCase {
 
 	public static function setUpBeforeClass()
