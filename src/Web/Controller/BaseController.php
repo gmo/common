@@ -1,5 +1,5 @@
 <?php
-namespace GMO\Common\Web\Controller;
+namespace Gmo\Common\Web\Controller;
 
 use Silex\Application;
 use Silex\ControllerProviderInterface;

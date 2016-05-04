@@ -1,9 +1,9 @@
 <?php
 namespace UnitTest;
 
-use GMO\Common\Collections\ArrayCollection;
-use GMO\Common\Config\AbstractConfig;
-use GMO\Common\Path;
+use Gmo\Common\Collections\ArrayCollection;
+use Gmo\Common\Config\AbstractConfig;
+use Gmo\Common\Path;
 
 class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 
@@ -90,7 +90,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @expectedException \GMO\Common\Exception\ConfigException
+	 * @expectedException \Gmo\Common\Exception\ConfigException
 	 * @expectedExceptionMessage Config key: "listssss" is missing!
 	 */
 	public function test_get_nonexistent_list() {
@@ -98,14 +98,14 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @expectedException \GMO\Common\Exception\ConfigException
+	 * @expectedException \Gmo\Common\Exception\ConfigException
 	 */
 	public function test_missing_key() {
 		IniConfig::getMissingKey();
 	}
 
 	/**
-	 * @expectedException \GMO\Common\Exception\ConfigException
+	 * @expectedException \Gmo\Common\Exception\ConfigException
 	 * @expectedExceptionMessage Config file doesn't exist
 	 */
 	public function test_nonexistent_config_file() {
@@ -113,7 +113,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @expectedException \GMO\Common\Exception\ConfigException
+	 * @expectedException \Gmo\Common\Exception\ConfigException
 	 * @expectedExceptionMessage Unknown config file format
 	 */
 	public function test_unknown_config_format() {

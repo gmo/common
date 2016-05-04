@@ -1,6 +1,6 @@
 <?php
 
-namespace GMO\Common\Collection;
+namespace Gmo\Common\Collection;
 
 class Arr {
 

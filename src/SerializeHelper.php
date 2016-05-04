@@ -1,12 +1,12 @@
 <?php
-namespace GMO\Common;
+namespace Gmo\Common;
 
-use GMO\Common\Exception\NotSerializableException;
+use Gmo\Common\Exception\NotSerializableException;
 
 /**
  * This class was refactored from {@see AbstractSerializable} to make it easier when you
  * need to implement {@see ISerializable} without extending {@see AbstractSerializable}
- * @package GMO\Common
+ * @package Gmo\Common
  * @since 1.14.0
  */
 class SerializeHelper {
@@ -94,7 +94,7 @@ class SerializeHelper {
 			} elseif ($paramCls->name === "DateTime") {
 				$timestamp = $obj[$refParam->name];
 				$params[] = DateTime::fromArray($timestamp);
-			} elseif ($paramCls->isSubclassOf('GMO\Common\ISerializable')) {
+			} elseif ($paramCls->isSubclassOf('Gmo\Common\ISerializable')) {
 				/** @var ISerializable|string $clsName */
 				$clsName = $paramCls->name;
 				if (!class_exists($clsName)) {
@@ -104,7 +104,7 @@ class SerializeHelper {
 			} elseif ($paramCls->isSubclassOf('\Exception') || $paramCls->getName() === 'Exception') {
 				$params[] = unserialize($obj[$refParam->name]);
 			} else {
-				throw new NotSerializableException($paramCls->name . ' does not implement GMO\Common\ISerializable');
+				throw new NotSerializableException($paramCls->name . ' does not implement Gmo\Common\ISerializable');
 			}
 		}
 		return $cls->newInstanceArgs($params);

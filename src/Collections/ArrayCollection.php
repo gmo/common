@@ -17,11 +17,11 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace GMO\Common\Collections;
+namespace Gmo\Common\Collections;
 
 use ArrayIterator;
-use GMO\Common\ISerializable;
-use GMO\Common\Json;
+use Gmo\Common\ISerializable;
+use Gmo\Common\Json;
 use stdClass;
 use Traversable;
 

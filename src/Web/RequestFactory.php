@@ -1,6 +1,6 @@
 <?php
 
-namespace GMO\Common\Web;
+namespace Gmo\Common\Web;
 
 class RequestFactory {
 

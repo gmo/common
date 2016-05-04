@@ -1,9 +1,9 @@
 <?php
-namespace GMO\Common\Log\Handler;
+namespace Gmo\Common\Log\Handler;
 
-use GMO\Common\Json;
-use GMO\Common\Log\Formatter\SlackFormatter;
-use GMO\Common\Str;
+use Gmo\Common\Json;
+use Gmo\Common\Log\Formatter\SlackFormatter;
+use Gmo\Common\Str;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\SlackHandler as SlackHandlerBase;
 use Monolog\Logger;

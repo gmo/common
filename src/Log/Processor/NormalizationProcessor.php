@@ -1,7 +1,7 @@
 <?php
-namespace GMO\Common\Log\Processor;
+namespace Gmo\Common\Log\Processor;
 
-use GMO\Common\Collection;
+use Gmo\Common\Collection;
 
 /**
  * Abstracts looping through the array data looking for an item to normalize

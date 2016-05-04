@@ -1,7 +1,7 @@
 <?php
 namespace UnitTest;
 
-use GMO\Common\AbstractSerializable;
+use Gmo\Common\AbstractSerializable;
 
 class SerializableTest extends \PHPUnit_Framework_TestCase {
 
@@ -16,7 +16,7 @@ class SerializableTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame('Doe', $result['lastName']);
 		$this->assertSame(21, $result['age']);
 		$timestamp = $result['timestamp'];
-		$this->assertSame('GMO\Common\DateTime', $timestamp['class']);
+		$this->assertSame('Gmo\Common\DateTime', $timestamp['class']);
 		$this->assertSame('2009-10-11 12:13:14.000000', $timestamp['date']);
 
 		$address = $result["address"];
@@ -112,8 +112,8 @@ class SerializableTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @expectedException \GMO\Common\Exception\NotSerializableException
-	 * @expectedExceptionMessage UnitTest\Herp does not implement GMO\Common\ISerializable
+	 * @expectedException \Gmo\Common\Exception\NotSerializableException
+	 * @expectedExceptionMessage UnitTest\Herp does not implement Gmo\Common\ISerializable
 	 */
 	public function testNotSerializable() {
 		$derp = new Derp(new Herp());

@@ -1,11 +1,11 @@
 <?php
-namespace GMO\Common;
+namespace Gmo\Common;
 
-use GMO\Common\Exception\PathException;
+use Gmo\Common\Exception\PathException;
 
 /**
  * Class Path
- * @package GMO\Common
+ * @package Gmo\Common
  * @since 1.11.0 Added truePath. Deprecated toAbsFile, toAbsDir
  * @since 1.2.0
  */

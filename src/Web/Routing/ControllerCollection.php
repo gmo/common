@@ -1,7 +1,7 @@
 <?php
-namespace GMO\Common\Web\Routing;
+namespace Gmo\Common\Web\Routing;
 
-use GMO\Common\Str;
+use Gmo\Common\Str;
 use Silex;
 use Silex\Controller;
 use Symfony\Component\Routing\RouteCollection;

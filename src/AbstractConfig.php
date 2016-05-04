@@ -1,11 +1,11 @@
 <?php
-namespace GMO\Common;
+namespace Gmo\Common;
 
-use GMO\Common\Config\AbstractConfig as NewAbstractConfig;
+use Gmo\Common\Config\AbstractConfig as NewAbstractConfig;
 
 /**
  * Maintaining backwards compatibility,
- * use {@see \GMO\Common\Config\AbstractConfig} instead.
+ * use {@see \Gmo\Common\Config\AbstractConfig} instead.
  * @deprecated
  */
 abstract class AbstractConfig extends NewAbstractConfig {

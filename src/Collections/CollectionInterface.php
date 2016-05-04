@@ -17,7 +17,7 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace GMO\Common\Collections;
+namespace Gmo\Common\Collections;
 
 use Countable, IteratorAggregate, ArrayAccess;
 

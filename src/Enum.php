@@ -1,5 +1,5 @@
 <?php
-namespace GMO\Common;
+namespace Gmo\Common;
 
 abstract class Enum extends AbstractSerializable {
 

@@ -1,6 +1,6 @@
 <?php
 
-use GMO\Common\Web\Routing\ControllerCollection;
+use Gmo\Common\Web\Routing\ControllerCollection;
 use Silex\Controller;
 use Silex\Exception\ControllerFrozenException;
 use Silex\Route;

@@ -2,7 +2,7 @@
 
 namespace UnitTest\Web\Routing;
 
-use GMO\Common\Web\Routing\UrlMatcher;
+use Gmo\Common\Web\Routing\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;

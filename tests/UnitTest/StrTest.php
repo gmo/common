@@ -1,7 +1,7 @@
 <?php
 namespace UnitTest;
 
-use GMO\Common\Str;
+use Gmo\Common\Str;
 
 class StrTest extends \PHPUnit_Framework_TestCase {
 

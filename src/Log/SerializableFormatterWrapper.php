@@ -1,9 +1,9 @@
 <?php
-namespace GMO\Common\Log;
+namespace Gmo\Common\Log;
 
-use GMO\Common\Collection;
-use GMO\Common\DateTime;
-use GMO\Common\ISerializable;
+use Gmo\Common\Collection;
+use Gmo\Common\DateTime;
+use Gmo\Common\ISerializable;
 use Monolog\Formatter\FormatterInterface;
 
 class SerializableFormatterWrapper implements FormatterInterface {
@@ -38,7 +38,7 @@ class SerializableFormatterWrapper implements FormatterInterface {
 		// Leave DateTime objects to be converted by normalizer
         if ($data instanceof DateTime) {
             return $data;
-        } elseif (is_array($data) && Collection::get($data, 'class') === 'GMO\Common\DateTime') {
+        } elseif (is_array($data) && Collection::get($data, 'class') === 'Gmo\Common\DateTime') {
             return DateTime::fromArray($data);
         }
 

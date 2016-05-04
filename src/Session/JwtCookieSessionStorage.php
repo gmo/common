@@ -1,7 +1,7 @@
 <?php
-namespace GMO\Common\Session;
+namespace Gmo\Common\Session;
 
-use GMO\Common\Collection;
+use Gmo\Common\Collection;
 use JWT;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;

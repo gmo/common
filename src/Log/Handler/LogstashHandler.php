@@ -1,5 +1,5 @@
 <?php
-namespace GMO\Common\Log\Handler;
+namespace Gmo\Common\Log\Handler;
 
 use Monolog\Formatter\LogstashFormatter;
 use Monolog\Handler\RedisHandler;

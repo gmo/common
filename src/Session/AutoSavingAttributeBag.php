@@ -1,5 +1,5 @@
 <?php
-namespace GMO\Common\Session;
+namespace Gmo\Common\Session;
 
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
 use Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;

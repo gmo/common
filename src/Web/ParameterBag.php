@@ -1,8 +1,8 @@
 <?php
-namespace GMO\Common\Web;
+namespace Gmo\Common\Web;
 
 use Carbon\Carbon;
-use GMO\Common\Web\Exception;
+use Gmo\Common\Web\Exception;
 use LogicException;
 use Symfony\Component\HttpFoundation\ParameterBag as ParameterBagBase;
 

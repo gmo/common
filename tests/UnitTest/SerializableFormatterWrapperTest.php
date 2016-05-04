@@ -1,9 +1,9 @@
 <?php
 namespace UnitTest;
 
-use GMO\Common\AbstractSerializable;
-use GMO\Common\DateTime;
-use GMO\Common\Log\SerializableFormatterWrapper;
+use Gmo\Common\AbstractSerializable;
+use Gmo\Common\DateTime;
+use Gmo\Common\Log\SerializableFormatterWrapper;
 use Monolog\Formatter\FormatterInterface;
 
 class SerializableFormatterWrapperTest extends \PHPUnit_Framework_TestCase {

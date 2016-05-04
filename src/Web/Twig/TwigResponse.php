@@ -1,8 +1,8 @@
 <?php
-namespace GMO\Common\Web\Twig;
+namespace Gmo\Common\Web\Twig;
 
-use GMO\Common\Collections\ArrayCollection;
-use GMO\Common\Str;
+use Gmo\Common\Collections\ArrayCollection;
+use Gmo\Common\Str;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment as Environment;
 

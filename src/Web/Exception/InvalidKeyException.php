@@ -1,5 +1,5 @@
 <?php
-namespace GMO\Common\Web\Exception;
+namespace Gmo\Common\Web\Exception;
 
 class InvalidKeyException extends ClientException {
 

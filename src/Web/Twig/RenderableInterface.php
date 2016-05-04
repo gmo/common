@@ -1,5 +1,5 @@
 <?php
-namespace GMO\Common\Web\Twig;
+namespace Gmo\Common\Web\Twig;
 
 interface RenderableInterface {
 

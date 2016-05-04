@@ -1,9 +1,9 @@
 <?php
 
-namespace GMO\Common;
+namespace Gmo\Common;
 
-use GMO\Common\Exception\DumpException;
-use GMO\Common\Exception\ParseException;
+use Gmo\Common\Exception\DumpException;
+use Gmo\Common\Exception\ParseException;
 use Seld\JsonLint\JsonParser;
 use Seld\JsonLint\ParsingException;
 

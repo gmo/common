@@ -1,7 +1,7 @@
 <?php
-namespace GMO\Common;
+namespace Gmo\Common;
 
-use GMO\Common\Exception\NotSerializableException;
+use Gmo\Common\Exception\NotSerializableException;
 
 abstract class AbstractSerializable implements ISerializable {
 

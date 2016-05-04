@@ -1,11 +1,11 @@
 <?php
-namespace GMO\Common;
+namespace Gmo\Common;
 
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class Http
- * @package GMO\Common
+ * @package Gmo\Common
  * @since 1.9.0
  */
 class Http {

@@ -1,7 +1,7 @@
 <?php
 namespace UnitTest\Config;
 
-use GMO\Common\Config\EnvironmentAwareConfig;
+use Gmo\Common\Config\EnvironmentAwareConfig;
 
 class EnvironmentAwareConfigTest extends \PHPUnit_Framework_TestCase {
 
@@ -36,7 +36,7 @@ class EnvironmentAwareConfigTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @expectedException \GMO\Common\Exception\ConfigException
+	 * @expectedException \Gmo\Common\Exception\ConfigException
 	 */
 	public function testUnknownAliasedEnvironment() {
 		TestConfig::setEnvironment('development');

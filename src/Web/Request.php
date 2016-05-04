@@ -1,5 +1,5 @@
 <?php
-namespace GMO\Common\Web;
+namespace Gmo\Common\Web;
 
 use Symfony\Component\HttpFoundation\Request as RequestBase;
 

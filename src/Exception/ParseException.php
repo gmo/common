@@ -1,6 +1,6 @@
 <?php
 
-namespace GMO\Common\Exception;
+namespace Gmo\Common\Exception;
 
 use Exception;
 use Seld\JsonLint\ParsingException as JsonParseException;

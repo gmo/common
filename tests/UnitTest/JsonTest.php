@@ -2,8 +2,8 @@
 
 namespace UnitTest;
 
-use GMO\Common\Exception\ParseException;
-use GMO\Common\Json;
+use Gmo\Common\Exception\ParseException;
+use Gmo\Common\Json;
 
 class JsonTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,9 +1,9 @@
 <?php
-namespace GMO\Common\Config;
+namespace Gmo\Common\Config;
 
-use GMO\Common\Collections\ArrayCollection;
-use GMO\Common\Exception\ConfigException;
-use GMO\Common\Str;
+use Gmo\Common\Collections\ArrayCollection;
+use Gmo\Common\Exception\ConfigException;
+use Gmo\Common\Str;
 
 /**
  * This config groups values by environment.

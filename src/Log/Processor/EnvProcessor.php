@@ -1,5 +1,5 @@
 <?php
-namespace GMO\Common\Log\Processor;
+namespace Gmo\Common\Log\Processor;
 
 class EnvProcessor {
 

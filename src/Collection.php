@@ -1,8 +1,8 @@
 <?php
-namespace GMO\Common;
+namespace Gmo\Common;
 
 /**
- * @deprecated Use {@see GMO\Common\Collection\Arr} instead.
+ * @deprecated Use {@see Gmo\Common\Collection\Arr} instead.
  */
 class Collection extends Collection\Arr
 {

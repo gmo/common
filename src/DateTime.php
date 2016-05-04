@@ -1,5 +1,5 @@
 <?php
-namespace GMO\Common;
+namespace Gmo\Common;
 
 /**
  * @deprecated Use {@see Carbon\Carbon Carbon} instead

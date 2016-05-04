@@ -1,10 +1,10 @@
 <?php
-namespace GMO\Common\Log\Processor;
+namespace Gmo\Common\Log\Processor;
 
-use GMO\Common\ISerializable;
+use Gmo\Common\ISerializable;
 
 /**
- * Normalizes {@see GMO\Common\ISerializable} objects
+ * Normalizes {@see Gmo\Common\ISerializable} objects
  */
 class SerializableProcessor extends NormalizationProcessor {
 

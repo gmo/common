@@ -1,9 +1,9 @@
 <?php
-namespace GMO\Common\Exception;
+namespace Gmo\Common\Exception;
 
 /**
  * Class PathException
- * @package GMO\Common\Exception
+ * @package Gmo\Common\Exception
  * @since 1.11.0
  */
 class PathException extends \Exception { }

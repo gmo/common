@@ -1,7 +1,7 @@
 <?php
 namespace UnitTest;
 
-use GMO\Common\Path;
+use Gmo\Common\Path;
 
 class PathTest extends \PHPUnit_Framework_TestCase {
 
@@ -56,7 +56,7 @@ class PathTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @expectedException \GMO\Common\Exception\PathException
+	 * @expectedException \Gmo\Common\Exception\PathException
 	 * @expectedExceptionMessage Cannot move up another directory
 	 */
 	public function test_true_path_exception() {

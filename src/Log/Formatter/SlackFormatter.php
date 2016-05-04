@@ -1,5 +1,5 @@
 <?php
-namespace GMO\Common\Log\Formatter;
+namespace Gmo\Common\Log\Formatter;
 
 use Monolog\Formatter\NormalizerFormatter;
 
