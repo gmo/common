@@ -175,7 +175,7 @@ class Json
         try {
             $parser->parse($json);
         } catch (ParsingException $e) {
-            throw ParseException::caseFromJson($e);
+            throw ParseException::castFromJson($e);
         }
 
         if (json_last_error() === JSON_ERROR_UTF8) {

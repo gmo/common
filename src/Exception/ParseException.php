@@ -21,7 +21,7 @@ class ParseException extends \RuntimeException
      *
      * @return ParseException
      */
-    public static function caseFromJson(JsonParseException $e)
+    public static function castFromJson(JsonParseException $e)
     {
         $details = $e->getDetails();
         $message = $e->getMessage();
