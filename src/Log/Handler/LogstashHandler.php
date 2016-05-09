@@ -57,13 +57,14 @@ class LogstashHandler extends RedisHandler {
 	 * @param string                                          $key
 	 * @param int                                             $level
 	 * @param bool                                            $bubble
+	 * @param bool|int                                        $capSize
 	 */
-	public function __construct($redis, $appName, $key = 'logging', $level = Logger::DEBUG, $bubble = true) {
+	public function __construct($redis, $appName, $key = 'logging', $level = Logger::DEBUG, $bubble = true, $capSize = false) {
 		$this->appName = $appName;
 		if ($redis instanceof \GMO\Cache\Redis) {
 			$redis = $redis->redis;
 		}
-		parent::__construct($redis, $key, $level, $bubble);
+		parent::__construct($redis, $key, $level, $bubble, $capSize);
 	}
 
 	protected $appName;
