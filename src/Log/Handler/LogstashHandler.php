@@ -1,7 +1,6 @@
 <?php
 namespace GMO\Common\Log\Handler;
 
-use Log\Handler\FallbackHandler;
 use Monolog\Formatter\LogstashFormatter;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\RedisHandler;
