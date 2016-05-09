@@ -1,8 +1,7 @@
 <?php
 
-namespace Log\Handler;
+namespace GMO\Common\Log\Handler;
 
-use GMO\Common\Log\Handler\AbstractDecoratorHandler;
 use Monolog\Handler\HandlerInterface;
 
 /**
