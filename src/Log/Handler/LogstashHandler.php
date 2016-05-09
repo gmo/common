@@ -1,30 +1,13 @@
 <?php
 namespace GMO\Common\Log\Handler;
 
+use Log\Handler\FallbackHandler;
 use Monolog\Formatter\LogstashFormatter;
+use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\RedisHandler;
 use Monolog\Logger;
-use Predis\Connection\ConnectionException;
-use Predis\Response\ServerException;
 
 class LogstashHandler extends RedisHandler {
-
-	/**
-	 * @inheritdoc
-	 *
-	 * Bubble down if there is an error writing to redis server,
-	 * this way a another handler can be used on error.
-	 */
-	public function handle(array $record)
-	{
-		try {
-			return parent::handle($record);
-		} catch (ServerException $e) {
-		} catch (ConnectionException $e) {
-		}
-
-		return false;
-	}
 
 	/**
 	 * @param string $contextPrefix
@@ -45,6 +28,15 @@ class LogstashHandler extends RedisHandler {
 		}
 		$this->extraPrefix = $extraPrefix;
 	}
+
+    public function fallbackTo(HandlerInterface $handler)
+    {
+        $exceptions = array(
+            'Predis\Response\ServerException',
+            'Predis\Connection\ConnectionException',
+        );
+        return new FallbackHandler($this, $handler, $exceptions);
+    }
 
 	protected function getDefaultFormatter() {
 		$this->frozen = true;
