@@ -17,7 +17,7 @@ class RequestProcessor {
 			'query' => $request->query->all(),
 			'userAgent' => $request->server->get('HTTP_USER_AGENT'),
 		);
-		if ($request->isMethod('POST')) {
+		if ($request->isMethod('POST') || $request->isMethod('PUT')) {
 			$params['body'] = $request->request->all();
 		}
 		if ($referer = $request->headers->get('referer')) {
