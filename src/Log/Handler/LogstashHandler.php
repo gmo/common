@@ -1,7 +1,7 @@
 <?php
 namespace GMO\Common\Log\Handler;
 
-use Monolog\Formatter\LogstashFormatter;
+use GMO\Common\Log\Formatter\LogstashFormatter;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\RedisHandler;
 use Monolog\Logger;
@@ -60,6 +60,6 @@ class LogstashHandler extends RedisHandler {
 
 	protected $appName;
 	protected $frozen = false;
-	protected $contextPrefix = 'ctxt.';
+	protected $contextPrefix = 'ctxt';
 	protected $extraPrefix = null;
 }
