@@ -1,5 +1,5 @@
 <?php
-namespace GMO\Common\Log;
+namespace GMO\Common\Log\Formatter;
 
 use Monolog\Formatter\LogstashFormatter as BaseLogstashFormatter;
 
