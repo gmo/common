@@ -13,6 +13,9 @@ class RequestFactory
      */
     public function __construct(array $options = array())
     {
+        $options += array(
+            'trust_proxies' => true,
+        );
         $this->options = $options;
     }
 
@@ -49,6 +52,16 @@ class RequestFactory
         array $server = array(),
         $content = null
     ) {
-        return new Request($query, $request, $attributes, $cookies, $files, $server, $content);
+        $request = new Request($query, $request, $attributes, $cookies, $files, $server, $content);
+
+        $proxies = $this->options['trust_proxies'];
+        if ($proxies === true) {
+            $proxies = array('127.0.0.1', $request->server->get('REMOTE_ADDR'));
+        }
+        if ($proxies === false) {
+            Request::setTrustedProxies((array) $proxies);
+        }
+
+        return $request;
     }
 }
