@@ -5,7 +5,7 @@ use Psr\Log\LoggerInterface;
 use Silex\Application;
 use Silex\LazyUrlMatcher;
 use Silex\ServiceProviderInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +48,7 @@ class RouterListener implements ServiceProviderInterface, EventSubscriberInterfa
 
 	public function register(Application $app) {
 		$self = $this;
-		$app['dispatcher'] = $app->share($app->extend('dispatcher', function (EventDispatcher $dispatcher, $app) use ($self) {
+		$app['dispatcher'] = $app->share($app->extend('dispatcher', function (EventDispatcherInterface $dispatcher, $app) use ($self) {
 			$self->removeOldListener($dispatcher);
 			$self->addNewListener($dispatcher, $app);
 			return $dispatcher;
@@ -58,9 +58,9 @@ class RouterListener implements ServiceProviderInterface, EventSubscriberInterfa
 	/**
 	 * Removes old listener from dispatcher
 	 *
-	 * @param EventDispatcher $dispatcher
+	 * @param EventDispatcherInterface $dispatcher
 	 */
-	private function removeOldListener(EventDispatcher $dispatcher) {
+	private function removeOldListener(EventDispatcherInterface $dispatcher) {
 		$listeners = $dispatcher->getListeners(KernelEvents::REQUEST);
 		foreach ($listeners as $listener) {
 			if (is_array($listener) && $listener[0] instanceof RouterListenerBase) {
@@ -72,10 +72,10 @@ class RouterListener implements ServiceProviderInterface, EventSubscriberInterfa
 	/**
 	 * Adds new listener to dispatcher
 	 *
-	 * @param EventDispatcher $dispatcher
-	 * @param Application     $app
+	 * @param EventDispatcherInterface $dispatcher
+	 * @param Application              $app
 	 */
-	private function addNewListener(EventDispatcher $dispatcher, Application $app) {
+	private function addNewListener(EventDispatcherInterface $dispatcher, Application $app) {
 		$urlMatcher = new LazyUrlMatcher(function () use ($app) {
 			return $app['url_matcher'];
 		});
