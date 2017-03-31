@@ -3,6 +3,9 @@ namespace UnitTest;
 
 use GMO\Common\Path;
 
+/**
+ * @group legacy
+ */
 class PathTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_path_is_absolute() {

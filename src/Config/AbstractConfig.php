@@ -4,9 +4,9 @@ namespace GMO\Common\Config;
 use GMO\Common\Collections\ArrayCollection;
 use GMO\Common\Exception\ConfigException;
 use GMO\Common\Json;
-use GMO\Common\Path;
 use GMO\Common\Str;
 use Symfony\Component\Yaml\Yaml;
+use Webmozart\PathUtil\Path;
 
 abstract class AbstractConfig implements ConfigInterface {
 
@@ -93,7 +93,7 @@ abstract class AbstractConfig implements ConfigInterface {
 
 	/** @inheritdoc */
 	public static function absPath($path) {
-		return Path::truePath($path, static::getProjectDir());
+		return Path::makeAbsolute($path, static::getProjectDir());
 	}
 
 	/** @inheritdoc */
@@ -101,7 +101,7 @@ abstract class AbstractConfig implements ConfigInterface {
 		if (static::$projectDir === null) {
 			$cls = new \ReflectionClass(get_called_class());
 			$baseDir = dirname($cls->getFileName());
-			static::$projectDir = Path::truePath(static::setProjectDir(), $baseDir);
+			static::$projectDir = Path::makeAbsolute(static::setProjectDir(), $baseDir);
 		}
 		return static::$projectDir;
 	}
@@ -127,7 +127,7 @@ abstract class AbstractConfig implements ConfigInterface {
 	}
 
 	protected static function getConfigFile() {
-		$file = Path::truePath(static::setConfigFile(), static::getProjectDir());
+		$file = Path::makeAbsolute(static::setConfigFile(), static::getProjectDir());
 		return new \SplFileInfo($file);
 	}
 

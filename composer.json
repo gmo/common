@@ -8,7 +8,8 @@
 		"seld/jsonlint": "^1.4",
 		"symfony/http-foundation": "^2.6 || ^3.0",
 		"symfony/polyfill-php55": "^1.0",
-		"symfony/yaml": "^2.5 || ^3.0"
+		"symfony/yaml": "^2.5 || ^3.0",
+		"webmozart/path-util": "^2.3"
 	},
 	"require-dev": {
 		"gmo/cache": "~1.0",

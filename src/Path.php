@@ -8,29 +8,41 @@ use GMO\Common\Exception\PathException;
  * @package GMO\Common
  * @since 1.11.0 Added truePath. Deprecated toAbsFile, toAbsDir
  * @since 1.2.0
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see \Webmozart\PathUtil\Path} instead.
  */
 class Path {
 
+    /**
+     * @param string $path
+     *
+     * @return bool
+     *
+     * @deprecated since 1.30 will be removed in 2.0. Use {@see \Webmozart\PathUtil\Path::isAbsolute} instead.
+     */
 	public static function isAbsolute($path) {
+	    Deprecated::method(1.30, 'Webmozart\PathUtil\Path::isAbsolute');
+
 		return substr($path, 0, 1) === "/"
 		       && !Str::contains($path, './')
 		       && !Str::contains($path, '..');
 	}
 
 	/**
-	 * Use {@see Path::truePath()}
-	 * @deprecated Path::truePath()
+     * @deprecated since 1.30 will be removed in 2.0. Use {@see \Webmozart\PathUtil\Path::makeAbsolute} instead.
 	 */
 	public static function toAbsFile($baseDir, $path) {
-		return static::truePath($path, $baseDir);
+        Deprecated::method(1.30, 'Webmozart\PathUtil\Path::makeAbsolute');
+
+        return static::truePath($path, $baseDir);
 	}
 
 	/**
-	 * Use {@see Path::truePath()}
-	 * @deprecated Path::truePath()
+     * @deprecated since 1.30 will be removed in 2.0. Use {@see \Webmozart\PathUtil\Path::makeAbsolute} instead.
 	 */
 	public static function toAbsDir($baseDir, $dir) {
-		return static::truePath($dir, $baseDir);
+        Deprecated::method(1.30, 'Webmozart\PathUtil\Path::makeAbsolute');
+
+        return static::truePath($dir, $baseDir);
 	}
 
 	/**
@@ -47,9 +59,12 @@ class Path {
 	 * @throws Exception\PathException If path is trying to move up more directories than the base path has.
 	 * @return string The resolved path, it might not exist.
 	 * @since 1.11.0
+     * @deprecated since 1.30 will be removed in 2.0. Use {@see \Webmozart\PathUtil\Path::makeAbsolute} instead.
 	 */
 	public static function truePath($path, $basePath = null) {
-		$basePath = $basePath ?: getcwd();
+        Deprecated::method(1.30, 'Webmozart\PathUtil\Path::makeAbsolute');
+
+        $basePath = $basePath ?: getcwd();
 		// attempts to detect if path is relative in which case, add cwd
 		$basePath = str_replace(array( '/', '\\' ), DIRECTORY_SEPARATOR, $basePath);
 		if (!static::isAbsolute($path)) {
