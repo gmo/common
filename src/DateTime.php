@@ -1,6 +1,8 @@
 <?php
 namespace GMO\Common;
 
+Deprecated::cls('GMO\Common\DateTime', 1.0, 'Carbon\Carbon');
+
 /**
  * @deprecated Use {@see Carbon\Carbon Carbon} instead
  */

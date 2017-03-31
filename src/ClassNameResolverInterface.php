@@ -1,8 +1,10 @@
 <?php
 namespace GMO\Common;
 
+Deprecated::cls('\GMO\Common\ClassNameResolverInterface', 1.0);
+
 /**
- * @deprecated
+ * @deprecated will be removed in 2.0.
  */
 interface ClassNameResolverInterface {
 

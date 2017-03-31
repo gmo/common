@@ -1,6 +1,8 @@
 <?php
 namespace GMO\Common;
 
+Deprecated::cls('GMO\Common\String', 1.0, 'GMO\Common\Str');
+
 /**
  * @deprecated Use {@see Str} instead.
  *
@@ -22,6 +24,8 @@ class String extends Str {
 	 * @TODO Remove in 2.0
 	 */
 	public static function iContains($haystack, $needle) {
+        Deprecated::method(1.0);
+
 		return static::containsInsensitive($haystack, $needle);
 	}
 
@@ -34,6 +38,8 @@ class String extends Str {
 	 * @TODO Remove in 2.0
 	 */
 	public static function iStartsWith($haystack, $needle) {
+        Deprecated::method(1.0);
+
 		return static::startsWithInsensitive($haystack, $needle);
 	}
 
@@ -46,6 +52,8 @@ class String extends Str {
 	 * @TODO Remove in 2.0
 	 */
 	public static function iEndsWith($haystack, $needle) {
+        Deprecated::method(1.0);
+
 		return static::endsWithInsensitive($haystack, $needle);
 	}
 }

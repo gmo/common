@@ -3,10 +3,12 @@ namespace GMO\Common;
 
 use GMO\Common\Config\AbstractConfig as NewAbstractConfig;
 
+Deprecated::cls('\GMO\Common\AbstractConfig', 1.0, '\GMO\Common\Config\AbstractConfig');
+
 /**
- * Maintaining backwards compatibility,
- * use {@see \GMO\Common\Config\AbstractConfig} instead.
- * @deprecated
+ * Maintaining backwards compatibility.
+ *
+ * @deprecated since 1.0 will be removed in 2.0. Use {@see \GMO\Common\Config\AbstractConfig} instead.
  */
 abstract class AbstractConfig extends NewAbstractConfig {
 

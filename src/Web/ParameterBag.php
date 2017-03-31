@@ -2,6 +2,7 @@
 namespace GMO\Common\Web;
 
 use Carbon\Carbon;
+use GMO\Common\Deprecated;
 use GMO\Common\Web\Exception;
 use LogicException;
 use Symfony\Component\HttpFoundation\ParameterBag as ParameterBagBase;
@@ -60,9 +61,11 @@ class ParameterBag extends ParameterBagBase {
 	}
 
 	/**
-	 * @deprecated
+	 * @deprecated will be removed in 2.0.
 	 */
 	public function getRequired($key) {
+        Deprecated::method(1.0, 'Use required()->get() instead.');
+
 		return $this->required()->get($key);
 	}
 

@@ -1,6 +1,7 @@
 <?php
 namespace GMO\Common\Web\Routing;
 
+use GMO\Common\Deprecated;
 use Psr\Log\LoggerInterface;
 use Silex\Application;
 use Silex\LazyUrlMatcher;
@@ -43,7 +44,9 @@ class RouterListener implements ServiceProviderInterface, EventSubscriberInterfa
 	 * @param Request $request
 	 */
 	public function setRequest(Request $request = null) {
-		$this->wrappedRouter->setRequest($request);
+        Deprecated::method();
+
+        $this->wrappedRouter->setRequest($request);
 	}
 
 	public function register(Application $app) {

@@ -2,8 +2,10 @@
 
 namespace Gmo\Common;
 
+Deprecated::cls('\Gmo\Common\ClassNameResolverTrait', 1.0);
+
 /**
- * @deprecated
+ * @deprecated will be removed in 2.0.
  */
 trait ClassNameResolverTrait
 {

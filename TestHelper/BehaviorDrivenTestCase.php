@@ -1,8 +1,12 @@
 <?php
 namespace GMO\TestHelper;
 
+use GMO\Common\Deprecated;
+
+Deprecated::cls('\GMO\TestHelper\BehaviorDrivenTestCase', 1.0);
+
 /**
- * @deprecated
+ * @deprecated will be removed in 2.0.
  */
 abstract class BehaviorDrivenTestCase extends \PHPUnit_Framework_TestCase {
 

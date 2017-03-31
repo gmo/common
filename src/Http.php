@@ -118,9 +118,11 @@ class Http {
 	}
 
 	/**
-	 * @deprecated
+	 * @deprecated will be removed in 2.0.
 	 */
 	public static function getRemoteIP() {
+        Deprecated::method(1.0, 'getIp');
+
 		return static::getIp();
 	}
 }
