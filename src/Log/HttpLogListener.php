@@ -49,7 +49,7 @@ class HttpLogListener implements EventSubscriberInterface {
 				'code' => $response->getStatusCode(),
 			]);
 		} else {
-			$this->logger->info('Sending response', [
+			$this->logger->debug('Sending response', [
 				'code' => $response->getStatusCode(),
 			]);
 		}
