@@ -115,6 +115,16 @@ class StrTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame("HelloGoodbyeGoodbye", Str::removeLast("HelloGoodbyeHELLOGoodbye", "hello", false));
 	}
 
+	public function test_replace_first_containing_value() {
+		$this->assertSame('HelloFooHelloGoodbye', Str::replaceFirst('HelloGoodbyeHelloGoodbye', 'Goodbye', 'Foo'));
+		$this->assertSame('HelloFooHelloGoodbye', Str::replaceFirst('HelloGOODBYEHelloGoodbye', 'goodbye', 'Foo', false));
+	}
+
+	public function test_replace_last_containing_value() {
+		$this->assertSame('HelloGoodbyeFooGoodbye', Str::replaceLast('HelloGoodbyeHelloGoodbye', 'Hello', 'Foo'));
+		$this->assertSame('HelloGoodbyeFooGoodbye', Str::replaceLast('HelloGoodbyeHELLOGoodbye', 'hello', 'Foo', false));
+	}
+
 	public function test_class_name() {
 		$this->assertSame('StrTest', Str::className($this));
 		$this->assertSame('StrTest', Str::className('UnitTest\\StrTest'));

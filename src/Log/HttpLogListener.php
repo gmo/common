@@ -76,7 +76,7 @@ class HttpLogListener implements EventSubscriberInterface {
 		}
 
 		$message = $e->getMessage();
-		$level = LogLevel::ERROR;
+		$level = LogLevel::CRITICAL;
 		$context = [
 			'exception' => $e,
 		];

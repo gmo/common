@@ -53,8 +53,20 @@ abstract class EnvironmentAwareConfig extends AbstractConfig {
 			throw new ConfigException("Config file does not contain the environment: \"$env\" requested by $location");
 		}
 
+		$value = static::getValueFromEnv($env, $section, $key, $default, $allowEmpty);
+
+		return $value;
+	}
+
+	public static function getValueFromEnv($env, $section, $key, $default = null, $allowEmpty = false)
+	{
 		static::$config = static::$environments->get($env);
-		$value = static::getValue($section, $key, $default, $allowEmpty);
+		try {
+			$value = static::getValue($section, $key, $default, $allowEmpty);
+		} catch (ConfigException $e) {
+			static::$config = static::$environments->get(static::$envName);
+			throw $e;
+		}
 		static::$config = static::$environments->get(static::$envName);
 
 		return $value;
@@ -65,23 +77,46 @@ abstract class EnvironmentAwareConfig extends AbstractConfig {
 		parent::doSetConfig();
 
 		/** @var ArrayCollection|null $default */
-		if (!$default = static::$config->remove('default')) {
+		if (!static::$config->containsKey('default')) {
 			throw new ConfigException('Config needs to have a default environment');
 		}
 
+		// config is actually list of environments
+		static::$environments = static::$config;
+
 		static::$envName = static::getEnvironment();
 
-		// Build config for each environment merging default values in
-		static::$environments = new ArrayCollection();
-		foreach (static::$config as $environment => $envConfig) {
-			static::$environments[$environment] = $default->copy()->replaceRecursive($envConfig);
+		$parsed = new ArrayCollection(array('default'));
+
+		// Merge in parent configs for each environment, specified with "_extends" key
+		foreach (static::$environments as $name => $config) {
+			// Skip default since this is the base for all
+			if ($name === 'default') {
+				continue;
+			}
+			$parent = $config->remove('_extends') ?: 'default';
+			if (!$parsed->contains($parent)) {
+				throw new ConfigException("Environment '$parent' has not been parsed yet. Try moving it higher in the file");
+			}
+			static::$environments[$name] = static::$environments[$parent]->copy()->replaceRecursive($config);
+			$parsed->add($name);
 		}
 
-		if (!static::$environments->containsKey(static::$envName)) {
-			static::$environments[static::$envName] = $default;
+		// Merge in separate environment specific files
+		$rootFile = static::getConfigFile();
+		$pos = strrpos($rootFile->getPathname(), '.');
+		$pathTemplate = substr_replace($rootFile->getPathname(), '.%s.', $pos, 1);
+		foreach (static::$environments as $name => $config) {
+			// config.yml -> config.production.yml
+			$file = new \SplFileInfo(sprintf($pathTemplate, $name));
+			if ($file->isReadable()) {
+				$envConfig = static::readConfig($file);
+				$config->replaceRecursive($envConfig);
+			}
 		}
 
-		static::$config = static::$environments[static::$envName];
+		// Set config to config for environment name or default
+		static::$config = static::$environments->get(static::$envName) ?: static::$environments->get('default');
 	}
 
 	protected static $envName;

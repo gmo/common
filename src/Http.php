@@ -1,7 +1,7 @@
 <?php
 namespace Gmo\Common;
 
-use Gmo\Common\Collections\Arr;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class Http
@@ -16,34 +16,38 @@ class Http {
 	 * fallback.
 	 */
 	public static $HEADERS_TO_CHECK = array(
-		'HTTP_X_FORWARDED_FOR',
-		'HTTP_CLIENT_IP',
-		'HTTP_X_CLIENT_IP',
-		'HTTP_RLNCLIENTIPADDR',    // from f5 load balancers
-		'HTTP_PROXY_CLIENT_IP',
-		'HTTP_WL_PROXY_CLIENT_IP', // weblogic load balancers
-		'HTTP_X_FORWARDED',
-		'HTTP_FORWARDED_FOR',
-		'HTTP_FORWARDED',
+		'x-forwarded-for',
+		'client-ip',
+		'x-client-ip',
+		'rlnclientipaddr',    // from f5 load balancers
+		'proxy-client-ip',
+		'wl-proxy-client-ip', // weblogic load balancers
+		'x-forwarded',
+		'forwarded-for',
+		'forwarded',
 	);
 
 	/**
 	 * Get the most suitable IP address from the given request. This function
 	 * checks the headers defined in {@see Http::HEADERS_TO_CHECK}.
 	 *
-	 * @return string|null The found IP address or null if no IP found.
+	 * @param Request|null $request Optional request to pull headers from
+	 *
+	 * @return null|string The found IP address or null if no IP found.
 	 */
-	public static function getIp() {
+	public static function getIp($request = null) {
+		$request = $request instanceof Request ? $request : Request::createFromGlobals();
+
 		foreach (static::$HEADERS_TO_CHECK as $headerName) {
-			if (isset($_SERVER[$headerName])) {
-				$ip = static::extractIp($headerName, $_SERVER[$headerName]);
+			if ($request->headers->has($headerName)) {
+				$ip = static::extractIp($headerName, $request->headers->get($headerName));
 				if ($ip) {
 					return $ip;
 				}
 			}
 		}
 
-		return Arr::get($_SERVER, 'REMOTE_ADDR');
+		return $request->server->get('REMOTE_ADDR');
 	}
 
 	/**
@@ -63,7 +67,7 @@ class Http {
 		}
 		// "X-Forwarded-For" header can contain many comma separated IPs such as clientIP, proxy1, proxy2...
 		// we are interested in the first item
-		if ($headerName === 'HTTP_X_FORWARDED_FOR') {
+		if ($headerName === 'x-forwarded-for') {
 			// loop over all parts and take the first non-empty value
 			foreach (explode(',', $headerValue) as $part) {
 				$part = trim($part);

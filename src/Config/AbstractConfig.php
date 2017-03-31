@@ -3,9 +3,10 @@ namespace Gmo\Common\Config;
 
 use Gmo\Common\Collections\ArrayCollection;
 use Gmo\Common\Exception\ConfigException;
-use Gmo\Common\Path;
+use Gmo\Common\Json;
 use Gmo\Common\Str;
 use Symfony\Component\Yaml\Yaml;
+use Webmozart\PathUtil\Path;
 
 abstract class AbstractConfig implements ConfigInterface {
 
@@ -92,7 +93,7 @@ abstract class AbstractConfig implements ConfigInterface {
 
 	/** @inheritdoc */
 	public static function absPath($path) {
-		return Path::truePath($path, static::getProjectDir());
+		return Path::makeAbsolute($path, static::getProjectDir());
 	}
 
 	/** @inheritdoc */
@@ -100,7 +101,7 @@ abstract class AbstractConfig implements ConfigInterface {
 		if (static::$projectDir === null) {
 			$cls = new \ReflectionClass(get_called_class());
 			$baseDir = dirname($cls->getFileName());
-			static::$projectDir = Path::truePath(static::setProjectDir(), $baseDir);
+			static::$projectDir = Path::makeAbsolute(static::setProjectDir(), $baseDir);
 		}
 		return static::$projectDir;
 	}
@@ -120,29 +121,36 @@ abstract class AbstractConfig implements ConfigInterface {
 	}
 
 	protected static function doSetConfig() {
-		$file = Path::truePath(static::setConfigFile(), static::getProjectDir());
-		if (!file_exists($file)) {
+		$file = static::getConfigFile();
+		static::$config = static::readConfig($file);
+		static::$configFileType = $file->getExtension();
+	}
+
+	protected static function getConfigFile() {
+		$file = Path::makeAbsolute(static::setConfigFile(), static::getProjectDir());
+		return new \SplFileInfo($file);
+	}
+
+	protected static function readConfig(\SplFileInfo $file) {
+		if (!$file->isReadable()) {
 			throw new ConfigException("Config file doesn't exist");
 		}
-		$type = pathinfo($file, PATHINFO_EXTENSION);
-		if ($type === "ini") {
-			static::$config = parse_ini_file($file, true);
-			static::$configFileType = "ini";
-		} elseif ($type === "json") {
-			static::$config = json_decode(file_get_contents($file), true);
-			static::$configFileType = "json";
+		$type = $file->getExtension();
+		if ($type === 'ini') {
+			$config = parse_ini_file($file, true);
+		} elseif ($type === 'json') {
+			$config = Json::parse(file_get_contents($file), true);
 		} elseif ($type === 'yml') {
-			static::$config = Yaml::parse(file_get_contents($file));
-			static::$configFileType = "yaml";
+			$config = Yaml::parse(file_get_contents($file));
 		} else {
-			throw new ConfigException("Unknown config file format");
+			throw new ConfigException('Unknown config file format');
 		}
 
-		if (!static::$config) {
+		if (!$config) {
 			throw new ConfigException("Unable to parse $type file: $file");
 		}
 
-		static::$config = ArrayCollection::createRecursive(static::$config);
+		return ArrayCollection::createRecursive($config);
 	}
 
 	/**

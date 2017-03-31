@@ -35,11 +35,11 @@ trait SerializableTrait {
 	}
 
 	public function toJson() {
-		return json_encode( $this->toArray() );
+		return Json::dump($this->toArray());
 	}
 
 	public static function fromJson($json) {
-		return static::fromArray(json_decode( $json, true ));
+		return static::fromArray(Json::parse($json));
 	}
 
 	public function jsonSerialize() {

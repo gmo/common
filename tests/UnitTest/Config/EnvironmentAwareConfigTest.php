@@ -17,6 +17,12 @@ class EnvironmentAwareConfigTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame('world2', $value);
 	}
 
+	public function testEnvironmentExtendsParent() {
+		TestConfig::setEnvironment('development');
+		$value = TestConfig::getValue('test', 'key');
+		$this->assertSame('staging_key', $value);
+	}
+
 	public function testUnknownEnvironmentUsesDefault() {
 		TestConfig::setEnvironment('asdf');
 		$value = TestConfig::getValue('test', 'hello');
@@ -37,24 +43,24 @@ class EnvironmentAwareConfigTest extends \PHPUnit_Framework_TestCase {
 		TestConfig::getValue('test', 'error');
 	}
 
-	public static function setUpBeforeClass() {
-		parent::setUpBeforeClass();
-		static::$originalEnvironment = getenv('PHP_ENV');
+	public function testSpecificEnvironmentFiles() {
+		TestConfig::setEnvironment('development');
+		$value = TestConfig::getValue(null, 'password');
+		$this->assertSame('password1', $value);
 	}
-
-	public static function tearDownAfterClass() {
-		putenv('PHP_ENV=' . static::$originalEnvironment);
-		parent::tearDownAfterClass();
-	}
-
-	static $originalEnvironment;
 }
 
 
 class TestConfig extends EnvironmentAwareConfig {
 
+	protected static $env;
+
+	public static function getEnvironment() {
+		return static::$env;
+	}
+
 	public static function setEnvironment($env) {
-		putenv("PHP_ENV=$env");
+		static::$env = $env;
 		static::doSetConfig();
 	}
 

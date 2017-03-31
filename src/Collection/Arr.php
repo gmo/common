@@ -1,11 +1,7 @@
 <?php
-namespace Gmo\Common\Collections;
 
-/**
- * Class Collection
- * @package GMO\Common
- * @since 1.7.0
- */
+namespace GMO\Common\Collection;
+
 class Arr {
 
 	/**

@@ -15,6 +15,10 @@ class DelegateLogger extends AbstractLogger implements LoggerAwareInterface {
 		$this->logger = $logger;
 	}
 
+	public function getLogger() {
+		return $this->logger;
+	}
+
 	public function log($level, $message, array $context = array()) {
 		if ($this->logger) {
 			$this->logger->log($level, $message, $context);

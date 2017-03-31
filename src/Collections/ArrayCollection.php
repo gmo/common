@@ -21,6 +21,7 @@ namespace Gmo\Common\Collections;
 
 use ArrayIterator;
 use Gmo\Common\Serialization\SerializableInterface;
+use GMO\Common\Json;
 use stdClass;
 use Traversable;
 
@@ -472,7 +473,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 
 	public function toJson()
 	{
-		return json_encode($this->toArray(), true);
+		return Json::dump($this->toArray());
 	}
 
 	/**
@@ -481,7 +482,7 @@ class ArrayCollection implements CollectionInterface, SerializableInterface
 	 */
 	public static function fromJson($json)
 	{
-		return static::fromArray(json_decode($json, true));
+		return static::fromArray(Json::parse($json));
 	}
 
 	public function serialize()
