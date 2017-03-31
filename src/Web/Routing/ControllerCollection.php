@@ -13,6 +13,8 @@ use Symfony\Component\Routing\RouteCollection;
  * - Allow a null route to default to specified class method.
  * - Split flush method to make it easier to override
  * - Remove trailing slash from flushed routes
+ *
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\Routing\ControllerCollection} instead.
  */
 class ControllerCollection extends Silex\ControllerCollection implements DefaultControllerAwareInterface {
 

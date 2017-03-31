@@ -1,7 +1,6 @@
 <?php
 namespace GMO\Common\Web\Routing;
 
-use Silex;
 use Silex\Controller;
 use Silex\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -13,7 +12,7 @@ use Symfony\Component\Routing\RouteCollection;
  *
  * The bound route name is on the route with the prefix.
  *
- * Note:
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\Routing\PrefixedVariableControllerCollection} instead.
  */
 abstract class PrefixedVariableControllerCollection extends ControllerCollection {
 

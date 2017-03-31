@@ -6,6 +6,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
+/**
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\EventListener\TemplateViewListener} instead.
+ */
 class TwigResponseListener implements EventSubscriberInterface {
 
 	public function onResponse(FilterResponseEvent $event) {

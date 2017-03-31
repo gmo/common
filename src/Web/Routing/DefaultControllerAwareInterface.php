@@ -1,6 +1,9 @@
 <?php
 namespace GMO\Common\Web\Routing;
 
+/**
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\Routing\DefaultControllerAwareInterface} instead.
+ */
 interface DefaultControllerAwareInterface {
 
 	/**

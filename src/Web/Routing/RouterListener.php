@@ -18,6 +18,8 @@ use Symfony\Component\HttpKernel\EventListener\RouterListener as RouterListenerB
 
 /**
  * This wraps the original RouterListener and replaces the logging
+ *
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\Routing\RouterListener} instead.
  */
 class RouterListener implements ServiceProviderInterface, EventSubscriberInterface {
 

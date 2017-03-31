@@ -5,6 +5,9 @@ use Silex\Application;
 use Silex\Provider\SessionServiceProvider;
 use Symfony\Component\HttpFoundation\Session\Session;
 
+/**
+ * @deprecated since 1.30 will be removed in 2.0.
+ */
 class JwtCookieSessionServiceProvider extends SessionServiceProvider {
 
 	public function register(Application $app) {

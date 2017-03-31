@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request as RequestBase;
  * {@inheritdoc}
  *
  * Sub-classing to use our ParameterBag.
+ *
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\Request} instead.
  */
 class Request extends RequestBase {
 

@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\ParameterBag as ParameterBagBase;
  * {@inheritdoc}
  *
  * Additional methods have been added.
+ *
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\Collection\ParameterBag} instead.
  */
 class ParameterBag extends ParameterBagBase {
 

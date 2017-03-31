@@ -6,6 +6,10 @@ use GMO\Common\Str;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment as Environment;
 
+/**
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\Response\TemplateView}
+ *      or {@see Gmo\Web\Response\TemplateResponse} instead.
+ */
 class TwigResponse extends Response implements RenderableInterface {
 
 	/**

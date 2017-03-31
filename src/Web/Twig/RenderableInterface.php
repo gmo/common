@@ -1,6 +1,9 @@
 <?php
 namespace GMO\Common\Web\Twig;
 
+/**
+ * @deprecated since 1.30 will be removed in 2.0.
+ */
 interface RenderableInterface {
 
 	/**

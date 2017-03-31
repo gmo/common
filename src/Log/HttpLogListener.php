@@ -3,7 +3,6 @@ namespace GMO\Common\Log;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Silex\Application;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -17,6 +16,8 @@ use Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Log request, response and exceptions.
  * Adapted from {@see Silex\EventListener\LogListener}
+ *
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\EventListener\HttpLogListener} instead.
  */
 class HttpLogListener implements EventSubscriberInterface {
 
