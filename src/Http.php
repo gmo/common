@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
  * Class Http
  * @package GMO\Common
  * @since 1.9.0
+ *
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\Http} instead.
  */
 class Http {
 
