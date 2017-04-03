@@ -22,9 +22,7 @@
 	},
 	"suggest": {
 		"psr/log": "Provides a basic console logger for PSR-3 interface",
-		"monolog/monolog": "Provides serializable formatter",
-		"silex/silex": "Provides twig responses",
-		"twig/twig": "Provides twig responses"
+		"monolog/monolog": "Provides serializable formatter"
 	},
 	"autoload": {
 		"psr-4": {
