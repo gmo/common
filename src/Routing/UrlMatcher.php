@@ -10,6 +10,8 @@ use Symfony\Component\Routing\Route;
  * {@inheritdoc}
  *
  * Matches routes with or without trailing slash but does not redirect for performance.
+ *
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\Routing\UrlMatcher} instead.
  */
 class UrlMatcher extends RedirectableUrlMatcher
 {

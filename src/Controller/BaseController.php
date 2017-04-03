@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+/**
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\Controller\AbstractController} instead.
+ */
 class BaseController implements ControllerProviderInterface {
 
 	public function connect(Application $app) {

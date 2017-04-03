@@ -8,6 +8,8 @@ use Symfony\Component\Routing\RequestContext;
  * Implements a lazy UrlGenerator.
  * Similar concept with {@see \Silex\LazyUrlMatcher LazyUrlMatcher} and
  * {@see \Symfony\Component\HttpKernel\EventListener\RouterListener RouterListener}
+ *
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\Routing\LazyUrlGenerator} instead.
  */
 class LazyUrlGenerator implements UrlGeneratorInterface {
 

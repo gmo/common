@@ -5,6 +5,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * A transparent pixel response
+ *
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\Response\PixelResponse} instead.
  */
 class PixelResponse extends Response {
 

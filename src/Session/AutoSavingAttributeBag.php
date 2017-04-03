@@ -4,6 +4,9 @@ namespace Gmo\Common\Session;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
 use Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;
 
+/**
+ * @deprecated since 1.30 will be removed in 2.0.
+ */
 class AutoSavingAttributeBag extends AttributeBag {
 
 	/**

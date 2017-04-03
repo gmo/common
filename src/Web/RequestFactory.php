@@ -2,6 +2,9 @@
 
 namespace GMO\Common\Web;
 
+/**
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\RequestFactory} instead.
+ */
 class RequestFactory
 {
     protected $options = array();

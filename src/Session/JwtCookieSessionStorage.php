@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
 use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
 
+/**
+ * @deprecated since 1.30 will be removed in 2.0.
+ */
 class JwtCookieSessionStorage implements SessionStorageInterface {
 
 	/**

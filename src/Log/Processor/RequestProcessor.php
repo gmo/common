@@ -3,6 +3,9 @@ namespace Gmo\Common\Log\Processor;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\Logger\Processor\RequestProcessor} instead.
+ */
 class RequestProcessor {
 
 	public function __invoke(array $record) {

@@ -9,6 +9,8 @@ use Silex\Route;
  * 2) Create a separate "locale-less" route for each route
  *
  * The bound route name is on the route with the locale prefix.
+ *
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\Routing\LocaleControllerCollection} instead.
  */
 class LocaleControllerCollection extends PrefixedVariableControllerCollection {
 

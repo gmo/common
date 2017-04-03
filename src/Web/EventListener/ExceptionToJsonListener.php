@@ -11,6 +11,8 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Converts HTTP exceptions to JSON responses.
+ *
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\EventListener\ExceptionToJsonListener} instead.
  */
 class ExceptionToJsonListener implements EventSubscriberInterface {
 
