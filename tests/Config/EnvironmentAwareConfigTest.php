@@ -64,6 +64,6 @@ class TestConfig extends EnvironmentAwareConfig {
 		static::doSetConfig();
 	}
 
-	public static function setProjectDir() { return "../../.."; }
-	public static function setConfigFile() { return "tests/testConfig.yml"; }
+	public static function setProjectDir() { return ".."; }
+	public static function setConfigFile() { return "fixtures/config/testConfig.yml"; }
 }
