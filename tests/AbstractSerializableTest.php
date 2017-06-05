@@ -29,12 +29,29 @@ class SerializableTest extends \PHPUnit_Framework_TestCase {
 	public function testToJson() {
 		$contact = $this->getContact();
 
-		$this->assertEquals(
-			'{"class":"Gmo\\\\Common\\\\Tests\\\\Contact","firstName":"John","middleName":"J","lastName":"Doe","address":{'
-			.'"class":"Gmo\\\\Common\\\\Tests\\\\Address","street":"123 Testing Way","city":"Unit Testing Ville","zip":"12345"},'
-			.'"age":21,"timestamp":{"class":"GMO\\\\Common\\\\DateTime","date":"2009-10-11 12:13:14.000000","timezone_type":3,"timezone":"America\/Chicago"}}',
-			$contact->toJson()
-		);
+		$serialized = <<<JSON
+{
+    "class": "Gmo\\\\Common\\\\Tests\\\\Contact",
+    "firstName": "John",
+    "middleName": "J",
+    "lastName": "Doe",
+    "address": {
+        "class": "Gmo\\\\Common\\\\Tests\\\\Address",
+        "street": "123 Testing Way",
+        "city": "Unit Testing Ville",
+        "zip": "12345"
+    },
+    "age": 21,
+    "timestamp": {
+        "class": "GMO\\\\Common\\\\DateTime",
+        "date": "2009-10-11 12:13:14.000000",
+        "timezone_type": 3,
+        "timezone": "America/Chicago"
+    }
+}
+JSON;
+
+		$this->assertEquals($serialized, $contact->toJson());
 	}
 
 	public function testToArrayOptionalValuesAreDefaulted() {

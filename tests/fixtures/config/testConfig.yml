@@ -9,13 +9,13 @@ production:
 
 staging:
   test:
-    hello: %production%
+    hello: "%production%"
     key: staging_key
 
 # note
 development:
   _extends: staging
   test:
-    hello: %staging%
-    error: %asdf%
+    hello: "%staging%"
+    error: "%asdf%"
   password: override this

@@ -3,6 +3,9 @@ namespace Gmo\Common\Tests;
 
 use GMO\Common\Collection;
 
+/**
+ * @group legacy
+ */
 class CollectionTest extends \PHPUnit_Framework_TestCase {
 
 	protected function setUp() {
@@ -119,12 +122,19 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame(array("red", "blue"), $actual);
 	}
 
-	public function test_flatten() {
-		$input = array('a', 'b', array('c', 'd'), 'e', array('f' => 'ooops'), 'g');
-		$expected = array('a', 'b', 'c', 'd', 'e', 'f' => 'ooops', 'g');
-		$actual = Collection::flatten($input);
-		$this->assertSame($expected, $actual);
-	}
+    public function test_flatten() {
+        $input = array('a', 'b', array('c', 'd'), 'e', array('f' => 'ooops'), 'g');
+        $expected = array('a', 'b', 'c', 'd', 'e', 'ooops', 'g');
+        $actual = Collection::flatten($input, false);
+        $this->assertSame($expected, $actual);
+    }
+
+    public function test_flatten_keys() {
+        $input = array(array('a' => 'foo'), array('f' => 'ooops'));
+        $expected = array('a' => 'foo', 'f' => 'ooops');
+        $actual = Collection::flatten($input);
+        $this->assertSame($expected, $actual);
+    }
 
 	public function test_pop_has_key() {
 		$actual = Collection::pop($this->sut, "color2");

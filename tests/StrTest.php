@@ -126,8 +126,8 @@ class StrTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function test_class_name() {
-		$this->assertSame('StringTest', Str::className($this));
-		$this->assertSame('StringTest', Str::className(static::class));
+		$this->assertSame('StrTest', Str::className($this));
+		$this->assertSame('StrTest', Str::className(static::class));
 	}
 
 	public function test_class_name_does_not_exist() {
