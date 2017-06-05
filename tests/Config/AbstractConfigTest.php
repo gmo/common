@@ -1,5 +1,5 @@
 <?php
-namespace UnitTest;
+namespace Gmo\Common\Tests\Config;
 
 use GMO\Common\Collections\ArrayCollection;
 use GMO\Common\Config\AbstractConfig;

@@ -1,5 +1,5 @@
 <?php
-namespace UnitTest;
+namespace Gmo\Common\Tests;
 
 use GMO\Common\Str;
 
@@ -127,7 +127,7 @@ class StrTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_class_name() {
 		$this->assertSame('StringTest', Str::className($this));
-		$this->assertSame('StringTest', Str::className('UnitTest\\StringTest'));
+		$this->assertSame('StringTest', Str::className(static::class));
 	}
 
 	public function test_class_name_does_not_exist() {

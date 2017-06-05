@@ -1,5 +1,5 @@
 <?php
-namespace UnitTest;
+namespace Gmo\Common\Tests;
 
 use GMO\Common\AbstractSerializable;
 
@@ -10,7 +10,7 @@ class SerializableTest extends \PHPUnit_Framework_TestCase {
 
 		$result = $contact->toArray();
 
-		$this->assertSame('UnitTest\Contact', $result['class']);
+		$this->assertSame('Gmo\Common\Tests\Contact', $result['class']);
 		$this->assertSame('John', $result['firstName']);
 		$this->assertSame('J', $result['middleName']);
 		$this->assertSame('Doe', $result['lastName']);
@@ -20,7 +20,7 @@ class SerializableTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame('2009-10-11 12:13:14.000000', $timestamp['date']);
 
 		$address = $result["address"];
-		$this->assertSame('UnitTest\Address', $address['class']);
+		$this->assertSame('Gmo\Common\Tests\Address', $address['class']);
 		$this->assertSame("123 Testing Way", $address["street"]);
 		$this->assertSame("Unit Testing Ville", $address["city"]);
 		$this->assertSame("12345", $address["zip"]);
@@ -30,8 +30,8 @@ class SerializableTest extends \PHPUnit_Framework_TestCase {
 		$contact = $this->getContact();
 
 		$this->assertEquals(
-			'{"class":"UnitTest\\\\Contact","firstName":"John","middleName":"J","lastName":"Doe","address":{'
-			.'"class":"UnitTest\\\\Address","street":"123 Testing Way","city":"Unit Testing Ville","zip":"12345"},'
+			'{"class":"Gmo\\\\Common\\\\Tests\\\\Contact","firstName":"John","middleName":"J","lastName":"Doe","address":{'
+			.'"class":"Gmo\\\\Common\\\\Tests\\\\Address","street":"123 Testing Way","city":"Unit Testing Ville","zip":"12345"},'
 			.'"age":21,"timestamp":{"class":"GMO\\\\Common\\\\DateTime","date":"2009-10-11 12:13:14.000000","timezone_type":3,"timezone":"America\/Chicago"}}',
 			$contact->toJson()
 		);
@@ -113,7 +113,7 @@ class SerializableTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @expectedException \GMO\Common\Exception\NotSerializableException
-	 * @expectedExceptionMessage UnitTest\Herp does not implement GMO\Common\ISerializable
+	 * @expectedExceptionMessage Gmo\Common\Tests\Herp does not implement GMO\Common\ISerializable
 	 */
 	public function testNotSerializable() {
 		$derp = new Derp(new Herp());

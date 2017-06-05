@@ -1,6 +1,6 @@
 <?php
 
-namespace UnitTest\Web\Routing;
+namespace Gmo\Common\Tests\Web\Routing;
 
 use GMO\Common\Web\Routing\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;

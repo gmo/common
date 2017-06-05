@@ -1,6 +1,6 @@
 <?php
 
-namespace UnitTest;
+namespace Gmo\Common\Tests;
 
 use GMO\Common\Exception\ParseException;
 use GMO\Common\Json;

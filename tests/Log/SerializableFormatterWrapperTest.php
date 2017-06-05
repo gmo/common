@@ -1,5 +1,5 @@
 <?php
-namespace UnitTest;
+namespace Gmo\Common\Tests\Log;
 
 use GMO\Common\AbstractSerializable;
 use GMO\Common\DateTime;
@@ -25,7 +25,7 @@ class SerializableFormatterWrapperTest extends \PHPUnit_Framework_TestCase {
 		));
 
 		$this->assertTrue(is_array($record['something']));
-		$this->assertSame('UnitTest\SomethingSerializable', $record['something']['class']);
+		$this->assertSame('Gmo\Common\Tests\Log\SomethingSerializable', $record['something']['class']);
 		$this->assertTrue($record['something']['time'] instanceof \DateTime);
 	}
 

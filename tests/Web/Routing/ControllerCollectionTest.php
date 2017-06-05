@@ -1,5 +1,7 @@
 <?php
 
+namespace Gmo\Common\Tests\Web\Routing;
+
 use GMO\Common\Web\Routing\ControllerCollection;
 use Silex\Controller;
 use Silex\Exception\ControllerFrozenException;
