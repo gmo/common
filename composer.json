@@ -13,6 +13,7 @@
 		"webmozart/path-util": "^2.3"
 	},
 	"require-dev": {
+		"bolt/collection": "^1.0",
 		"gmo/cache": "~1.0",
 		"psr/log": "1.0.0",
 		"monolog/monolog": "^1.18",
