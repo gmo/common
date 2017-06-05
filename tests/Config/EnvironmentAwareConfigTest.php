@@ -1,9 +1,12 @@
 <?php
 namespace Gmo\Common\Tests\Config;
 
-use GMO\Common\Config\EnvironmentAwareConfig;
+use Gmo\Common\Tests\Config\Singleton\EnvConfig as TestConfig;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group legacy
+ */
 class EnvironmentAwareConfigTest extends TestCase {
 
 	public function testDefaultEnvironment() {
@@ -49,22 +52,4 @@ class EnvironmentAwareConfigTest extends TestCase {
 		$value = TestConfig::getValue(null, 'password');
 		$this->assertSame('password1', $value);
 	}
-}
-
-
-class TestConfig extends EnvironmentAwareConfig {
-
-	protected static $env;
-
-	public static function getEnvironment() {
-		return static::$env;
-	}
-
-	public static function setEnvironment($env) {
-		static::$env = $env;
-		static::doSetConfig();
-	}
-
-	public static function setProjectDir() { return ".."; }
-	public static function setConfigFile() { return "fixtures/config/testConfig.yml"; }
 }

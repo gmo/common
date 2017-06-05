@@ -1,0 +1,5 @@
+# error: before environment it extended
+development:
+  _extends: staging
+
+staging:

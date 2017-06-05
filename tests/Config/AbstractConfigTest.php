@@ -2,9 +2,15 @@
 namespace Gmo\Common\Tests\Config;
 
 use GMO\Common\Collections\ArrayCollection;
-use GMO\Common\Config\AbstractConfig;
+use Gmo\Common\Tests\Config\Singleton\CsvConfig;
+use Gmo\Common\Tests\Config\Singleton\IniConfig;
+use Gmo\Common\Tests\Config\Singleton\JsonConfig;
+use Gmo\Common\Tests\Config\Singleton\NonexistentConfig;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group legacy
+ */
 class AbstractConfigTest extends TestCase {
 
 	public function test_get_json_value() {
@@ -121,57 +127,3 @@ class AbstractConfigTest extends TestCase {
 	}
 
 }
-
-#region Test Config Classes
-class JsonConfig extends AbstractConfig {
-
-	public static function setProjectDir() { return ".."; }
-	public static function setConfigFile() { return "fixtures/config/package.json"; }
-
-	public static function getRepoType() {
-		return static::getValue("repository", "type");
-	}
-}
-
-class IniConfig extends AbstractConfig {
-
-	public static function setProjectDir() { return ".."; }
-	public static function setConfigFile() { return "fixtures/config/testConfig.ini"; }
-
-	public static function getAllowedAuthorization() {
-		return static::getValue("AUTHORIZATION", "allow");
-	}
-	public static function getYamlFile() {
-		return static::getPath("FILES", "yaml");
-	}
-	public static function getUnknownFile() {
-		return static::getPath("FILES", "derp", "nope");
-	}
-	public static function getDefaultKey() {
-		return static::getValue("NOT", "needed", "defaultValue");
-	}
-	public static function getMissingKey() {
-		return static::getValue("NEEDED", "asdf");
-	}
-}
-
-class NonexistentConfig extends AbstractConfig {
-
-	public static function setProjectDir() { return ".."; }
-	public static function setConfigFile() { return "asdf"; }
-
-	public static function getSomething() {
-		return static::getValue("nope", "nope");
-	}
-}
-
-class CsvConfig extends AbstractConfig {
-
-	public static function setProjectDir() { return ".."; }
-	public static function setConfigFile() { return "fixtures/config/testConfig.csv"; }
-
-	public static function getSomething() {
-		return static::getValue("nope", "nope");
-	}
-}
-#endregion

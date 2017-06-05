@@ -2,8 +2,11 @@
 namespace GMO\Common\Config;
 
 use GMO\Common\Collections\ArrayCollection;
+use GMO\Common\Deprecated;
 use GMO\Common\Exception\ConfigException;
 use GMO\Common\Str;
+
+Deprecated::cls('GMO\Common\Config\EnvironmentAwareConfig', null, 'Gmo\Common\Config\Config');
 
 /**
  * This config groups values by environment.
@@ -28,6 +31,8 @@ use GMO\Common\Str;
  *       production: hello
  *       staging: world
  *       development: world
+ *
+ * @deprecated will be removed in 2.0.
  */
 abstract class EnvironmentAwareConfig extends AbstractConfig {
 

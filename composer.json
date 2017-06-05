@@ -28,6 +28,7 @@
 	},
 	"autoload": {
 		"psr-4": {
+			"Gmo\\Common\\": "src",
 			"GMO\\Common\\": "src/",
 			"GMO\\TestHelper\\": "TestHelper/"
 		}
