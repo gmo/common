@@ -3,7 +3,10 @@
 namespace Gmo\Common\Config;
 
 use Bolt\Collection\Bag;
+use Gmo\Common\Dependency\DependencyResolver;
 use GMO\Common\Exception\ConfigException;
+use Gmo\Common\Exception\Dependency\CyclicDependencyException;
+use Gmo\Common\Exception\Dependency\UnknownDependencyException;
 use Symfony\Component\Yaml\Yaml;
 use Webmozart\PathUtil\Path;
 
@@ -72,9 +75,7 @@ class ConfigFactory
             $envs['default'] = new Bag();
         }
 
-        $parsed = [
-            'default' => true,
-        ];
+        $envs = $this->sortEnvs($envs);
 
         // Merge in parent configs for each environment, specified with "_extends" key
         foreach ($envs as $name => $config) {
@@ -84,11 +85,7 @@ class ConfigFactory
             }
 
             $parent = $config->remove('_extends', 'default');
-            if (!isset($parsed[$parent])) {
-                throw new ConfigException("Move '$name' below '$parent' environment.");
-            }
             $envs[$name] = $envs[$parent]->replaceRecursive($config);
-            $parsed[$name] = true;
         }
 
         return $envs;
@@ -144,5 +141,42 @@ class ConfigFactory
         }
 
         return $env;
+    }
+
+    /**
+     * Sort envs based on their "_extends" key.
+     *
+     * @param Bag $envs
+     *
+     * @throws ConfigException
+     *
+     * @return Bag
+     */
+    private function sortEnvs($envs)
+    {
+        $resolver = DependencyResolver::fromMap($envs, function (Bag $env, $key) {
+            // Default is the base case and cannot depend upon anything.
+            if ($key === 'default') {
+                return [];
+            }
+
+            $parent = $env->get('_extends', 'default');
+
+            return [$parent];
+        });
+
+        try {
+            return $resolver->sort()->mutable();
+        } catch (CyclicDependencyException $e) {
+            $e->setItemName('environments');
+            throw $e;
+        } catch (UnknownDependencyException $e) {
+            $message = sprintf(
+                "Config environment '%s' cannot extend '%s' environment because it does not exist.",
+                $e->getItem(),
+                $e->getDependency()
+            );
+            throw new ConfigException($message, 0, $e);
+        }
     }
 }

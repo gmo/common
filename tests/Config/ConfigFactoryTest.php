@@ -55,8 +55,8 @@ class ConfigFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \GMO\Common\Exception\ConfigException
-     * @expectedExceptionMessage Move 'development' below 'staging' environment.
+     * @expectedException \Gmo\Common\Exception\Dependency\CyclicDependencyException
+     * @expectedExceptionMessage The environments 'staging', 'development' have a cyclic dependency.
      */
     public function testInvalidEnvironmentDefinition()
     {
