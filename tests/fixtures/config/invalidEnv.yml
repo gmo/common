@@ -1,0 +1,6 @@
+# error: cyclic extends
+development:
+  _extends: staging
+
+staging:
+  _extends: development

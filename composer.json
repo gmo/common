@@ -3,6 +3,7 @@
 	"license": "MIT",
 	"description": "A library for common code",
 	"require": {
+		"nesbot/carbon": "^1.20",
 		"php": ">=5.3.3",
 		"seld/jsonlint": "^1.4",
 		"symfony/polyfill-php55": "^1.0",
@@ -10,11 +11,12 @@
 		"webmozart/path-util": "^2.3"
 	},
 	"require-dev": {
+		"bolt/collection": "^1.0",
 		"gmo/cache": "~1.0@dev",
 		"psr/log": "1.0.0",
 		"monolog/monolog": "^1.18",
-		"nesbot/carbon": "^1.20",
-		"phpunit/phpunit": "3.7.*"
+        "symfony/phpunit-bridge": "^2.8 || ^3.0",
+		"phpunit/phpunit": "^4.8"
 	},
 	"suggest": {
 		"psr/log": "Provides a basic console logger for PSR-3 interface",
@@ -22,12 +24,12 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Gmo\\Common\\": "src/"
+			"Gmo\\Common\\": "src"
 		}
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Gmo\\Common\\": "tests/"
+			"Gmo\\Common\\Tests\\": "tests"
 		}
 	},
 	"extra": {

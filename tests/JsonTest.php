@@ -1,11 +1,12 @@
 <?php
 
-namespace UnitTest;
+namespace Gmo\Common\Tests;
 
 use GMO\Common\Exception\ParseException;
 use GMO\Common\Json;
+use PHPUnit\Framework\TestCase;
 
-class JsonTest extends \PHPUnit_Framework_TestCase
+class JsonTest extends TestCase
 {
     public function testParseNull()
     {

@@ -1,7 +1,7 @@
 <?php
 namespace Gmo\Common\Serialization;
 
-use Gmo\Common\DateTime;
+use Gmo\Common\SerializableCarbon;
 use Gmo\Common\Serialization\Exception\NotSerializableException;
 
 /**
@@ -36,7 +36,7 @@ class SerializeHelper {
 			if ($value instanceof SerializableInterface) {
 				$values[$key] = $value->toArray();
 			} elseif ($value instanceof \DateTime) {
-				$values[$key] = DateTime::castFromBuiltin($value)->toArray();
+                $values[$key] = SerializableCarbon::instance($value)->toArray();
 			} elseif ($value instanceof \Exception) {
 				$values[$key] = serialize($value);
 			} else {
@@ -92,9 +92,6 @@ class SerializeHelper {
 			}
 			if (!$paramCls) {
 				$params[] = $obj[$refParam->name];
-			} elseif ($paramCls->name === "DateTime") {
-				$timestamp = $obj[$refParam->name];
-				$params[] = DateTime::fromArray($timestamp);
 			} elseif ($paramCls->isSubclassOf('GMO\Common\ISerializable')) {
 				/** @var SerializableInterface|string $clsName */
 				$clsName = $paramCls->name;
@@ -104,6 +101,8 @@ class SerializeHelper {
 				$params[] = $clsName::fromArray($obj[$refParam->name]);
 			} elseif ($paramCls->isSubclassOf('\Exception') || $paramCls->getName() === 'Exception') {
 				$params[] = unserialize($obj[$refParam->name]);
+            } elseif (is_a($paramCls->name, 'DateTime', true)) {
+                $params[] = SerializableCarbon::fromArray($obj[$refParam->name]);
 			} else {
 				throw new NotSerializableException($paramCls->name . ' does not implement GMO\Common\ISerializable');
 			}

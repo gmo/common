@@ -1,26 +1,27 @@
 <?php
-namespace Gmo\Common\UnitTest;
+namespace Gmo\Common\Tests;
 
 use Gmo\Common\Serialization\AbstractSerializable;
+use PHPUnit\Framework\TestCase;
 
-class SerializableTest extends \PHPUnit_Framework_TestCase {
+class SerializableTest extends TestCase {
 
 	public function testToArray() {
 		$contact = $this->getContact();
 
 		$result = $contact->toArray();
 
-		$this->assertSame('UnitTest\Contact', $result['class']);
+		$this->assertSame('Gmo\Common\Tests\Contact', $result['class']);
 		$this->assertSame('John', $result['firstName']);
 		$this->assertSame('J', $result['middleName']);
 		$this->assertSame('Doe', $result['lastName']);
 		$this->assertSame(21, $result['age']);
 		$timestamp = $result['timestamp'];
-		$this->assertSame('GMO\Common\DateTime', $timestamp['class']);
+		$this->assertSame('Gmo\Common\SerializableCarbon', $timestamp['class']);
 		$this->assertSame('2009-10-11 12:13:14.000000', $timestamp['date']);
 
 		$address = $result["address"];
-		$this->assertSame('UnitTest\Address', $address['class']);
+		$this->assertSame('Gmo\Common\Tests\Address', $address['class']);
 		$this->assertSame("123 Testing Way", $address["street"]);
 		$this->assertSame("Unit Testing Ville", $address["city"]);
 		$this->assertSame("12345", $address["zip"]);
@@ -29,12 +30,29 @@ class SerializableTest extends \PHPUnit_Framework_TestCase {
 	public function testToJson() {
 		$contact = $this->getContact();
 
-		$this->assertEquals(
-			'{"class":"UnitTest\\\\Contact","firstName":"John","middleName":"J","lastName":"Doe","address":{'
-			.'"class":"UnitTest\\\\Address","street":"123 Testing Way","city":"Unit Testing Ville","zip":"12345"},'
-			.'"age":21,"timestamp":{"class":"GMO\\\\Common\\\\DateTime","date":"2009-10-11 12:13:14.000000","timezone_type":3,"timezone":"America\/Chicago"}}',
-			$contact->toJson()
-		);
+		$serialized = <<<JSON
+{
+    "class": "Gmo\\\\Common\\\\Tests\\\\Contact",
+    "firstName": "John",
+    "middleName": "J",
+    "lastName": "Doe",
+    "address": {
+        "class": "Gmo\\\\Common\\\\Tests\\\\Address",
+        "street": "123 Testing Way",
+        "city": "Unit Testing Ville",
+        "zip": "12345"
+    },
+    "age": 21,
+    "timestamp": {
+        "class": "Gmo\\\\Common\\\\SerializableCarbon",
+        "date": "2009-10-11 12:13:14.000000",
+        "timezone_type": 3,
+        "timezone": "America/Chicago"
+    }
+}
+JSON;
+
+		$this->assertEquals($serialized, $contact->toJson());
 	}
 
 	public function testToArrayOptionalValuesAreDefaulted() {
@@ -113,7 +131,7 @@ class SerializableTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @expectedException \Gmo\Common\Serialization\Exception\NotSerializableException
-	 * @expectedExceptionMessage UnitTest\Herp does not implement GMO\Common\SerializableInterface
+	 * @expectedExceptionMessage Gmo\Common\Tests\Herp does not implement GMO\Common\SerializableInterface
 	 */
 	public function testNotSerializable() {
 		$derp = new Derp(new Herp());

@@ -1,9 +1,10 @@
 <?php
-namespace Gmo\Common\UnitTest;
+namespace Gmo\Common\Tests;
 
 use Gmo\Common\Str;
+use PHPUnit\Framework\TestCase;
 
-class StrTest extends \PHPUnit_Framework_TestCase {
+class StrTest extends TestCase {
 
 	public function test_contains() {
 		$this->assertTrue(Str::contains("this", "t"));
@@ -73,13 +74,13 @@ class StrTest extends \PHPUnit_Framework_TestCase {
 		$this->assertFalse(Str::endsWith("blah", "BLAH"));
 	}
 
-	public function test_split() {
-		$this->assertSame(array("herp", "derp"), Str::split("herp derp", " ")->toArray());
-	}
+    public function test_explode() {
+        $this->assertSame(array("herp", "derp"), Str::explode("herp derp", " ")->toArray());
+    }
 
-	public function test_split_empty_returns_empty_collection() {
-		$this->assertTrue(Str::split("herp derp", "")->isEmpty());
-	}
+    public function test_explode_empty_returns_empty_collection() {
+        $this->assertTrue(Str::explode("herp derp", "")->isEmpty());
+    }
 
 	public function test_split_first_last_empty_returns_false() {
 		$this->assertFalse(Str::splitFirst("herp derp", ""));
@@ -87,7 +88,7 @@ class StrTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function test_split_not_containing_delimiter() {
-		$this->assertSame('herp derp', Str::split("herp derp", ",")->first());
+		$this->assertSame('herp derp', Str::explode("herp derp", ",")->first());
 		$this->assertSame("herp derp", Str::splitFirst("herp derp", ","));
 		$this->assertSame("herp derp", Str::splitLast("herp derp", ","));
 	}
@@ -127,7 +128,7 @@ class StrTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_class_name() {
 		$this->assertSame('StrTest', Str::className($this));
-		$this->assertSame('StrTest', Str::className('UnitTest\\StrTest'));
+		$this->assertSame('StrTest', Str::className(static::class));
 	}
 
 	public function test_class_name_does_not_exist() {

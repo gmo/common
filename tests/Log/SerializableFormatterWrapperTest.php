@@ -1,17 +1,17 @@
 <?php
-namespace Gmo\Common\UnitTest;
+namespace Gmo\Common\Tests\Log;
 
 use Gmo\Common\AbstractSerializable;
-use Gmo\Common\DateTime;
 use Gmo\Common\Log\SerializableFormatterWrapper;
 use Monolog\Formatter\FormatterInterface;
+use PHPUnit\Framework\TestCase;
 
-class SerializableFormatterWrapperTest extends \PHPUnit_Framework_TestCase {
+class SerializableFormatterWrapperTest extends TestCase {
 
 	public function testDateTimeClassIsKept() {
 		$formatter = $this->getFormatter();
 		$record = $formatter->format(array(
-			'time' => new DateTime(),
+			'time' => new \DateTime(),
 		));
 
 		$this->assertTrue($record['time'] instanceof \DateTime);
@@ -21,11 +21,11 @@ class SerializableFormatterWrapperTest extends \PHPUnit_Framework_TestCase {
 		$formatter = $this->getFormatter();
 
 		$record = $formatter->format(array(
-			'something' => new SomethingSerializable(new DateTime()),
+			'something' => new SomethingSerializable(new \DateTime()),
 		));
 
 		$this->assertTrue(is_array($record['something']));
-		$this->assertSame('UnitTest\SomethingSerializable', $record['something']['class']);
+		$this->assertSame('Gmo\Common\Tests\Log\SomethingSerializable', $record['something']['class']);
 		$this->assertTrue($record['something']['time'] instanceof \DateTime);
 	}
 
