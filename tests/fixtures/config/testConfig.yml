@@ -12,7 +12,6 @@ staging:
     hello: "%production%"
     key: staging_key
 
-# note
 development:
   _extends: staging
   test:

@@ -4,6 +4,9 @@ namespace GMO\Common\Config;
 use GMO\Common\Collections\ArrayCollection;
 use GMO\Common\Exception\ConfigException;
 
+/**
+ * @deprecated will be removed in 2.0.
+ */
 interface ConfigInterface {
 
 	/**

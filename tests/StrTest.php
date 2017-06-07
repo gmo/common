@@ -74,10 +74,24 @@ class StrTest extends TestCase {
 		$this->assertFalse(Str::endsWith("blah", "BLAH"));
 	}
 
+    public function test_explode() {
+        $this->assertSame(array("herp", "derp"), Str::explode("herp derp", " ")->toArray());
+    }
+
+    public function test_explode_empty_returns_empty_collection() {
+        $this->assertTrue(Str::explode("herp derp", "")->isEmpty());
+    }
+
+    /**
+     * @group legacy
+     */
 	public function test_split() {
 		$this->assertSame(array("herp", "derp"), Str::split("herp derp", " ")->toArray());
 	}
 
+    /**
+     * @group legacy
+     */
 	public function test_split_empty_returns_empty_collection() {
 		$this->assertTrue(Str::split("herp derp", "")->isEmpty());
 	}
@@ -87,8 +101,12 @@ class StrTest extends TestCase {
 		$this->assertFalse(Str::splitLast("herp derp", ""));
 	}
 
-	public function test_split_not_containing_delimiter() {
+	public function testLegacy_split_not_containing_delimiter() {
 		$this->assertSame('herp derp', Str::split("herp derp", ",")->first());
+	}
+
+	public function test_split_not_containing_delimiter() {
+		$this->assertSame('herp derp', Str::explode("herp derp", ",")->first());
 		$this->assertSame("herp derp", Str::splitFirst("herp derp", ","));
 		$this->assertSame("herp derp", Str::splitLast("herp derp", ","));
 	}

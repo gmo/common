@@ -45,6 +45,8 @@ use Countable, IteratorAggregate, ArrayAccess;
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Jonathan Wage <jonwage@gmail.com>
  * @author Roman Borschel <roman@code-factory.org>
+ *
+ * @deprecated Use bolt/collection library instead.
  */
 interface CollectionInterface extends Countable, IteratorAggregate, ArrayAccess
 {

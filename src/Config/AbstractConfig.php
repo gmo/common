@@ -2,12 +2,18 @@
 namespace GMO\Common\Config;
 
 use GMO\Common\Collections\ArrayCollection;
+use GMO\Common\Deprecated;
 use GMO\Common\Exception\ConfigException;
 use GMO\Common\Json;
 use GMO\Common\Str;
 use Symfony\Component\Yaml\Yaml;
 use Webmozart\PathUtil\Path;
 
+Deprecated::cls('GMO\Common\Config\AbstractConfig', null, 'Gmo\Common\Config\Config');
+
+/**
+ * @deprecated will be removed in 2.0.
+ */
 abstract class AbstractConfig implements ConfigInterface {
 
 	/** @inheritdoc */
