@@ -1,4 +1,5 @@
 <?php
+
 namespace GMO\Common\Web;
 
 use Symfony\Component\HttpFoundation\Request as RequestBase;
@@ -10,48 +11,49 @@ use Symfony\Component\HttpFoundation\Request as RequestBase;
  *
  * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\Request} instead.
  */
-class Request extends RequestBase {
+class Request extends RequestBase
+{
+    /**
+     * Query string parameters ($_GET).
+     *
+     * @var ParameterBag
+     */
+    public $query;
 
-	/**
-	 * Query string parameters ($_GET).
-	 *
-	 * @var ParameterBag
-	 */
-	public $query;
+    /**
+     * Request body parameters ($_POST).
+     *
+     * @var ParameterBag
+     */
+    public $request;
 
-	/**
-	 * Request body parameters ($_POST).
-	 *
-	 * @var ParameterBag
-	 */
-	public $request;
+    /**
+     * {@inheritdoc}
+     */
+    public function initialize(
+        array $query = array(),
+        array $request = array(),
+        array $attributes = array(),
+        array $cookies = array(),
+        array $files = array(),
+        array $server = array(),
+        $content = null
+    ) {
+        parent::initialize($query, $request, $attributes, $cookies, $files, $server, $content);
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function initialize(
-		array $query = array(),
-		array $request = array(),
-		array $attributes = array(),
-		array $cookies = array(),
-		array $files = array(),
-		array $server = array(),
-		$content = null
-	) {
-		parent::initialize($query, $request, $attributes, $cookies, $files, $server, $content);
+        $this->request = new ParameterBag($request);
+        $this->query = new ParameterBag($query);
+    }
 
-		$this->request = new ParameterBag($request);
-		$this->query = new ParameterBag($query);
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public static function createFromGlobals()
+    {
+        $request = parent::createFromGlobals();
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public static function createFromGlobals() {
-		$request = parent::createFromGlobals();
+        $request->request = new ParameterBag($request->request->all());
 
-		$request->request = new ParameterBag($request->request->all());
-
-		return $request;
-	}
+        return $request;
+    }
 }

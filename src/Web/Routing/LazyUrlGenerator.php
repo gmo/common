@@ -1,4 +1,5 @@
 <?php
+
 namespace GMO\Common\Web\Routing;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -11,35 +12,56 @@ use Symfony\Component\Routing\RequestContext;
  *
  * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\Routing\LazyUrlGenerator} instead.
  */
-class LazyUrlGenerator implements UrlGeneratorInterface {
+class LazyUrlGenerator implements UrlGeneratorInterface
+{
+    private $factory;
 
-	public function setContext(RequestContext $context) {
-		$this->getUrlGenerator()->setContext($context);
-	}
+    /**
+     * Constructor.
+     *
+     * @param \Closure $factory
+     */
+    public function __construct(\Closure $factory)
+    {
+        $this->factory = $factory;
+    }
 
-	public function getContext() {
-		return $this->getUrlGenerator()->getContext();
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function setContext(RequestContext $context)
+    {
+        $this->getUrlGenerator()->setContext($context);
+    }
 
-	public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH) {
-		return $this->getUrlGenerator()->generate($name, $parameters, $referenceType);
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getContext()
+    {
+        return $this->getUrlGenerator()->getContext();
+    }
 
-	/**
-	 * @return UrlGeneratorInterface
-	 */
-	public function getUrlGenerator() {
-		$urlGenerator = call_user_func($this->factory);
-		if (!$urlGenerator instanceof UrlGeneratorInterface) {
-			throw new \LogicException('Factory supplied to LazyUrlGenerator must return implementation of UrlGeneratorInterface.');
-		}
+    /**
+     * {@inheritdoc}
+     */
+    public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
+    {
+        return $this->getUrlGenerator()->generate($name, $parameters, $referenceType);
+    }
 
-		return $urlGenerator;
-	}
+    /**
+     * @return UrlGeneratorInterface
+     */
+    public function getUrlGenerator()
+    {
+        $urlGenerator = call_user_func($this->factory);
+        if (!$urlGenerator instanceof UrlGeneratorInterface) {
+            throw new \LogicException(
+                'Factory supplied to LazyUrlGenerator must return implementation of UrlGeneratorInterface.'
+            );
+        }
 
-	public function __construct(\Closure $factory) {
-		$this->factory = $factory;
-	}
-
-	private $factory;
+        return $urlGenerator;
+    }
 }

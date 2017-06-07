@@ -1,4 +1,5 @@
 <?php
+
 namespace Gmo\Common\Tests;
 
 use GMO\Common\Collections\ArrayCollection;
@@ -7,23 +8,25 @@ use PHPUnit\Framework\TestCase;
 /**
  * @group legacy
  */
-class ArrayCollectionTest extends TestCase {
+class ArrayCollectionTest extends TestCase
+{
+    public function testCreation()
+    {
+        $this->assertCollection(array('a', 'b'), new ArrayCollection(array('a', 'b')));
+        $this->assertCollection(array('a', 'b'), new ArrayCollection('a', 'b'));
+        $this->assertCollection(array('a'), new ArrayCollection('a'));
+        $this->assertCollection(array(), new ArrayCollection(null));
+        $this->assertCollection(array(), new ArrayCollection());
 
-	public function testCreation() {
-		$this->assertCollection(array('a', 'b'), new ArrayCollection(array('a', 'b')));
-		$this->assertCollection(array('a', 'b'), new ArrayCollection('a', 'b'));
-		$this->assertCollection(array('a'), new ArrayCollection('a'));
-		$this->assertCollection(array(), new ArrayCollection(null));
-		$this->assertCollection(array(), new ArrayCollection());
+        $this->assertCollection(array('a', 'b'), ArrayCollection::create(array('a', 'b')));
+        $this->assertCollection(array('a', 'b'), ArrayCollection::create('a', 'b'));
+        $this->assertCollection(array('a'), ArrayCollection::create('a'));
+        $this->assertCollection(array(), ArrayCollection::create(null));
+        $this->assertCollection(array(), ArrayCollection::create());
+    }
 
-		$this->assertCollection(array('a', 'b'), ArrayCollection::create(array('a', 'b')));
-		$this->assertCollection(array('a', 'b'), ArrayCollection::create('a', 'b'));
-		$this->assertCollection(array('a'), ArrayCollection::create('a'));
-		$this->assertCollection(array(), ArrayCollection::create(null));
-		$this->assertCollection(array(), ArrayCollection::create());
-	}
-
-	private function assertCollection($expected, ArrayCollection $actual) {
-		$this->assertSame($expected, $actual->toArray());
-	}
+    private function assertCollection($expected, ArrayCollection $actual)
+    {
+        $this->assertSame($expected, $actual->toArray());
+    }
 }

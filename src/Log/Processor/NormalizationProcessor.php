@@ -1,4 +1,5 @@
 <?php
+
 namespace GMO\Common\Log\Processor;
 
 use GMO\Common\Collection;
@@ -6,29 +7,31 @@ use GMO\Common\Collection;
 /**
  * Abstracts looping through the array data looking for an item to normalize
  */
-abstract class NormalizationProcessor {
+abstract class NormalizationProcessor
+{
+    public function __invoke(array $record)
+    {
+        return $this->normalizeCollection($record);
+    }
 
-	public function __invoke(array $record) {
-		return $this->normalizeCollection($record);
-	}
+    protected abstract function normalize($data);
 
-	protected abstract function normalize($data);
+    protected function normalizeCollection($data)
+    {
+        if (!Collection::isTraversable($data)) {
+            return $this->normalize($data);
+        }
+        $normalized = [];
 
-	protected function normalizeCollection($data) {
-		if (!Collection::isTraversable($data)) {
-			return $this->normalize($data);
-		}
-		$normalized = array();
+        $count = 1;
+        foreach ($data as $key => $value) {
+            if ($count++ >= 1000) {
+                $normalized['...'] = 'Over 1000 items, aborting normalization';
+                break;
+            }
+            $normalized[$key] = $this->normalizeCollection($value);
+        }
 
-		$count = 1;
-		foreach ($data as $key => $value) {
-			if ($count++ >= 1000) {
-				$normalized['...'] = 'Over 1000 items, aborting normalization';
-				break;
-			}
-			$normalized[$key] = $this->normalizeCollection($value);
-		}
-
-		return $normalized;
-	}
+        return $normalized;
+    }
 }

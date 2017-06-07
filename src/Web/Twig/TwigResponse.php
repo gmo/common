@@ -1,4 +1,5 @@
 <?php
+
 namespace GMO\Common\Web\Twig;
 
 use GMO\Common\Collections\ArrayCollection;
@@ -10,95 +11,110 @@ use Twig_Environment as Environment;
  * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\Response\TemplateView}
  *      or {@see Gmo\Web\Response\TemplateResponse} instead.
  */
-class TwigResponse extends Response implements RenderableInterface {
+class TwigResponse extends Response implements RenderableInterface
+{
+    protected $template;
+    /** @var ArrayCollection */
+    protected $variables;
+    /** @var bool */
+    protected $rendered = false;
 
-	/**
-	 * @param string|string[] $template
-	 * @return $this
-	 */
-	public function setTemplate($template) {
-		if ($this->rendered) {
-			throw new \LogicException('Cannot set template after response is rendered');
-		}
-		$this->template = $template;
-		return $this;
-	}
+    /**
+     * Constructor.
+     *
+     * @param string|string[]       $template  The name of the template(s)
+     * @param ArrayCollection|array $variables The variables for the template
+     * @param int                   $status    The response status code
+     * @param array                 $headers   An array of response headers
+     *
+     * @throws \InvalidArgumentException When the HTTP status code is not valid
+     *
+     * @api
+     */
+    public function __construct($template, $variables = array(), $status = 200, $headers = array())
+    {
+        $this->template = $template;
+        $this->variables = new ArrayCollection($variables);
+        parent::__construct('', $status, $headers);
+    }
 
-	public function getTemplate() {
-		return $this->template;
-	}
+    /**
+     * @param string|string[] $template
+     *
+     * @return $this
+     */
+    public function setTemplate($template)
+    {
+        if ($this->rendered) {
+            throw new \LogicException('Cannot set template after response is rendered');
+        }
+        $this->template = $template;
 
-	public function getVariables() {
-		return $this->variables;
-	}
+        return $this;
+    }
 
-	public function setVariables($variables) {
-		if ($this->rendered) {
-			throw new \LogicException('Cannot set variables after response is rendered');
-		}
-		$this->variables = new ArrayCollection($variables);
-		return $this;
-	}
+    public function getTemplate()
+    {
+        return $this->template;
+    }
 
-	/**
-	 * @param string $name
-	 * @param mixed  $value
-	 * @return $this
-	 */
-	public function addVariable($name, $value) {
-		if ($this->rendered) {
-			throw new \LogicException('Cannot add variables after response is rendered');
-		}
-		$this->variables->set($name, $value);
-		return $this;
-	}
+    public function getVariables()
+    {
+        return $this->variables;
+    }
 
-	/**
-	 * @param ArrayCollection|array $values
-	 * @return $this
-	 */
-	public function addVariables($values) {
-		if ($this->rendered) {
-			throw new \LogicException('Cannot add variables after response is rendered');
-		}
-		$this->variables->replace($values);
-		return $this;
-	}
+    public function setVariables($variables)
+    {
+        if ($this->rendered) {
+            throw new \LogicException('Cannot set variables after response is rendered');
+        }
+        $this->variables = new ArrayCollection($variables);
 
-	public function render(Environment $twig) {
-		$templates = ArrayCollection::create($this->template)
-			->map(function ($template) {
-				return Str::endsWith($template, '.twig') ? $template : $template . '.twig';
-			});
-		$this->setContent($twig->resolveTemplate($templates->toArray())->render($this->variables->toArray()));
-		$this->rendered = true;
-	}
+        return $this;
+    }
 
-	public function isRendered() {
-		return $this->rendered;
-	}
+    /**
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return $this
+     */
+    public function addVariable($name, $value)
+    {
+        if ($this->rendered) {
+            throw new \LogicException('Cannot add variables after response is rendered');
+        }
+        $this->variables->set($name, $value);
 
-	/**
-	 * Constructor.
-	 *
-	 * @param string|string[]       $template  The name of the template(s)
-	 * @param ArrayCollection|array $variables The variables for the template
-	 * @param int                   $status    The response status code
-	 * @param array                 $headers   An array of response headers
-	 *
-	 * @throws \InvalidArgumentException When the HTTP status code is not valid
-	 *
-	 * @api
-	 */
-	public function __construct($template, $variables = array(), $status = 200, $headers = array()) {
-		$this->template = $template;
-		$this->variables = new ArrayCollection($variables);
-		parent::__construct('', $status, $headers);
-	}
+        return $this;
+    }
 
-	protected $template;
-	/** @var ArrayCollection */
-	protected $variables;
-	/** @var bool */
-	protected $rendered = false;
+    /**
+     * @param ArrayCollection|array $values
+     *
+     * @return $this
+     */
+    public function addVariables($values)
+    {
+        if ($this->rendered) {
+            throw new \LogicException('Cannot add variables after response is rendered');
+        }
+        $this->variables->replace($values);
+
+        return $this;
+    }
+
+    public function render(Environment $twig)
+    {
+        $templates = ArrayCollection::create($this->template)->map(function ($template) {
+            return Str::endsWith($template, '.twig') ? $template : $template . '.twig';
+        });
+        $this->setContent($twig->resolveTemplate($templates->toArray())->render($this->variables->toArray()));
+        $this->rendered = true;
+    }
+
+    public function isRendered()
+    {
+        return $this->rendered;
+    }
 }

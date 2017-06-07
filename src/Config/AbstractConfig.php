@@ -1,4 +1,5 @@
 <?php
+
 namespace GMO\Common\Config;
 
 use GMO\Common\Collections\ArrayCollection;
@@ -14,199 +15,229 @@ Deprecated::cls('GMO\Common\Config\AbstractConfig', null, 'Gmo\Common\Config\Con
 /**
  * @deprecated will be removed in 2.0.
  */
-abstract class AbstractConfig implements ConfigInterface {
+abstract class AbstractConfig implements ConfigInterface
+{
+    /** @inheritdoc */
+    public static function getList($section, $key, $default = null)
+    {
+        if ($default instanceof \Traversable) {
+            $default = iterator_to_array($default);
+        }
+        if (is_array($default)) {
+            $default = new ArrayCollection($default);
+        }
 
-	/** @inheritdoc */
-	public static function getList($section, $key, $default = null) {
-		if ($default instanceof \Traversable) {
-			$default = iterator_to_array($default);
-		}
-		if (is_array($default)) {
-			$default = new ArrayCollection($default);
-		}
-		return static::getValue($section, $key, $default);
-	}
+        return static::getValue($section, $key, $default);
+    }
 
-	/** @inheritdoc */
-	public static function getBool($section, $key, $default = null) {
-		static::setConfig();
+    /** @inheritdoc */
+    public static function getBool($section, $key, $default = null)
+    {
+        static::setConfig();
 
-		if (!static::hasKey($section, $key, $default === null)) {
-			return $default;
-		}
-		$value = static::doGetValue($section, $key);
-		if (static::$configFileType === 'ini' && is_string($value)) {
-			//                                              booleans from ini are converted to 1|0
-			return Str::equals($value, "true", false) || Str::equals($value, "1");
-		}
-		return (bool)$value;
-	}
+        if (!static::hasKey($section, $key, $default === null)) {
+            return $default;
+        }
+        $value = static::doGetValue($section, $key);
+        if (static::$configFileType === 'ini' && is_string($value)) {
+            //                                              booleans from ini are converted to 1|0
+            return Str::equals($value, "true", false) || Str::equals($value, "1");
+        }
 
-	/** @inheritdoc */
-	public static function getPath($section, $key, $default = null) {
-		static::setConfig();
+        return (bool) $value;
+    }
 
-		if (!static::hasKey($section, $key, $default === null)) {
-			return $default;
-		}
+    /** @inheritdoc */
+    public static function getPath($section, $key, $default = null)
+    {
+        static::setConfig();
 
-		$value = static::doGetValue($section, $key);
-		return static::absPath($value);
-	}
+        if (!static::hasKey($section, $key, $default === null)) {
+            return $default;
+        }
 
-	/** @inheritdoc */
-	public static function getValue($section, $key, $default = null, $allowEmpty = false) {
-		static::setConfig();
+        $value = static::doGetValue($section, $key);
 
-		if (!static::hasKey($section, $key, $default === null && !$allowEmpty)) {
-			return $default;
-		}
+        return static::absPath($value);
+    }
 
-		$value = static::doGetValue($section, $key);
-		if ($value || is_bool($value)) {
-			return $value;
-		}
-		if ($allowEmpty) {
-			if ($default !== null) {
-				return $default;
-			}
-			return $value;
-		}
-		if ($default === null) {
-			throw new ConfigException('Config value for key: "'. ($section ? $section . '.' : '') . $key .'" is missing!');
-		}
-		return $default;
-	}
+    /** @inheritdoc */
+    public static function getValue($section, $key, $default = null, $allowEmpty = false)
+    {
+        static::setConfig();
 
-	/** @inheritdoc */
-	public static function overrideValue($section, $key, $value) {
-		static::setConfig();
+        if (!static::hasKey($section, $key, $default === null && !$allowEmpty)) {
+            return $default;
+        }
 
-		if ($section !== null && !static::$config->containsKey($section)) {
-			static::$config[$section] = new ArrayCollection();
-		}
+        $value = static::doGetValue($section, $key);
+        if ($value || is_bool($value)) {
+            return $value;
+        }
+        if ($allowEmpty) {
+            if ($default !== null) {
+                return $default;
+            }
 
-		if (ArrayCollection::isTraversable($value)) {
-			$value = ArrayCollection::createRecursive($value);
-		}
+            return $value;
+        }
+        if ($default === null) {
+            throw new ConfigException(
+                'Config value for key: "' . ($section ? $section . '.' : '') . $key . '" is missing!'
+            );
+        }
 
-		if ($section === null) {
-			static::$config[$key] = $value;
-		} else {
-			static::$config[$section]->set($key, $value);
-		}
-	}
+        return $default;
+    }
 
-	/** @inheritdoc */
-	public static function absPath($path) {
-		return Path::makeAbsolute($path, static::getProjectDir());
-	}
+    /** @inheritdoc */
+    public static function overrideValue($section, $key, $value)
+    {
+        static::setConfig();
 
-	/** @inheritdoc */
-	public static function getProjectDir() {
-		if (static::$projectDir === null) {
-			$cls = new \ReflectionClass(get_called_class());
-			$baseDir = dirname($cls->getFileName());
-			static::$projectDir = Path::makeAbsolute(static::setProjectDir(), $baseDir);
-		}
-		return static::$projectDir;
-	}
+        if ($section !== null && !static::$config->containsKey($section)) {
+            static::$config[$section] = new ArrayCollection();
+        }
 
-	protected static function setConfig() {
-		if (static::$configFile !== static::setConfigFile()) {
-			static::$config = null;
-			static::$configFile = null;
-		}
-		if (static::$configFile === null) {
-			static::$configFile = static::setConfigFile();
-		}
+        if (ArrayCollection::isTraversable($value)) {
+            $value = ArrayCollection::createRecursive($value);
+        }
 
-		if (static::$config === null) {
-			static::doSetConfig();
-		}
-	}
+        if ($section === null) {
+            static::$config[$key] = $value;
+        } else {
+            static::$config[$section]->set($key, $value);
+        }
+    }
 
-	protected static function doSetConfig() {
-		$file = static::getConfigFile();
-		static::$config = static::readConfig($file);
-		static::$configFileType = $file->getExtension();
-	}
+    /** @inheritdoc */
+    public static function absPath($path)
+    {
+        return Path::makeAbsolute($path, static::getProjectDir());
+    }
 
-	protected static function getConfigFile() {
-		$file = Path::makeAbsolute(static::setConfigFile(), static::getProjectDir());
-		return new \SplFileInfo($file);
-	}
+    /** @inheritdoc */
+    public static function getProjectDir()
+    {
+        if (static::$projectDir === null) {
+            $cls = new \ReflectionClass(get_called_class());
+            $baseDir = dirname($cls->getFileName());
+            static::$projectDir = Path::makeAbsolute(static::setProjectDir(), $baseDir);
+        }
 
-	protected static function readConfig(\SplFileInfo $file) {
-		if (!$file->isReadable()) {
-			throw new ConfigException("Config file doesn't exist");
-		}
-		$type = $file->getExtension();
-		if ($type === 'ini') {
-			$config = parse_ini_file($file, true);
-		} elseif ($type === 'json') {
-			$config = Json::parse(file_get_contents($file), true);
-		} elseif ($type === 'yml') {
-			$config = Yaml::parse(file_get_contents($file));
-		} else {
-			throw new ConfigException('Unknown config file format');
-		}
+        return static::$projectDir;
+    }
 
-		if (!$config) {
-			throw new ConfigException("Unable to parse $type file: $file");
-		}
+    protected static function setConfig()
+    {
+        if (static::$configFile !== static::setConfigFile()) {
+            static::$config = null;
+            static::$configFile = null;
+        }
+        if (static::$configFile === null) {
+            static::$configFile = static::setConfigFile();
+        }
 
-		return ArrayCollection::createRecursive($config);
-	}
+        if (static::$config === null) {
+            static::doSetConfig();
+        }
+    }
 
-	/**
-	 * NOTE: Does not check if section exists.
-	 * @param $section
-	 * @param $key
-	 * @return null
-	 */
-	private static function doGetValue($section, $key) {
-		if (!$section) {
-			return static::$config->get($key);
-		}
-		return static::$config[$section]->get($key);
-	}
+    protected static function doSetConfig()
+    {
+        $file = static::getConfigFile();
+        static::$config = static::readConfig($file);
+        static::$configFileType = $file->getExtension();
+    }
 
-	private static function hasKey($section, $key, $throwException = false) {
-		if (!$section) {
-			if (!static::$config->containsKey($key)) {
-				if ($throwException) {
-					throw new ConfigException("Config key: \"$key\" is missing!");
-				}
-				return false;
-			}
-			return true;
-		}
-		if (!static::$config->containsKey($section)) {
-			if ($throwException) {
-				throw new ConfigException("Config section: \"$section\" is missing!");
-			}
-			return false;
-		}
-		if (!static::$config[$section] instanceof ArrayCollection) {
-			if ($throwException) {
-				throw new ConfigException("Config section: \"$section\" is not a collection!");
-			}
-			return false;
-		}
-		if (!static::$config[$section]->containsKey($key)) {
-			if ($throwException) {
-				throw new ConfigException("Config key: \"$key\" is missing!");
-			}
-			return false;
-		}
+    protected static function getConfigFile()
+    {
+        $file = Path::makeAbsolute(static::setConfigFile(), static::getProjectDir());
 
-		return true;
-	}
+        return new \SplFileInfo($file);
+    }
 
-	protected static $configFileType;
-	protected static $configFile;
-	/** @var ArrayCollection[]|ArrayCollection */
-	protected static $config;
-	protected static $projectDir;
+    protected static function readConfig(\SplFileInfo $file)
+    {
+        if (!$file->isReadable()) {
+            throw new ConfigException("Config file doesn't exist");
+        }
+        $type = $file->getExtension();
+        if ($type === 'ini') {
+            $config = parse_ini_file($file, true);
+        } elseif ($type === 'json') {
+            $config = Json::parse(file_get_contents($file), true);
+        } elseif ($type === 'yml') {
+            $config = Yaml::parse(file_get_contents($file));
+        } else {
+            throw new ConfigException('Unknown config file format');
+        }
+
+        if (!$config) {
+            throw new ConfigException("Unable to parse $type file: $file");
+        }
+
+        return ArrayCollection::createRecursive($config);
+    }
+
+    /**
+     * NOTE: Does not check if section exists.
+     *
+     * @param $section
+     * @param $key
+     *
+     * @return null
+     */
+    private static function doGetValue($section, $key)
+    {
+        if (!$section) {
+            return static::$config->get($key);
+        }
+
+        return static::$config[$section]->get($key);
+    }
+
+    private static function hasKey($section, $key, $throwException = false)
+    {
+        if (!$section) {
+            if (!static::$config->containsKey($key)) {
+                if ($throwException) {
+                    throw new ConfigException("Config key: \"$key\" is missing!");
+                }
+
+                return false;
+            }
+
+            return true;
+        }
+        if (!static::$config->containsKey($section)) {
+            if ($throwException) {
+                throw new ConfigException("Config section: \"$section\" is missing!");
+            }
+
+            return false;
+        }
+        if (!static::$config[$section] instanceof ArrayCollection) {
+            if ($throwException) {
+                throw new ConfigException("Config section: \"$section\" is not a collection!");
+            }
+
+            return false;
+        }
+        if (!static::$config[$section]->containsKey($key)) {
+            if ($throwException) {
+                throw new ConfigException("Config key: \"$key\" is missing!");
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    protected static $configFileType;
+    protected static $configFile;
+    /** @var ArrayCollection[]|ArrayCollection */
+    protected static $config;
+    protected static $projectDir;
 }

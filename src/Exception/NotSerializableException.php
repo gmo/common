@@ -1,9 +1,13 @@
 <?php
+
 namespace GMO\Common\Exception;
 
 /**
  * Class NotSerializableException
+ *
  * @package GMO\Common\Exception
- * @since 1.5.0
+ * @since   1.5.0
  */
-class NotSerializableException extends \Exception { }
+class NotSerializableException extends \Exception
+{
+}

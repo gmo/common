@@ -1,4 +1,5 @@
 <?php
+
 namespace GMO\Common;
 
 Deprecated::cls('GMO\Common\DateTime', 1.0, 'Carbon\Carbon');
@@ -6,65 +7,79 @@ Deprecated::cls('GMO\Common\DateTime', 1.0, 'Carbon\Carbon');
 /**
  * @deprecated Use {@see Carbon\Carbon Carbon} instead
  */
-class DateTime extends \DateTime implements ISerializable {
+class DateTime extends \DateTime implements ISerializable
+{
+    const SIMPLE_DATE = "Y-m-d H:i:s";
 
-	const SIMPLE_DATE = "Y-m-d H:i:s";
-
-    public static function castFromBuiltin(\DateTime $dt) {
+    public static function castFromBuiltin(\DateTime $dt)
+    {
         $newCls = new static();
         $newCls->setTimestamp($dt->getTimestamp());
         $newCls->setTimezone($dt->getTimezone());
+
         return $newCls;
     }
 
-	public static function now($timezone = null) {
-		if ($timezone) {
-			return new static(null, $timezone);
-		}
-		return new static();
-	}
+    public static function now($timezone = null)
+    {
+        if ($timezone) {
+            return new static(null, $timezone);
+        }
 
-	public function toString($format = self::SIMPLE_DATE) {
-		return $this->format($format);
-	}
+        return new static();
+    }
 
-	public function __toString() {
-		return $this->toString();
-	}
+    public function toString($format = self::SIMPLE_DATE)
+    {
+        return $this->format($format);
+    }
 
-	//region Serializable Methods
+    public function __toString()
+    {
+        return $this->toString();
+    }
 
-	public function toArray() {
-		return SerializeHelper::serializeObject(get_called_class(), get_object_vars($this));
-	}
+    //region Serializable Methods
 
-	public static function fromArray($obj) {
-		$tz = $obj['timezone'] ? new \DateTimeZone($obj['timezone']) : null;
-		return new static($obj['date'], $tz);
-	}
+    public function toArray()
+    {
+        return SerializeHelper::serializeObject(get_called_class(), get_object_vars($this));
+    }
 
-	public function toJson() {
-		return Json::dump($this->toArray());
-	}
+    public static function fromArray($obj)
+    {
+        $tz = $obj['timezone'] ? new \DateTimeZone($obj['timezone']) : null;
 
-	public static function fromJson($json) {
-		return static::fromArray(Json::parse($json));
-	}
+        return new static($obj['date'], $tz);
+    }
 
-	public function jsonSerialize() {
-		return $this->toArray();
-	}
+    public function toJson()
+    {
+        return Json::dump($this->toArray());
+    }
 
-	public function serialize() {
-		return $this->toJson();
-	}
+    public static function fromJson($json)
+    {
+        return static::fromArray(Json::parse($json));
+    }
 
-	public function unserialize($serialized) {
-		$this->__construct();
-		$cls = $this->fromJson($serialized);
-		$this->setTimestamp($cls->getTimestamp());
-		$this->setTimezone($cls->getTimezone());
-	}
+    public function jsonSerialize()
+    {
+        return $this->toArray();
+    }
 
-	//endregion
+    public function serialize()
+    {
+        return $this->toJson();
+    }
+
+    public function unserialize($serialized)
+    {
+        $this->__construct();
+        $cls = $this->fromJson($serialized);
+        $this->setTimestamp($cls->getTimestamp());
+        $this->setTimezone($cls->getTimezone());
+    }
+
+    //endregion
 }

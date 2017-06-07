@@ -1,4 +1,5 @@
 <?php
+
 namespace GMO\Common\Web\EventListener;
 
 use GMO\Common\Str;
@@ -14,37 +15,40 @@ use Symfony\Component\HttpKernel\KernelEvents;
  *
  * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\EventListener\ExceptionToJsonListener} instead.
  */
-class ExceptionToJsonListener implements EventSubscriberInterface {
+class ExceptionToJsonListener implements EventSubscriberInterface
+{
+    public function onKernelException(GetResponseForExceptionEvent $event)
+    {
+        if (!$this->isApplicable($event->getRequest())) {
+            return;
+        }
 
-	public function onKernelException(GetResponseForExceptionEvent $event) {
-		if (!$this->isApplicable($event->getRequest())) {
-			return;
-		}
+        $ex = $event->getException();
+        $statusCode = 500;
+        if ($ex instanceof HttpExceptionInterface) {
+            $statusCode = $ex->getStatusCode();
+        }
 
-		$ex = $event->getException();
-		$statusCode = 500;
-		if ($ex instanceof HttpExceptionInterface) {
-			$statusCode = $ex->getStatusCode();
-		}
+        $errorType = Str::removeLast(Str::className($ex), 'Exception');
+        $response = new JsonResponse(array(
+            'success'   => false,
+            'errorType' => $errorType ?: 'Unknown',
+            'code'      => $statusCode,
+            'message'   => $ex->getMessage(),
+        ));
+        $response->setStatusCode($statusCode, $errorType ?: null);
+        $event->setResponse($response);
+    }
 
-		$errorType = Str::removeLast(Str::className($ex), 'Exception');
-		$response = new JsonResponse(array(
-			'success'   => false,
-			'errorType' => $errorType ?: 'Unknown',
-			'code'      => $statusCode,
-			'message'   => $ex->getMessage(),
-		));
-		$response->setStatusCode($statusCode, $errorType ?: null);
-		$event->setResponse($response);
-	}
+    protected function isApplicable(Request $request)
+    {
+        return Str::startsWith($request->getPathInfo(), '/api/', false);
+    }
 
-	protected function isApplicable(Request $request) {
-		return Str::startsWith($request->getPathInfo(), '/api/', false);
-	}
-
-	public static function getSubscribedEvents() {
-		return array(
-			KernelEvents::EXCEPTION => array('onKernelException', -7),
-		);
-	}
+    public static function getSubscribedEvents()
+    {
+        return array(
+            KernelEvents::EXCEPTION => array('onKernelException', -7),
+        );
+    }
 }

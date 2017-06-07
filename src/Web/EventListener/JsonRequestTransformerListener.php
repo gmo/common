@@ -17,7 +17,8 @@ use Symfony\Component\Routing\RouteCollection;
  * - Request's route has json=true option. This forces parsing when header isn't set (used to skip
  *   fetch's preflight check). This is optional and depends on RouteCollection to be passed in.
  *
- * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\EventListener\JsonRequestTransformerListener} instead.
+ * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\EventListener\JsonRequestTransformerListener}
+ *             instead.
  */
 class JsonRequestTransformerListener implements EventSubscriberInterface
 {

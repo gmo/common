@@ -1,4 +1,5 @@
 <?php
+
 namespace GMO\Common\Web\Routing;
 
 use Silex\Route;
@@ -12,26 +13,28 @@ use Silex\Route;
  *
  * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\Routing\LocaleControllerCollection} instead.
  */
-class LocaleControllerCollection extends PrefixedVariableControllerCollection {
+class LocaleControllerCollection extends PrefixedVariableControllerCollection
+{
+    const SHORT_REGEX = '[a-zA-Z]{2}';
+    const LONG_REGEX = '[a-zA-Z]{2}(?:[-_][a-zA-Z]{2})?';
 
-	const SHORT_REGEX = '[a-zA-Z]{2}';
-	const LONG_REGEX = '[a-zA-Z]{2}(?:[-_][a-zA-Z]{2})?';
+    /**
+     * LocaleControllerCollection constructor.
+     *
+     * @param Route        $defaultRoute
+     * @param array|string $supportedLocales Regex requirement for locale, or a list of locales
+     */
+    public function __construct(Route $defaultRoute, $supportedLocales = self::SHORT_REGEX)
+    {
+        $requirement = is_array($supportedLocales) ? implode('|', $supportedLocales) : $supportedLocales;
+        parent::__construct($defaultRoute, $requirement);
+    }
 
-	/**
-	 * LocaleControllerCollection constructor.
-	 *
-	 * @param Route        $defaultRoute
-	 * @param array|string $supportedLocales Regex requirement for locale, or a list of locales
-	 */
-	public function __construct(Route $defaultRoute, $supportedLocales = self::SHORT_REGEX) {
-		$requirement = is_array($supportedLocales) ? implode('|', $supportedLocales) : $supportedLocales;
-		parent::__construct($defaultRoute, $requirement);
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	protected function getVariableName() {
-		return '_locale';
-	}
+    /**
+     * {@inheritdoc}
+     */
+    protected function getVariableName()
+    {
+        return '_locale';
+    }
 }

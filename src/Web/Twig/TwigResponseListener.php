@@ -1,4 +1,5 @@
 <?php
+
 namespace GMO\Common\Web\Twig;
 
 use Silex\Application;
@@ -9,25 +10,37 @@ use Symfony\Component\HttpKernel\KernelEvents;
 /**
  * @deprecated since 1.30 will be removed in 2.0. Use {@see Gmo\Web\EventListener\TemplateViewListener} instead.
  */
-class TwigResponseListener implements EventSubscriberInterface {
+class TwigResponseListener implements EventSubscriberInterface
+{
+    /** @var Application */
+    protected $app;
 
-	public function onResponse(FilterResponseEvent $event) {
-		$response = $event->getResponse();
-		if (!$response instanceof RenderableInterface || $response->isRendered()) {
-			return;
-		}
-		$response->render($this->app['twig']);
-	}
+    /**
+     * Constructor.
+     *
+     * @param Application $app
+     */
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
 
-	public static function getSubscribedEvents() {
-		return array(
-			KernelEvents::RESPONSE => array('onResponse', -100),
-		);
-	}
+    public function onResponse(FilterResponseEvent $event)
+    {
+        $response = $event->getResponse();
+        if (!$response instanceof RenderableInterface || $response->isRendered()) {
+            return;
+        }
+        $response->render($this->app['twig']);
+    }
 
-	public function __construct(Application $app) {
-		$this->app = $app;
-	}
-
-	protected $app;
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            KernelEvents::RESPONSE => array('onResponse', -100),
+        );
+    }
 }
