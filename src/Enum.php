@@ -2,6 +2,8 @@
 
 namespace GMO\Common;
 
+use Gmo\Common\Serialization\AbstractSerializable;
+
 abstract class Enum extends AbstractSerializable
 {
     /** @var mixed Enum value */
