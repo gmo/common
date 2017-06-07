@@ -1,40 +1,40 @@
 {
-	"name": "gmo/common",
-	"license": "MIT",
-	"description": "A library for common code",
-	"require": {
-		"nesbot/carbon": "^1.20",
-		"php": "^7.1",
-		"seld/jsonlint": "^1.4",
-		"symfony/polyfill-php55": "^1.0",
-		"symfony/yaml": "^2.5 || ^3.0",
-		"webmozart/path-util": "^2.3"
-	},
-	"require-dev": {
-		"bolt/collection": "^1.0",
-		"gmo/cache": "~1.0@dev",
-		"psr/log": "1.0.0",
-		"monolog/monolog": "^1.18",
+    "name": "gmo/common",
+    "license": "MIT",
+    "description": "A library for common code",
+    "require": {
+        "nesbot/carbon": "^1.20",
+        "php": "^7.1",
+        "seld/jsonlint": "^1.4",
+        "symfony/polyfill-php55": "^1.0",
+        "symfony/yaml": "^2.5 || ^3.0",
+        "webmozart/path-util": "^2.3"
+    },
+    "require-dev": {
+        "bolt/collection": "^1.0",
+        "gmo/cache": "~1.0@dev",
+        "psr/log": "1.0.0",
+        "monolog/monolog": "^1.18",
         "symfony/phpunit-bridge": "^2.8 || ^3.0",
-		"phpunit/phpunit": "^4.8"
-	},
-	"suggest": {
-		"psr/log": "Provides a basic console logger for PSR-3 interface",
-		"monolog/monolog": "Provides serializable formatter"
-	},
-	"autoload": {
-		"psr-4": {
-			"Gmo\\Common\\": "src"
-		}
-	},
-	"autoload-dev": {
-		"psr-4": {
-			"Gmo\\Common\\Tests\\": "tests"
-		}
-	},
-	"extra": {
-		"branch-alias": {
-			"dev-master": "2.x-dev"
-		}
-	}
+        "phpunit/phpunit": "^4.8"
+    },
+    "suggest": {
+        "psr/log": "Provides a basic console logger for PSR-3 interface",
+        "monolog/monolog": "Provides serializable formatter"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gmo\\Common\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Gmo\\Common\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        }
+    }
 }

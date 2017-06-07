@@ -1,10 +1,10 @@
 <?php
 
-namespace Gmo\Common;
+namespace Gmo\Common\Serialization;
 
 use Carbon\Carbon;
 use DateTime;
-use Gmo\Common\Serialization\SerializableInterface;
+use GMO\Common\Json;
 
 /**
  * Out of necessity to maintain ISerializable contract.
@@ -36,7 +36,7 @@ class SerializableCarbon extends Carbon implements SerializableInterface
      */
     public function toArray()
     {
-        return ['class' => get_called_class()] + (array) $this;
+        return array('class' => get_called_class()) + (array) $this;
     }
 
     /**

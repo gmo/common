@@ -1,9 +1,8 @@
 <?php
 
-namespace Gmo\Common\Tests;
+namespace Gmo\Common\Tests\Serialization;
 
-use GMO\Common\DateTime;
-use Gmo\Common\SerializableCarbon;
+use Gmo\Common\Serialization\SerializableCarbon;
 use PHPUnit\Framework\TestCase;
 
 class SerializableCarbonTest extends TestCase
@@ -34,15 +33,5 @@ class SerializableCarbonTest extends TestCase
     public function testCarbonSerialize()
     {
         $this->assertEquals($this->now, SerializableCarbon::fromSerialized($this->now->serialize()));
-    }
-
-    public function testLegacyCompat()
-    {
-        $this->assertEquals($this->now, DateTime::fromArray($this->now->toArray()));
-        $this->assertEquals($this->now, DateTime::fromJson($this->now->toJson()));
-
-        $now = DateTime::now();
-        $this->assertEquals($now, SerializableCarbon::fromArray($now->toArray()));
-        $this->assertEquals($now, SerializableCarbon::fromJson($now->toJson()));
     }
 }
