@@ -2,11 +2,12 @@
 namespace Gmo\Common\Tests;
 
 use GMO\Common\Path;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group legacy
  */
-class PathTest extends \PHPUnit_Framework_TestCase {
+class PathTest extends TestCase {
 
 	public function test_path_is_absolute() {
 		$this->assertTrue(Path::isAbsolute("/var/"));

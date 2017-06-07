@@ -3,11 +3,12 @@
 namespace Gmo\Common\Tests\Web\Routing;
 
 use GMO\Common\Web\Routing\UrlMatcher;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-class UrlMatcherTest extends \PHPUnit_Framework_TestCase
+class UrlMatcherTest extends TestCase
 {
     /** @var RouteCollection */
     protected $routes;

@@ -2,11 +2,12 @@
 namespace Gmo\Common\Tests;
 
 use GMO\Common\Collection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group legacy
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase {
+class CollectionTest extends TestCase {
 
 	protected function setUp() {
 		$this->sut = array( "color1" => "red", "color2" => "blue" );

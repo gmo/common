@@ -3,7 +3,7 @@
 namespace Gmo\Common\Tests;
 
 use GMO\Common\Deprecated;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Carson Full <carsonfull@gmail.com>

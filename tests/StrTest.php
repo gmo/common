@@ -2,8 +2,9 @@
 namespace Gmo\Common\Tests;
 
 use GMO\Common\Str;
+use PHPUnit\Framework\TestCase;
 
-class StrTest extends \PHPUnit_Framework_TestCase {
+class StrTest extends TestCase {
 
 	public function test_contains() {
 		$this->assertTrue(Str::contains("this", "t"));

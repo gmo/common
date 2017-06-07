@@ -4,8 +4,9 @@ namespace Gmo\Common\Tests\Log;
 use GMO\Common\AbstractSerializable;
 use GMO\Common\Log\SerializableFormatterWrapper;
 use Monolog\Formatter\FormatterInterface;
+use PHPUnit\Framework\TestCase;
 
-class SerializableFormatterWrapperTest extends \PHPUnit_Framework_TestCase {
+class SerializableFormatterWrapperTest extends TestCase {
 
 	public function testDateTimeClassIsKept() {
 		$formatter = $this->getFormatter();

@@ -2,8 +2,9 @@
 namespace Gmo\Common\Tests;
 
 use GMO\Common\AbstractSerializable;
+use PHPUnit\Framework\TestCase;
 
-class SerializableTest extends \PHPUnit_Framework_TestCase {
+class SerializableTest extends TestCase {
 
 	public function testToArray() {
 		$contact = $this->getContact();

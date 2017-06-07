@@ -3,8 +3,9 @@ namespace Gmo\Common\Tests\Config;
 
 use GMO\Common\Collections\ArrayCollection;
 use GMO\Common\Config\AbstractConfig;
+use PHPUnit\Framework\TestCase;
 
-class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
+class AbstractConfigTest extends TestCase {
 
 	public function test_get_json_value() {
 		$this->assertEquals("git", JsonConfig::getRepoType());

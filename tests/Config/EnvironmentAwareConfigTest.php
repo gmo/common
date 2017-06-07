@@ -2,8 +2,9 @@
 namespace Gmo\Common\Tests\Config;
 
 use GMO\Common\Config\EnvironmentAwareConfig;
+use PHPUnit\Framework\TestCase;
 
-class EnvironmentAwareConfigTest extends \PHPUnit_Framework_TestCase {
+class EnvironmentAwareConfigTest extends TestCase {
 
 	public function testDefaultEnvironment() {
 		TestConfig::setEnvironment('production');

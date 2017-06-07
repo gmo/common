@@ -4,7 +4,7 @@ namespace Gmo\Common\Tests;
 
 use GMO\Common\DateTime;
 use Gmo\Common\SerializableCarbon;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class SerializableCarbonTest extends TestCase
 {
