@@ -1,9 +1,10 @@
 <?php
-namespace UnitTest;
+namespace Gmo\Common\Tests;
 
 use GMO\Common\Collections\ArrayCollection;
+use PHPUnit\Framework\TestCase;
 
-class ArrayCollectionTest extends \PHPUnit_Framework_TestCase {
+class ArrayCollectionTest extends TestCase {
 
 	public function testCreation() {
 		$this->assertCollection(array('a', 'b'), new ArrayCollection(array('a', 'b')));

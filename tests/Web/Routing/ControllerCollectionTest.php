@@ -1,11 +1,14 @@
 <?php
 
+namespace Gmo\Common\Tests\Web\Routing;
+
 use GMO\Common\Web\Routing\ControllerCollection;
+use PHPUnit\Framework\TestCase;
 use Silex\Controller;
 use Silex\Exception\ControllerFrozenException;
 use Silex\Route;
 
-class ControllerCollectionTest extends \PHPUnit_Framework_TestCase
+class ControllerCollectionTest extends TestCase
 {
 	public function testGetRouteCollectionWithNoRoutes()
 	{

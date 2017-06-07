@@ -1,9 +1,10 @@
 <?php
-namespace UnitTest;
+namespace Gmo\Common\Tests;
 
 use GMO\Common\Str;
+use PHPUnit\Framework\TestCase;
 
-class StrTest extends \PHPUnit_Framework_TestCase {
+class StrTest extends TestCase {
 
 	public function test_contains() {
 		$this->assertTrue(Str::contains("this", "t"));
@@ -126,8 +127,8 @@ class StrTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function test_class_name() {
-		$this->assertSame('StringTest', Str::className($this));
-		$this->assertSame('StringTest', Str::className('UnitTest\\StringTest'));
+		$this->assertSame('StrTest', Str::className($this));
+		$this->assertSame('StrTest', Str::className(static::class));
 	}
 
 	public function test_class_name_does_not_exist() {

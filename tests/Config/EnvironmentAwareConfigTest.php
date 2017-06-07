@@ -1,9 +1,10 @@
 <?php
-namespace UnitTest\Config;
+namespace Gmo\Common\Tests\Config;
 
 use GMO\Common\Config\EnvironmentAwareConfig;
+use PHPUnit\Framework\TestCase;
 
-class EnvironmentAwareConfigTest extends \PHPUnit_Framework_TestCase {
+class EnvironmentAwareConfigTest extends TestCase {
 
 	public function testDefaultEnvironment() {
 		TestConfig::setEnvironment('production');
@@ -64,6 +65,6 @@ class TestConfig extends EnvironmentAwareConfig {
 		static::doSetConfig();
 	}
 
-	public static function setProjectDir() { return "../../.."; }
-	public static function setConfigFile() { return "tests/testConfig.yml"; }
+	public static function setProjectDir() { return ".."; }
+	public static function setConfigFile() { return "fixtures/config/testConfig.yml"; }
 }

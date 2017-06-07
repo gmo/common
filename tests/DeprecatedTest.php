@@ -1,7 +1,9 @@
 <?php
 
+namespace Gmo\Common\Tests;
+
 use GMO\Common\Deprecated;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Carson Full <carsonfull@gmail.com>
@@ -26,31 +28,31 @@ class DeprecatedTest extends TestCase
     public function testMethodUsingBacktrace()
     {
         TestDeprecatedClass::foo();
-        $this->assertDeprecation('TestDeprecatedClass::foo() is deprecated since 1.1 and will be removed in 2.0.');
+        $this->assertDeprecation('Gmo\Common\Tests\TestDeprecatedClass::foo() is deprecated since 1.1 and will be removed in 2.0.');
 
         deprecatedFunction();
-        $this->assertDeprecation('deprecatedFunction() is deprecated since 1.1 and will be removed in 2.0.');
+        $this->assertDeprecation('Gmo\Common\Tests\deprecatedFunction() is deprecated since 1.1 and will be removed in 2.0.');
 
         TestDeprecatedClass::magicStatic();
-        $this->assertDeprecation('TestDeprecatedClass::magicStatic() is deprecated since 1.1 and will be removed in 2.0.');
+        $this->assertDeprecation('Gmo\Common\Tests\TestDeprecatedClass::magicStatic() is deprecated since 1.1 and will be removed in 2.0.');
 
         $cls = new TestDeprecatedClass();
         $cls->magic();
-        $this->assertDeprecation('TestDeprecatedClass::magic() is deprecated since 1.1 and will be removed in 2.0.');
+        $this->assertDeprecation('Gmo\Common\Tests\TestDeprecatedClass::magic() is deprecated since 1.1 and will be removed in 2.0.');
 
         $cls->magic;
-        $this->assertDeprecation('Getting TestDeprecatedClass::magic is deprecated since 1.1 and will be removed in 2.0.');
+        $this->assertDeprecation('Getting Gmo\Common\Tests\TestDeprecatedClass::magic is deprecated since 1.1 and will be removed in 2.0.');
 
         $cls->magic = 'derp';
-        $this->assertDeprecation('Setting TestDeprecatedClass::magic is deprecated since 1.1 and will be removed in 2.0.');
+        $this->assertDeprecation('Setting Gmo\Common\Tests\TestDeprecatedClass::magic is deprecated since 1.1 and will be removed in 2.0.');
 
         isset($cls->magic);
-        $this->assertDeprecation('isset(TestDeprecatedClass::magic) is deprecated since 1.1 and will be removed in 2.0.');
+        $this->assertDeprecation('isset(Gmo\Common\Tests\TestDeprecatedClass::magic) is deprecated since 1.1 and will be removed in 2.0.');
         unset($cls->magic);
-        $this->assertDeprecation('unset(TestDeprecatedClass::magic) is deprecated since 1.1 and will be removed in 2.0.');
+        $this->assertDeprecation('unset(Gmo\Common\Tests\TestDeprecatedClass::magic) is deprecated since 1.1 and will be removed in 2.0.');
 
         new TestDeprecatedClass(true);
-        $this->assertDeprecation('TestDeprecatedClass is deprecated since 1.1 and will be removed in 2.0.');
+        $this->assertDeprecation('Gmo\Common\Tests\TestDeprecatedClass is deprecated since 1.1 and will be removed in 2.0.');
     }
 
     public function testClass()

@@ -1,11 +1,11 @@
 <?php
-namespace UnitTest;
+namespace Gmo\Common\Tests\Config;
 
 use GMO\Common\Collections\ArrayCollection;
 use GMO\Common\Config\AbstractConfig;
-use GMO\Common\Path;
+use PHPUnit\Framework\TestCase;
 
-class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
+class AbstractConfigTest extends TestCase {
 
 	public function test_get_json_value() {
 		$this->assertEquals("git", JsonConfig::getRepoType());
@@ -17,7 +17,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function test_get_abs_path_from_config() {
-		$expected = Path::truePath("../../testConfig.yml", __DIR__);
+		$expected = realpath(__DIR__ . '/../fixtures/config/testConfig.yml');
 		$this->assertEquals($expected, IniConfig::getYamlFile());
 	}
 
@@ -125,8 +125,8 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase {
 #region Test Config Classes
 class JsonConfig extends AbstractConfig {
 
-	public static function setProjectDir() { return "../../.."; }
-	public static function setConfigFile() { return "package.json"; }
+	public static function setProjectDir() { return ".."; }
+	public static function setConfigFile() { return "fixtures/config/package.json"; }
 
 	public static function getRepoType() {
 		return static::getValue("repository", "type");
@@ -135,8 +135,8 @@ class JsonConfig extends AbstractConfig {
 
 class IniConfig extends AbstractConfig {
 
-	public static function setProjectDir() { return "../../.."; }
-	public static function setConfigFile() { return "tests/testConfig.ini"; }
+	public static function setProjectDir() { return ".."; }
+	public static function setConfigFile() { return "fixtures/config/testConfig.ini"; }
 
 	public static function getAllowedAuthorization() {
 		return static::getValue("AUTHORIZATION", "allow");
@@ -157,7 +157,7 @@ class IniConfig extends AbstractConfig {
 
 class NonexistentConfig extends AbstractConfig {
 
-	public static function setProjectDir() { return "../../.."; }
+	public static function setProjectDir() { return ".."; }
 	public static function setConfigFile() { return "asdf"; }
 
 	public static function getSomething() {
@@ -167,8 +167,8 @@ class NonexistentConfig extends AbstractConfig {
 
 class CsvConfig extends AbstractConfig {
 
-	public static function setProjectDir() { return "../../.."; }
-	public static function setConfigFile() { return "tests/testConfig.csv"; }
+	public static function setProjectDir() { return ".."; }
+	public static function setConfigFile() { return "fixtures/config/testConfig.csv"; }
 
 	public static function getSomething() {
 		return static::getValue("nope", "nope");
