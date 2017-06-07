@@ -1,6 +1,7 @@
 <?php
 namespace GMO\Common;
 
+use Bolt\Collection\Bag;
 use GMO\Common\Collections\ArrayCollection;
 
 class Str
@@ -135,12 +136,41 @@ class Str
      */
     public static function split($string, $delimiter, $limit = null)
     {
+        Deprecated::method(1.0, 'explode');
+
         if (empty($delimiter)) {
             return new ArrayCollection();
         }
         $parts = $limit === null ? explode($delimiter, $string) : explode($delimiter, $string, $limit);
 
         return new ArrayCollection($parts ?: array());
+    }
+
+    /**
+     * Splits a string on the delimiter.
+     *
+     * @param string $subject   The string to split
+     * @param string $delimiter The term to split on
+     * @param int    $limit     If limit is set and positive, the returned array will contain a maximum of limit
+     *                          elements with the last element containing the rest of string.
+     *
+     *                          If the limit parameter is negative, all components except the last -limit are returned.
+     *
+     *                          If the limit parameter is zero, then this is treated as 1.
+     *
+     * @return Bag A bag containing the string parts.
+     *         The bag will be empty if the delimiter is an empty string or
+     *         if delimiter contains a value that is not contained in string
+     *         and a negative limit is used.
+     */
+    public static function explode($subject, $delimiter, $limit = null)
+    {
+        if (empty($delimiter)) {
+            return new Bag();
+        }
+        $parts = $limit === null ? explode($delimiter, $subject) : explode($delimiter, $subject, $limit);
+
+        return new Bag($parts ?: array());
     }
 
     /**
