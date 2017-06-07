@@ -3,8 +3,8 @@
 namespace GMO\Common\Log;
 
 use GMO\Common\Collection\Arr;
-use GMO\Common\ISerializable;
-use Gmo\Common\SerializableCarbon;
+use Gmo\Common\Serialization\SerializableCarbon;
+use Gmo\Common\Serialization\SerializableInterface;
 use Monolog\Formatter\FormatterInterface;
 
 class SerializableFormatterWrapper implements FormatterInterface
@@ -61,7 +61,7 @@ class SerializableFormatterWrapper implements FormatterInterface
             return SerializableCarbon::fromArray($data);
         }
 
-        if ($data instanceof ISerializable) {
+        if ($data instanceof SerializableInterface) {
             $data = $data->toArray();
         }
 

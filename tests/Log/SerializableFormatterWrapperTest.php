@@ -2,8 +2,8 @@
 
 namespace Gmo\Common\Tests\Log;
 
-use GMO\Common\AbstractSerializable;
 use GMO\Common\Log\SerializableFormatterWrapper;
+use Gmo\Common\Serialization\AbstractSerializable;
 use Monolog\Formatter\FormatterInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -41,7 +41,6 @@ class SerializableFormatterWrapperTest extends TestCase
         return new SerializableFormatterWrapper(new NullFormatter());
     }
 }
-
 
 class NullFormatter implements FormatterInterface
 {

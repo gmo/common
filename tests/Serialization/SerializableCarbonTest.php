@@ -1,9 +1,9 @@
 <?php
 
-namespace Gmo\Common\Tests;
+namespace Gmo\Common\Tests\Serialization;
 
 use GMO\Common\DateTime;
-use Gmo\Common\SerializableCarbon;
+use Gmo\Common\Serialization\SerializableCarbon;
 use PHPUnit\Framework\TestCase;
 
 class SerializableCarbonTest extends TestCase

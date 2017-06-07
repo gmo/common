@@ -30,31 +30,10 @@ namespace {
 
 namespace GMO\Common {
 
-    /** @noinspection PhpUndefinedClassInspection */
-    interface ISerializable extends \JsonSerializable, \Serializable
-    {
-        /**
-         * @return array
-         */
-        public function toArray();
+    use Gmo\Common\Serialization\SerializableInterface;
 
-        /**
-         * @return string
-         */
-        public function toJson();
-
-        /**
-         * @param $obj
-         *
-         * @return $this
-         */
-        public static function fromArray($obj);
-
-        /**
-         * @param $json
-         *
-         * @return $this
-         */
-        public static function fromJson($json);
-    }
+    /**
+     * @deprecated will be removed in 2.0. Use {@see Gmo\Common\Serialization\SerializableInterface} instead.
+     */
+    interface ISerializable extends SerializableInterface {}
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Gmo\Common\Tests;
+namespace Gmo\Common\Tests\Serialization;
 
-use GMO\Common\AbstractSerializable;
+use Gmo\Common\Serialization\AbstractSerializable;
 use PHPUnit\Framework\TestCase;
 
 class SerializableTest extends TestCase
@@ -13,17 +13,17 @@ class SerializableTest extends TestCase
 
         $result = $contact->toArray();
 
-        $this->assertSame('Gmo\Common\Tests\Contact', $result['class']);
+        $this->assertSame('Gmo\Common\Tests\Serialization\Contact', $result['class']);
         $this->assertSame('John', $result['firstName']);
         $this->assertSame('J', $result['middleName']);
         $this->assertSame('Doe', $result['lastName']);
         $this->assertSame(21, $result['age']);
         $timestamp = $result['timestamp'];
-        $this->assertSame('Gmo\Common\SerializableCarbon', $timestamp['class']);
+        $this->assertSame('Gmo\Common\Serialization\SerializableCarbon', $timestamp['class']);
         $this->assertSame('2009-10-11 12:13:14.000000', $timestamp['date']);
 
         $address = $result["address"];
-        $this->assertSame('Gmo\Common\Tests\Address', $address['class']);
+        $this->assertSame('Gmo\Common\Tests\Serialization\Address', $address['class']);
         $this->assertSame("123 Testing Way", $address["street"]);
         $this->assertSame("Unit Testing Ville", $address["city"]);
         $this->assertSame("12345", $address["zip"]);
@@ -35,19 +35,19 @@ class SerializableTest extends TestCase
 
         $serialized = <<<JSON
 {
-    "class": "Gmo\\\\Common\\\\Tests\\\\Contact",
+    "class": "Gmo\\\\Common\\\\Tests\\\\Serialization\\\\Contact",
     "firstName": "John",
     "middleName": "J",
     "lastName": "Doe",
     "address": {
-        "class": "Gmo\\\\Common\\\\Tests\\\\Address",
+        "class": "Gmo\\\\Common\\\\Tests\\\\Serialization\\\\Address",
         "street": "123 Testing Way",
         "city": "Unit Testing Ville",
         "zip": "12345"
     },
     "age": 21,
     "timestamp": {
-        "class": "Gmo\\\\Common\\\\SerializableCarbon",
+        "class": "Gmo\\\\Common\\\\Serialization\\\\SerializableCarbon",
         "date": "2009-10-11 12:13:14.000000",
         "timezone_type": 3,
         "timezone": "America/Chicago"
@@ -139,7 +139,7 @@ JSON;
 
     /**
      * @expectedException \GMO\Common\Exception\NotSerializableException
-     * @expectedExceptionMessage Gmo\Common\Tests\Herp does not implement GMO\Common\ISerializable
+     * @expectedExceptionMessage Gmo\Common\Tests\Serialization\Herp does not implement Gmo\Common\Serialization\SerializableInterface
      */
     public function testNotSerializable()
     {
