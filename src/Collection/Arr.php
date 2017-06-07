@@ -2,6 +2,13 @@
 
 namespace GMO\Common\Collection;
 
+use GMO\Common\Deprecated;
+
+Deprecated::cls('GMO\Common\Collection\Arr', null, 'Bolt\Collection\Arr');
+
+/**
+ * @deprecated Use bolt/collection library instead.
+ */
 class Arr {
 
 	/**

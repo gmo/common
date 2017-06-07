@@ -37,6 +37,8 @@ use Traversable;
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Jonathan Wage <jonwage@gmail.com>
  * @author Roman Borschel <roman@code-factory.org>
+ *
+ * @deprecated Use bolt/collection library instead.
  */
 class ArrayCollection implements CollectionInterface, ISerializable
 {

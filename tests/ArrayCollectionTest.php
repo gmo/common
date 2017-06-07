@@ -4,6 +4,9 @@ namespace Gmo\Common\Tests;
 use GMO\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group legacy
+ */
 class ArrayCollectionTest extends TestCase {
 
 	public function testCreation() {
