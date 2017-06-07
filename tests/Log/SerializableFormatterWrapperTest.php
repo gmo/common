@@ -2,7 +2,6 @@
 namespace Gmo\Common\Tests\Log;
 
 use GMO\Common\AbstractSerializable;
-use GMO\Common\DateTime;
 use GMO\Common\Log\SerializableFormatterWrapper;
 use Monolog\Formatter\FormatterInterface;
 
@@ -11,7 +10,7 @@ class SerializableFormatterWrapperTest extends \PHPUnit_Framework_TestCase {
 	public function testDateTimeClassIsKept() {
 		$formatter = $this->getFormatter();
 		$record = $formatter->format(array(
-			'time' => new DateTime(),
+			'time' => new \DateTime(),
 		));
 
 		$this->assertTrue($record['time'] instanceof \DateTime);
@@ -21,7 +20,7 @@ class SerializableFormatterWrapperTest extends \PHPUnit_Framework_TestCase {
 		$formatter = $this->getFormatter();
 
 		$record = $formatter->format(array(
-			'something' => new SomethingSerializable(new DateTime()),
+			'something' => new SomethingSerializable(new \DateTime()),
 		));
 
 		$this->assertTrue(is_array($record['something']));

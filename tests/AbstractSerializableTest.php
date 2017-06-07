@@ -16,7 +16,7 @@ class SerializableTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame('Doe', $result['lastName']);
 		$this->assertSame(21, $result['age']);
 		$timestamp = $result['timestamp'];
-		$this->assertSame('GMO\Common\DateTime', $timestamp['class']);
+		$this->assertSame('Gmo\Common\SerializableCarbon', $timestamp['class']);
 		$this->assertSame('2009-10-11 12:13:14.000000', $timestamp['date']);
 
 		$address = $result["address"];
@@ -43,7 +43,7 @@ class SerializableTest extends \PHPUnit_Framework_TestCase {
     },
     "age": 21,
     "timestamp": {
-        "class": "GMO\\\\Common\\\\DateTime",
+        "class": "Gmo\\\\Common\\\\SerializableCarbon",
         "date": "2009-10-11 12:13:14.000000",
         "timezone_type": 3,
         "timezone": "America/Chicago"
