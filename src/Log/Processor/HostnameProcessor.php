@@ -1,6 +1,6 @@
 <?php
 
-namespace GMO\Common\Log\Processor;
+namespace Gmo\Common\Log\Processor;
 
 /**
  * Adds the system's hostname to records

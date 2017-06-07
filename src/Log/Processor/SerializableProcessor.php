@@ -5,7 +5,7 @@ namespace Gmo\Common\Log\Processor;
 use Gmo\Common\Serialization\SerializableInterface;
 
 /**
- * Normalizes {@see GMO\Common\Serialization\SerializableInterface} objects
+ * Normalizes {@see Gmo\Common\Serialization\SerializableInterface} objects
  */
 class SerializableProcessor extends NormalizationProcessor
 {

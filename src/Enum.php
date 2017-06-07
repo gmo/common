@@ -1,6 +1,6 @@
 <?php
 
-namespace GMO\Common;
+namespace Gmo\Common;
 
 use Gmo\Common\Serialization\AbstractSerializable;
 

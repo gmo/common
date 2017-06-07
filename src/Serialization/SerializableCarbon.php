@@ -4,7 +4,7 @@ namespace Gmo\Common\Serialization;
 
 use Carbon\Carbon;
 use DateTime;
-use GMO\Common\Json;
+use Gmo\Common\Json;
 
 /**
  * Out of necessity to maintain ISerializable contract.

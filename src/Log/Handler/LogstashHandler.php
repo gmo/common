@@ -2,7 +2,7 @@
 
 namespace Gmo\Common\Log\Handler;
 
-use GMO\Common\Log\Formatter\LogstashFormatter;
+use Gmo\Common\Log\Formatter\LogstashFormatter;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\RedisHandler;
 use Monolog\Logger;
