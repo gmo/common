@@ -2,15 +2,8 @@
 
 namespace GMO\Common;
 
-use Psr\Log\AbstractLogger;
+Deprecated::cls('GMO\Common\ConsoleLogger', null, 'Gmo\Common\Log\ConsoleLogger');
 
-class ConsoleLogger extends AbstractLogger
+class ConsoleLogger extends \Gmo\Common\Log\ConsoleLogger
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function log($level, $message, array $context = array())
-    {
-        echo sprintf("%s %s: %s\n", date("Y-m-d H:i:s"), strtoupper($level), $message);
-    }
 }
