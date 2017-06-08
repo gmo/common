@@ -29,7 +29,7 @@ class SerializableTest extends TestCase
         $this->assertSame("12345", $address["zip"]);
     }
 
-    public function testToJson()
+    public function testLegacyToJson()
     {
         $contact = $this->getContact();
 
@@ -120,7 +120,7 @@ JSON;
         $this->assertSame('12345', $contact->getAddress()->getZip());
     }
 
-    public function testFromJson()
+    public function testLegacyFromJson()
     {
         $json = '{"firstName":"John","middleName":"J","lastName":"Doe","address":{"street":"123 Testing Way", "city":"Unit Testing Ville","zip":"12345"},"age":21,"timestamp":{"date":"2009-10-11 12:13:14.000000", "timezone_type":3,"timezone":"America\/Chicago"}}';
         $contact = Contact::fromJson($json);
@@ -144,7 +144,7 @@ JSON;
     public function testNotSerializable()
     {
         $derp = new Derp(new Herp());
-        Derp::fromJson($derp->toJson());
+        Derp::fromArray($derp->toArray());
     }
 
     private function getContact()
