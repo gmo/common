@@ -3,7 +3,7 @@
 namespace GMO\Common\Config;
 
 use GMO\Common\Collections\ArrayCollection;
-use GMO\Common\Deprecated;
+use Gmo\Common\Deprecated;
 use GMO\Common\Exception\ConfigException;
 use GMO\Common\Str;
 

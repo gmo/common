@@ -2,7 +2,7 @@
 
 namespace GMO\Common\Exception;
 
-use GMO\Common\Deprecated;
+use Gmo\Common\Deprecated;
 
 Deprecated::cls('\GMO\Common\Exception\PathException', 1.30);
 

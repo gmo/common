@@ -3,7 +3,7 @@
 namespace GMO\Common\Web;
 
 use Carbon\Carbon;
-use GMO\Common\Deprecated;
+use Gmo\Common\Deprecated;
 use GMO\Common\Web\Exception;
 use LogicException;
 use Symfony\Component\HttpFoundation\ParameterBag as ParameterBagBase;

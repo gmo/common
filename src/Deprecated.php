@@ -1,6 +1,6 @@
 <?php
 
-namespace GMO\Common;
+namespace Gmo\Common;
 
 /**
  * This class provides shortcuts for trigger deprecation warnings for various things.

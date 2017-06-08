@@ -4,7 +4,7 @@ namespace Gmo\Common\Serialization;
 
 use Carbon\Carbon;
 use DateTime;
-use GMO\Common\Deprecated;
+use Gmo\Common\Deprecated;
 use GMO\Common\ISerializable;
 use GMO\Common\Json;
 

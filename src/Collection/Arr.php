@@ -2,7 +2,7 @@
 
 namespace GMO\Common\Collection;
 
-use GMO\Common\Deprecated;
+use Gmo\Common\Deprecated;
 
 Deprecated::cls('GMO\Common\Collection\Arr', null, 'Bolt\Collection\Arr');
 

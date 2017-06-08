@@ -2,7 +2,7 @@
 
 namespace Gmo\Common\Serialization;
 
-use GMO\Common\Deprecated;
+use Gmo\Common\Deprecated;
 use GMO\Common\Exception\NotSerializableException;
 use GMO\Common\ISerializable;
 use GMO\Common\Json;

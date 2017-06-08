@@ -2,7 +2,7 @@
 
 namespace GMO\Common\Web\Routing;
 
-use GMO\Common\Deprecated;
+use Gmo\Common\Deprecated;
 use Psr\Log\LoggerInterface;
 use Silex\Application;
 use Silex\LazyUrlMatcher;
