@@ -61,7 +61,7 @@ class DeprecatedTest extends TestCase
         $this->assertDeprecation('Foo\Bar is deprecated.');
         Deprecated::cls('Foo\Bar', 1.1);
         $this->assertDeprecation('Foo\Bar is deprecated since 1.1 and will be removed in 2.0.');
-        Deprecated::cls('Foo\Bar', null, 'Bar\Baz');
+        Deprecated::cls('\Foo\Bar', null, '\Bar\Baz');
         $this->assertDeprecation('Foo\Bar is deprecated. Use Bar\Baz instead.');
         Deprecated::cls('Foo\Bar', null, 'Do it this way instead.');
         $this->assertDeprecation('Foo\Bar is deprecated. Do it this way instead.');
