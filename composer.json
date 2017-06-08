@@ -14,7 +14,7 @@
         "psr/log": "1.0.0",
         "monolog/monolog": "^1.18",
         "symfony/phpunit-bridge": "^2.8 || ^3.0",
-        "phpunit/phpunit": "^4.8"
+        "phpunit/phpunit": "^6.2"
     },
     "suggest": {
         "psr/log": "Provides a basic console logger for PSR-3 interface",
