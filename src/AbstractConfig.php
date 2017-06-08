@@ -4,7 +4,7 @@ namespace GMO\Common;
 
 use GMO\Common\Config\AbstractConfig as NewAbstractConfig;
 
-Deprecated::cls('\GMO\Common\AbstractConfig', 1.0, '\GMO\Common\Config\AbstractConfig');
+Deprecated::cls('GMO\Common\AbstractConfig', 1.0, 'Gmo\Common\Config\Config');
 
 /**
  * Maintaining backwards compatibility.
