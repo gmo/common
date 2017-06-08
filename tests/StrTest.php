@@ -100,6 +100,14 @@ class StrTest extends TestCase
     }
 
     /**
+     * @requires PHP 5.5
+     */
+    public function test_explode_not_containing_delimiter()
+    {
+        $this->assertSame('herp derp', Str::explode("herp derp", ",")->first());
+    }
+
+    /**
      * @group legacy
      */
     public function test_split()
@@ -128,7 +136,6 @@ class StrTest extends TestCase
 
     public function test_split_not_containing_delimiter()
     {
-        $this->assertSame('herp derp', Str::explode("herp derp", ",")->first());
         $this->assertSame("herp derp", Str::splitFirst("herp derp", ","));
         $this->assertSame("herp derp", Str::splitLast("herp derp", ","));
     }
