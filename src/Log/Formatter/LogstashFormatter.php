@@ -11,7 +11,7 @@ class LogstashFormatter extends BaseLogstashFormatter
      */
     protected function formatV1(array $record)
     {
-        $context = isset($record['context']) ? $record['context'] : [];
+        $context = isset($record['context']) ? $record['context'] : array();
         unset($record['context']);
         $message = parent::formatV1($record);
 

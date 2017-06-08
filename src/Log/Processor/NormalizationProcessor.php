@@ -19,7 +19,7 @@ abstract class NormalizationProcessor
         if (!is_iterable($data)) {
             return $this->normalize($data);
         }
-        $normalized = [];
+        $normalized = array();
 
         $count = 1;
         foreach ($data as $key => $value) {

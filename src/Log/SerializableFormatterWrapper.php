@@ -66,7 +66,7 @@ class SerializableFormatterWrapper implements FormatterInterface
         }
 
         if (is_array($data) || $data instanceof \Traversable) {
-            $normalized = [];
+            $normalized = array();
 
             $count = 1;
             foreach ($data as $key => $value) {

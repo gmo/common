@@ -105,13 +105,13 @@ class SlackHandler extends SlackHandlerBase
             $fields,
             2,
             0,
-            [
-                [
+            array(
+                array(
                     'title' => 'Channel',
                     'value' => $record['channel'],
                     'short' => false,
-                ],
-            ]
+                ),
+            )
         );
 
         // Set short property for the fields it applies too.

@@ -63,10 +63,10 @@ class LogstashHandler extends RedisHandler
 
     public function fallbackTo(HandlerInterface $handler)
     {
-        $exceptions = [
+        $exceptions = array(
             'Predis\Response\ServerException',
             'Predis\Connection\ConnectionException',
-        ];
+        );
 
         return new FallbackHandler($this, $handler, $exceptions);
     }

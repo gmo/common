@@ -68,7 +68,7 @@ class JwtCookieSessionStorage implements SessionStorageInterface
         try {
             return Collection::objectToArray(JWT::decode($cookieData, $this->secret));
         } catch (\Exception $e) {
-            return [];
+            return array();
         }
     }
 
@@ -165,7 +165,7 @@ class JwtCookieSessionStorage implements SessionStorageInterface
             $bag->clear();
         }
 
-        $this->values = [];
+        $this->values = array();
         $this->connectValuesToBags();
     }
 
@@ -219,11 +219,11 @@ class JwtCookieSessionStorage implements SessionStorageInterface
     protected function connectValuesToBags()
     {
         /** @var SessionBagInterface[] $bags */
-        $bags = array_merge($this->bags, [$this->metadataBag]);
+        $bags = array_merge($this->bags, array($this->metadataBag));
 
         foreach ($bags as $bag) {
             $key = $bag->getStorageKey();
-            $this->values[$key] = isset($this->values[$key]) ? $this->values[$key] : [];
+            $this->values[$key] = isset($this->values[$key]) ? $this->values[$key] : array();
             $bag->initialize($this->values[$key]);
         }
     }
