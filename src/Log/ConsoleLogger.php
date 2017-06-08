@@ -1,6 +1,6 @@
 <?php
 
-namespace Gmo\Common;
+namespace Gmo\Common\Log;
 
 use Psr\Log\AbstractLogger;
 
