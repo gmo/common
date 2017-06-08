@@ -201,11 +201,3 @@ class ConfigBagTest extends TestCase
         $this->config->child('test', 'ArrayObject');
     }
 }
-
-class TestSubConfigBag extends ConfigBag
-{
-    public function getHello()
-    {
-        return $this->get('hello');
-    }
-}
