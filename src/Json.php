@@ -55,7 +55,11 @@ class Json
             return null;
         }
 
-        $data = @json_decode($json, true, $depth, $options);
+        if (PHP_VERSION_ID > 50400) {
+            $data = @json_decode($json, true, $depth, $options);
+        } else {
+            $data = @json_decode($json, true, $depth);
+        }
         if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
             static::determineParseError($json);
         }
@@ -76,7 +80,7 @@ class Json
             return @json_encode($data, $options, $depth);
         }
 
-        return @json_encode($data, 0, $depth);
+        return @json_encode($data);
     }
 
     /**

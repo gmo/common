@@ -20,7 +20,12 @@ class SerializableTest extends TestCase
         $this->assertSame(21, $result['age']);
         $timestamp = $result['timestamp'];
         $this->assertSame('Gmo\Common\Serialization\SerializableCarbon', $timestamp['class']);
-        $this->assertSame('2009-10-11 12:13:14.000000', $timestamp['date']);
+
+        if (PHP_VERSION_ID < 50400) {
+            $this->assertSame('2009-10-11 12:13:14', $timestamp['date']);
+        } else {
+            $this->assertSame('2009-10-11 12:13:14.000000', $timestamp['date']);
+        }
 
         $address = $result["address"];
         $this->assertSame('Gmo\Common\Tests\Serialization\Address', $address['class']);
@@ -54,6 +59,11 @@ class SerializableTest extends TestCase
     }
 }
 JSON;
+        if (PHP_VERSION_ID < 50400) {
+            $serialized = json_decode($serialized, true);
+            $serialized['timestamp']['date'] = substr($serialized['timestamp']['date'], 0, -7);
+            $serialized = json_encode($serialized);
+        }
 
         $this->assertEquals($serialized, $contact->toJson());
     }
