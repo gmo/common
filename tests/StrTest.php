@@ -83,11 +83,17 @@ class StrTest extends TestCase
         $this->assertFalse(Str::endsWith("blah", "BLAH"));
     }
 
+    /**
+     * @requires PHP 5.5
+     */
     public function test_explode()
     {
         $this->assertSame(array("herp", "derp"), Str::explode("herp derp", " ")->toArray());
     }
 
+    /**
+     * @requires PHP 5.5
+     */
     public function test_explode_empty_returns_empty_collection()
     {
         $this->assertTrue(Str::explode("herp derp", "")->isEmpty());
