@@ -40,7 +40,8 @@ class Deprecated
         }
 
         if ($method === null) {
-            $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+            $traceLimit = PHP_VERSION_ID >= 50400;
+            $trace = $traceLimit ? debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2) : debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
             $caller = $trace[1];
             $function = $caller['function'];
             if ($function === '__construct') {
@@ -49,7 +50,7 @@ class Deprecated
                 return;
             }
             if (in_array($function, array('__call', '__callStatic', '__set', '__get', '__isset', '__unset'), true)) {
-                $trace = debug_backtrace(false, 2); // with args
+                $trace = $traceLimit ? debug_backtrace(false, 2) : debug_backtrace(false);  // with args
                 $caller = $trace[1];
                 $caller['function'] = $caller['args'][0];
             }

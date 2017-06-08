@@ -59,7 +59,7 @@ class SerializableCarbon extends Carbon implements ISerializable
 
         // Maintain compatibility with parent classes method
         // SerializableCarbon::fromSerialized($carbon->serialize())
-        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+        $trace = PHP_VERSION_ID >= 50400 ? debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1) : debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
         if (isset($trace[0]['file'])) {
             $serialized = sprintf(
                 'C:%d:"%s":%d:{%s}',
