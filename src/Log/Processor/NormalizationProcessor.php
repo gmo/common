@@ -2,8 +2,6 @@
 
 namespace GMO\Common\Log\Processor;
 
-use GMO\Common\Collection;
-
 /**
  * Abstracts looping through the array data looking for an item to normalize
  */
@@ -18,7 +16,7 @@ abstract class NormalizationProcessor
 
     protected function normalizeCollection($data)
     {
-        if (!Collection::isTraversable($data)) {
+        if (!is_iterable($data)) {
             return $this->normalize($data);
         }
         $normalized = [];
