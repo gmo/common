@@ -149,7 +149,7 @@ JSON;
 
     private function getContact()
     {
-        return new Contact('John', 'J', 'Doe', $this->getAddress(), 21, new \DateTime('2009-10-11 12:13:14'));
+        return new Contact('John', 'J', 'Doe', $this->getAddress(), 21, new \DateTime('2009-10-11 12:13:14', new \DateTimeZone('America/Chicago')));
     }
 
     private function getAddress()
