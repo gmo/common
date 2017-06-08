@@ -20,11 +20,6 @@ class SerializableCarbonTest extends TestCase
         $this->assertEquals($this->now, SerializableCarbon::fromArray($this->now->toArray()));
     }
 
-    public function testJson()
-    {
-        $this->assertEquals($this->now, SerializableCarbon::fromJson($this->now->toJson()));
-    }
-
     public function testNativeSerialize()
     {
         $this->assertEquals($this->now, unserialize(serialize($this->now)));

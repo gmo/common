@@ -8,7 +8,7 @@ abstract class Enum extends AbstractSerializable
 {
     /** @var mixed Enum value */
     protected $value;
-    /** @var Enum[] */
+    /** @var array */
     private static $instances = [];
     /** @var array Store existing constants in a static cache per object. */
     private static $cache = [];
@@ -222,7 +222,7 @@ abstract class Enum extends AbstractSerializable
     public function unserialize($serialized)
     {
         /** @var Enum $obj */
-        $obj = static::fromJson($serialized);
+        $obj = static::fromArray(unserialize($serialized));
         $this->value = $obj->value;
 
         return $obj;
