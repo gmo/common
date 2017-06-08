@@ -2,6 +2,7 @@
 
 namespace GMO\Common\Log\Handler;
 
+use GMO\Common\Deprecated;
 use GMO\Common\Log\Formatter\LogstashFormatter;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\RedisHandler;
@@ -15,12 +16,12 @@ class LogstashHandler extends RedisHandler
     protected $extraPrefix = null;
 
     /**
-     * @param \GMO\Cache\Redis|\Predis\ClientInterface|\Redis $redis
-     * @param string                                          $appName
-     * @param string                                          $key
-     * @param int                                             $level
-     * @param bool                                            $bubble
-     * @param bool|int                                        $capSize
+     * @param \Predis\ClientInterface|\Redis $redis
+     * @param string                         $appName
+     * @param string                         $key
+     * @param int                            $level
+     * @param bool                           $bubble
+     * @param bool|int                       $capSize
      */
     public function __construct(
         $redis,
@@ -33,6 +34,7 @@ class LogstashHandler extends RedisHandler
         $this->appName = $appName;
         if ($redis instanceof \GMO\Cache\Redis) {
             $redis = $redis->redis;
+            Deprecated::warn('Passing GMO\Cache\Redis to ' . __CLASS__);
         }
         parent::__construct($redis, $key, $level, $bubble, $capSize);
     }
