@@ -2,6 +2,7 @@
 
 namespace Gmo\Common\Serialization;
 
+use GMO\Common\Deprecated;
 use GMO\Common\Exception\NotSerializableException;
 use GMO\Common\ISerializable;
 use GMO\Common\Json;
@@ -43,6 +44,8 @@ abstract class AbstractSerializable implements ISerializable
 
     public function toJson()
     {
+        Deprecated::method();
+
         return Json::dump($this->toArray());
     }
 
@@ -53,6 +56,8 @@ abstract class AbstractSerializable implements ISerializable
      */
     public static function fromJson($json)
     {
+        Deprecated::method();
+
         return static::fromArray(Json::parse($json));
     }
 
@@ -63,12 +68,12 @@ abstract class AbstractSerializable implements ISerializable
 
     public function serialize()
     {
-        return $this->toJson();
+        return serialize($this->toArray());
     }
 
     public function unserialize($serialized)
     {
-        $cls = $this->fromJson($serialized);
+        $cls = static::fromArray(unserialize($serialized));
         $properties = get_class_vars(get_called_class());
         foreach ($properties as $property => $value) {
             $this->$property = $cls->$property;

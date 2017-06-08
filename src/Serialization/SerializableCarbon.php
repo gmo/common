@@ -4,6 +4,7 @@ namespace Gmo\Common\Serialization;
 
 use Carbon\Carbon;
 use DateTime;
+use GMO\Common\Deprecated;
 use GMO\Common\ISerializable;
 use GMO\Common\Json;
 
@@ -87,6 +88,8 @@ class SerializableCarbon extends Carbon implements ISerializable
      */
     public static function fromJson($json)
     {
+        Deprecated::method();
+
         return static::fromArray(Json::parse($json));
     }
 
@@ -95,6 +98,8 @@ class SerializableCarbon extends Carbon implements ISerializable
      */
     public function toJson()
     {
+        Deprecated::method();
+
         return Json::dump($this->toArray());
     }
 }

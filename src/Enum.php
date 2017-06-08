@@ -222,7 +222,7 @@ abstract class Enum extends AbstractSerializable
     public function unserialize($serialized)
     {
         /** @var Enum $obj */
-        $obj = static::fromJson($serialized);
+        $obj = static::fromArray(unserialize($serialized));
         $this->value = $obj->value;
 
         return $obj;

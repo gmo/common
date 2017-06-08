@@ -3,7 +3,6 @@
 namespace Gmo\Common\Serialization;
 
 use GMO\Common\Exception\NotSerializableException;
-use GMO\Common\Json;
 
 trait SerializableTrait
 {
@@ -93,16 +92,6 @@ trait SerializableTrait
         return $cls->newInstanceArgs($params);
     }
 
-    public function toJson()
-    {
-        return Json::dump($this->toArray());
-    }
-
-    public static function fromJson($json)
-    {
-        return static::fromArray(Json::parse($json));
-    }
-
     public function jsonSerialize()
     {
         return $this->toArray();
@@ -110,12 +99,12 @@ trait SerializableTrait
 
     public function serialize()
     {
-        return $this->toJson();
+        return serialize($this->toArray());
     }
 
     public function unserialize($serialized)
     {
-        $cls = $this->fromJson($serialized);
+        $cls = static::fromArray(unserialize($serialized));
         $properties = get_class_vars(get_called_class());
         foreach ($properties as $property => $value) {
             $this->$property = $cls->$property;

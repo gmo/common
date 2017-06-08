@@ -35,5 +35,18 @@ namespace GMO\Common {
     /**
      * @deprecated will be removed in 2.0. Use {@see Gmo\Common\Serialization\SerializableInterface} instead.
      */
-    interface ISerializable extends SerializableInterface {}
+    interface ISerializable extends SerializableInterface
+    {
+        /**
+         * @return string
+         */
+        public function toJson();
+
+        /**
+         * @param string $json
+         *
+         * @return static
+         */
+        public static function fromJson($json);
+    }
 }

@@ -70,13 +70,13 @@ class DateTime extends \DateTime implements ISerializable
 
     public function serialize()
     {
-        return $this->toJson();
+        return serialize($this->toArray());
     }
 
     public function unserialize($serialized)
     {
         $this->__construct();
-        $cls = $this->fromJson($serialized);
+        $cls = static::fromArray(unserialize($serialized));
         $this->setTimestamp($cls->getTimestamp());
         $this->setTimezone($cls->getTimezone());
     }

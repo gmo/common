@@ -514,12 +514,12 @@ class ArrayCollection implements CollectionInterface, ISerializable
 
     public function serialize()
     {
-        return $this->toJson();
+        return serialize($this->toArray());
     }
 
     public function unserialize($serialized)
     {
-        $cls = $this->fromJson($serialized);
+        $cls = static::fromArray(unserialize($serialized));
         $this->elements = $cls->toArray();
     }
 

@@ -21,7 +21,7 @@ class SerializableCarbonTest extends TestCase
         $this->assertEquals($this->now, SerializableCarbon::fromArray($this->now->toArray()));
     }
 
-    public function testJson()
+    public function testLegacyJson()
     {
         $this->assertEquals($this->now, SerializableCarbon::fromJson($this->now->toJson()));
     }
