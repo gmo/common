@@ -93,6 +93,11 @@ class StrTest extends TestCase
         $this->assertTrue(Str::explode("herp derp", "")->isEmpty());
     }
 
+    public function test_explode_not_containing_delimiter()
+    {
+        $this->assertSame('herp derp', Str::explode("herp derp", ",")->first());
+    }
+
     public function test_split_first_last_empty_returns_false()
     {
         $this->assertFalse(Str::splitFirst("herp derp", ""));
@@ -101,7 +106,6 @@ class StrTest extends TestCase
 
     public function test_split_not_containing_delimiter()
     {
-        $this->assertSame('herp derp', Str::explode("herp derp", ",")->first());
         $this->assertSame("herp derp", Str::splitFirst("herp derp", ","));
         $this->assertSame("herp derp", Str::splitLast("herp derp", ","));
     }

@@ -29,35 +29,6 @@ class SerializableTest extends TestCase
         $this->assertSame("12345", $address["zip"]);
     }
 
-    public function testToJson()
-    {
-        $contact = $this->getContact();
-
-        $serialized = <<<JSON
-{
-    "class": "Gmo\\\\Common\\\\Tests\\\\Serialization\\\\Contact",
-    "firstName": "John",
-    "middleName": "J",
-    "lastName": "Doe",
-    "address": {
-        "class": "Gmo\\\\Common\\\\Tests\\\\Serialization\\\\Address",
-        "street": "123 Testing Way",
-        "city": "Unit Testing Ville",
-        "zip": "12345"
-    },
-    "age": 21,
-    "timestamp": {
-        "class": "Gmo\\\\Common\\\\Serialization\\\\SerializableCarbon",
-        "date": "2009-10-11 12:13:14.000000",
-        "timezone_type": 3,
-        "timezone": "America/Chicago"
-    }
-}
-JSON;
-
-        $this->assertEquals($serialized, $contact->toJson());
-    }
-
     public function testToArrayOptionalValuesAreDefaulted()
     {
         $contact = new Contact('John', 'J', 'Doe', $this->getAddress());
@@ -120,23 +91,6 @@ JSON;
         $this->assertSame('12345', $contact->getAddress()->getZip());
     }
 
-    public function testFromJson()
-    {
-        $json = '{"firstName":"John","middleName":"J","lastName":"Doe","address":{"street":"123 Testing Way", "city":"Unit Testing Ville","zip":"12345"},"age":21,"timestamp":{"date":"2009-10-11 12:13:14.000000", "timezone_type":3,"timezone":"America\/Chicago"}}';
-        $contact = Contact::fromJson($json);
-
-        $this->assertSame('John', $contact->getFirstName());
-        $this->assertSame('J', $contact->getMiddleName());
-        $this->assertSame('Doe', $contact->getLastName());
-        $this->assertSame(21, $contact->getAge());
-
-        $this->assertSame('2009-10-11 12:13:14', $contact->getTimestamp()->format('Y-m-d h:i:s'));
-
-        $this->assertSame('123 Testing Way', $contact->getAddress()->getStreet());
-        $this->assertSame('Unit Testing Ville', $contact->getAddress()->getCity());
-        $this->assertSame('12345', $contact->getAddress()->getZip());
-    }
-
     /**
      * @expectedException \GMO\Common\Exception\NotSerializableException
      * @expectedExceptionMessage Gmo\Common\Tests\Serialization\Herp does not implement Gmo\Common\Serialization\SerializableInterface
@@ -144,12 +98,12 @@ JSON;
     public function testNotSerializable()
     {
         $derp = new Derp(new Herp());
-        Derp::fromJson($derp->toJson());
+        Derp::fromArray($derp->toArray());
     }
 
     private function getContact()
     {
-        return new Contact('John', 'J', 'Doe', $this->getAddress(), 21, new \DateTime('2009-10-11 12:13:14'));
+        return new Contact('John', 'J', 'Doe', $this->getAddress(), 21, new \DateTime('2009-10-11 12:13:14', new \DateTimeZone('America/Chicago')));
     }
 
     private function getAddress()

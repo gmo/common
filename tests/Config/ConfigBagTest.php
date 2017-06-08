@@ -198,11 +198,3 @@ class ConfigBagTest extends TestCase
         $this->config->child('test', \ArrayObject::class);
     }
 }
-
-class TestSubConfigBag extends ConfigBag
-{
-    public function getHello()
-    {
-        return $this->get('hello');
-    }
-}
