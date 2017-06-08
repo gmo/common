@@ -76,8 +76,11 @@ class Json
      */
     private static function doEncode($data, $options = 448, $depth = 512)
     {
-        if (PHP_VERSION_ID >= 50400) {
+        if (PHP_VERSION_ID >= 50500) {
             return @json_encode($data, $options, $depth);
+        }
+        if (PHP_VERSION_ID >= 50400) {
+            return @json_encode($data, $options);
         }
 
         return @json_encode($data);
