@@ -46,10 +46,8 @@ class SerializableCarbon extends Carbon implements ISerializable
      */
     public function unserialize($serialized)
     {
-        $this->__construct();
-        $dt = static::fromArray(unserialize($serialized));
-        $this->setTimezone($dt->getTimezone());
-        $this->setTimestamp($dt->getTimestamp());
+        $arr = unserialize($serialized);
+        $this->__construct($arr['date'], $arr['timezone']);
     }
 
     /**
