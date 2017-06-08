@@ -10,7 +10,7 @@ use Monolog\Formatter\NormalizerFormatter;
 class SlackFormatter extends NormalizerFormatter
 {
     /**
-     * @param \Exception|\Throwable $e
+     * @param \Throwable $e
      *
      * @return string
      */

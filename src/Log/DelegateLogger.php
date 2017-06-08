@@ -4,6 +4,7 @@ namespace Gmo\Common\Log;
 
 use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -12,18 +13,9 @@ use Psr\Log\LoggerInterface;
  */
 class DelegateLogger extends AbstractLogger implements LoggerAwareInterface
 {
-    /** @var LoggerInterface|null */
-    protected $logger;
+    use LoggerAwareTrait;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-    }
-
-    public function getLogger()
+    public function getLogger(): ?LoggerInterface
     {
         return $this->logger;
     }

@@ -23,7 +23,7 @@ class SlackHandler extends SlackHandlerBase
      * @param string      $token                  Slack API token
      * @param string      $channel                Slack channel/user (encoded ID or name)
      * @param string      $username               Name of a bot
-     * @param int         $level                  The minimum logging level at which this handler will be triggered
+     * @param string|int  $level                  The minimum logging level at which this handler will be triggered
      * @param bool        $bubble                 Whether the messages that are handled can bubble up the stack or not
      * @param bool        $includeContextAndExtra Whether the attachment should include context and extra data
      * @param string|null $iconEmoji              The emoji name to use (or null)
@@ -33,15 +33,15 @@ class SlackHandler extends SlackHandlerBase
      *                                            are in a short style
      */
     public function __construct(
-        $token,
-        $channel,
-        $username = 'Logger',
+        string $token,
+        string $channel,
+        string $username = 'Logger',
         $level = Logger::CRITICAL,
-        $bubble = true,
-        $includeContextAndExtra = true,
-        $iconEmoji = 'page_with_curl',
-        $useAttachment = true,
-        $useShortAttachment = false
+        bool $bubble = true,
+        bool $includeContextAndExtra = true,
+        ?string $iconEmoji = 'page_with_curl',
+        bool $useAttachment = true,
+        bool $useShortAttachment = false
     ) {
         parent::__construct(
             $token,

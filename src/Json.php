@@ -27,9 +27,9 @@ class Json
      *
      * @return string
      */
-    public static function dump($data, $options = 448, $depth = 512)
+    public static function dump($data, int $options = 448, int $depth = 512)
     {
-        $json = static::doEncode($data, $options, $depth);
+        $json = @json_encode($data, $options, $depth);
 
         if ($json === false) {
             $json = static::handleJsonError($data, $options, $depth, json_last_error(), json_last_error_msg());
@@ -49,7 +49,7 @@ class Json
      *
      * @return mixed
      */
-    public static function parse($json, $options = 0, $depth = 512)
+    public static function parse(?string $json, int $options = 0, int $depth = 512)
     {
         if ($json === null) {
             return null;
@@ -61,22 +61,6 @@ class Json
         }
 
         return $data;
-    }
-
-    /**
-     * @param mixed $data    Data to encode
-     * @param int   $options JSON encode options
-     * @param int   $depth   Recursion depth
-     *
-     * @return false|string JSON encoded data or false on failure
-     */
-    private static function doEncode($data, $options = 448, $depth = 512)
-    {
-        if (PHP_VERSION_ID >= 50400) {
-            return @json_encode($data, $options, $depth);
-        }
-
-        return @json_encode($data, 0, $depth);
     }
 
     /**
@@ -92,7 +76,7 @@ class Json
      *
      * @return string JSON encoded data after error correction
      */
-    private static function handleJsonError($data, $options, $depth, $code, $message)
+    private static function handleJsonError($data, int $options, int $depth, int $code, ?string $message)
     {
         if ($code !== JSON_ERROR_UTF8) {
             static::throwEncodeError($code, $message);
@@ -106,7 +90,7 @@ class Json
             static::throwEncodeError($code, $message);
         }
 
-        $json = static::doEncode($data, $options, $depth);
+        $json = @json_encode($data, $options, $depth);
 
         if ($json === false) {
             static::throwEncodeError(json_last_error(), json_last_error_msg());
@@ -123,7 +107,7 @@ class Json
      *
      * @throws DumpException
      */
-    private static function throwEncodeError($code, $message)
+    private static function throwEncodeError(int $code, ?string $message)
     {
         throw new DumpException('JSON dumping failed: ' . ($message ?: 'Unknown error'), $code);
     }
@@ -154,8 +138,8 @@ class Json
                 $data
             );
             $data = str_replace(
-                array('¤', '¦', '¨', '´', '¸', '¼', '½', '¾'),
-                array('€', 'Š', 'š', 'Ž', 'ž', 'Œ', 'œ', 'Ÿ'),
+                ['¤', '¦', '¨', '´', '¸', '¼', '½', '¾'],
+                ['€', 'Š', 'š', 'Ž', 'ž', 'Œ', 'œ', 'Ÿ'],
                 $data
             );
         }
@@ -168,7 +152,7 @@ class Json
      *
      * @throws ParseException
      */
-    private static function determineParseError($json)
+    private static function determineParseError(string $json)
     {
         $parser = new JsonParser();
 

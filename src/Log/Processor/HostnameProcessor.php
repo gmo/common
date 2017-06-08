@@ -15,7 +15,7 @@ class HostnameProcessor
      *
      * @param string $hostname
      */
-    public function __construct($hostname = null)
+    public function __construct(?string $hostname = null)
     {
         $this->hostname = $hostname ?: gethostname();
     }

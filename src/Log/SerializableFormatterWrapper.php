@@ -22,11 +22,7 @@ class SerializableFormatterWrapper implements FormatterInterface
     }
 
     /**
-     * Formats a log record.
-     *
-     * @param  array $record A record to format
-     *
-     * @return mixed The formatted record
+     * {@inheritdoc}
      */
     public function format(array $record)
     {
@@ -36,11 +32,7 @@ class SerializableFormatterWrapper implements FormatterInterface
     }
 
     /**
-     * Formats a set of log records.
-     *
-     * @param  array $records A set of records to format
-     *
-     * @return mixed The formatted set of records
+     * {@inheritdoc}
      */
     public function formatBatch(array $records)
     {
@@ -64,8 +56,8 @@ class SerializableFormatterWrapper implements FormatterInterface
             $data = $data->toArray();
         }
 
-        if (is_array($data) || $data instanceof \Traversable) {
-            $normalized = array();
+        if (is_iterable($data)) {
+            $normalized = [];
 
             $count = 1;
             foreach ($data as $key => $value) {

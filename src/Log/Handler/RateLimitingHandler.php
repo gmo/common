@@ -27,7 +27,7 @@ class RateLimitingHandler extends AbstractDecoratorHandler
      * @param int                    $rateLimit Number of seconds a certain message can be handled.
      *                                          Zero or a negative number disables rate limiting.
      */
-    public function __construct(Predis\ClientInterface $redis, HandlerInterface $handler, $rateLimit = 1)
+    public function __construct(Predis\ClientInterface $redis, HandlerInterface $handler, int $rateLimit = 1)
     {
         $this->redis = $redis;
         $this->handler = $handler;
