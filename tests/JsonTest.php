@@ -107,6 +107,9 @@ class JsonTest extends TestCase
         }
     }
 
+    /**
+     * @requires PHP 5.4
+     */
     public function testDumpSimpleJsonString()
     {
         $data = array('name' => 'composer/composer');
@@ -116,6 +119,9 @@ class JsonTest extends TestCase
         $this->assertJsonFormat($json, $data);
     }
 
+    /**
+     * @requires PHP 5.4
+     */
     public function testDumpTrailingBackslash()
     {
         $data = array('Metadata\\' => 'src/');
@@ -125,6 +131,9 @@ class JsonTest extends TestCase
         $this->assertJsonFormat($json, $data);
     }
 
+    /**
+     * @requires PHP 5.4
+     */
     public function testDumpEscape()
     {
         $data = array("Metadata\\\"" => 'src/');
@@ -134,6 +143,9 @@ class JsonTest extends TestCase
         $this->assertJsonFormat($json, $data);
     }
 
+    /**
+     * @requires PHP 5.4
+     */
     public function testDumpUnicode()
     {
         if (!function_exists('mb_convert_encoding') && PHP_VERSION_ID < 50400) {
@@ -187,6 +199,9 @@ class JsonTest extends TestCase
         }
     }
 
+    /**
+     * @requires PHP 5.4
+     */
     public function testConvertsInvalidEncodingAsLatin9()
     {
         $result = Json::dump(array('message' => "\xA4\xA6\xA8\xB4\xB8\xBC\xBD\xBE"));
