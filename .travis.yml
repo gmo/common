@@ -1,7 +1,6 @@
 language: php
 
 sudo: false
-dist: trusty
 
 php:
   - 5.3
@@ -13,6 +12,9 @@ php:
 
 matrix:
   fast_finish: true
+
+install:
+  - composer install
 
 cache:
   directories:
