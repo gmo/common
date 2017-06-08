@@ -2,7 +2,7 @@
 
 namespace Gmo\Common\Tests;
 
-use GMO\Common\Deprecated;
+use Gmo\Common\Deprecated;
 use PHPUnit\Framework\TestCase;
 
 /**

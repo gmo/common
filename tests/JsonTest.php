@@ -2,8 +2,8 @@
 
 namespace Gmo\Common\Tests;
 
-use GMO\Common\Exception\ParseException;
-use GMO\Common\Json;
+use Gmo\Common\Exception\ParseException;
+use Gmo\Common\Json;
 use PHPUnit\Framework\TestCase;
 
 class JsonTest extends TestCase

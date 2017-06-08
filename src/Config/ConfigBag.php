@@ -3,8 +3,8 @@
 namespace Gmo\Common\Config;
 
 use Bolt\Collection\Bag;
-use GMO\Common\Exception\ConfigException;
-use GMO\Common\Str;
+use Gmo\Common\Exception\ConfigException;
+use Gmo\Common\Str;
 use Webmozart\Assert\Assert;
 use Webmozart\PathUtil\Path;
 

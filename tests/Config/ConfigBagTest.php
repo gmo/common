@@ -53,7 +53,7 @@ class ConfigBagTest extends TestCase
     }
 
     /**
-     * @expectedException \GMO\Common\Exception\ConfigException
+     * @expectedException \Gmo\Common\Exception\ConfigException
      * @expectedExceptionMessage Config value for key 'foo/bar' is missing.
      */
     public function testGetMissing()
@@ -67,7 +67,7 @@ class ConfigBagTest extends TestCase
     }
 
     /**
-     * @expectedException \GMO\Common\Exception\ConfigException
+     * @expectedException \Gmo\Common\Exception\ConfigException
      * @expectedExceptionMessage Config does not contain the environment 'derp' requested by 'test/bad'.
      */
     public function testGetValueIsUnknownEnvAlias()
@@ -146,7 +146,7 @@ class ConfigBagTest extends TestCase
     }
 
     /**
-     * @expectedException \GMO\Common\Exception\ConfigException
+     * @expectedException \Gmo\Common\Exception\ConfigException
      * @expectedExceptionMessage Config does not contain the environment 'derp'.
      */
     public function testWithUnknownEnv()
