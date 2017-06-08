@@ -12,14 +12,14 @@ interface EnvironmentAwareConfigBagInterface extends ConfigBagInterface
      *
      * @return string
      */
-    public function getEnv();
+    public function getEnv(): string;
 
     /**
      * Set the current environment name.
      *
      * @param string $env The environment name
      */
-    public function setEnv($env);
+    public function setEnv(string $env);
 
     /**
      * Return a new ConfigBag using the given environment name.
@@ -30,5 +30,5 @@ interface EnvironmentAwareConfigBagInterface extends ConfigBagInterface
      *
      * @return static
      */
-    public function withEnv($env);
+    public function withEnv(string $env);
 }

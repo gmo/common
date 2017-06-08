@@ -23,7 +23,7 @@ class ConfigFactory
      *
      * @return ConfigBagInterface
      */
-    public function create($rootPath, $configFilePath)
+    public function create(string $rootPath, string $configFilePath): ConfigBagInterface
     {
         $file = $this->resolvePath($rootPath, $configFilePath);
 
@@ -47,7 +47,7 @@ class ConfigFactory
      *
      * @return string
      */
-    protected function resolvePath($rootPath, $configFilePath)
+    protected function resolvePath(string $rootPath, string $configFilePath): string
     {
         $file = Path::makeAbsolute($configFilePath, $rootPath);
 
@@ -67,7 +67,7 @@ class ConfigFactory
      *
      * @return Bag|Bag[]
      */
-    protected function parseMainFile($file)
+    protected function parseMainFile(string $file): Bag
     {
         $envs = $this->parse($file);
 
@@ -99,7 +99,7 @@ class ConfigFactory
      *
      * @return Bag|Bag[]
      */
-    protected function mergeExternalFiles($file, Bag $envs)
+    protected function mergeExternalFiles(string $file, Bag $envs): Bag
     {
         $extPos = strrpos($file, '.');
         $pathTemplate = substr_replace($file, '.%s.', $extPos, 1);
@@ -121,7 +121,7 @@ class ConfigFactory
      *
      * @return Bag|Bag[]
      */
-    protected function parse($file)
+    protected function parse(string $file): Bag
     {
         $data = Yaml::parse(file_get_contents($file));
 
@@ -133,7 +133,7 @@ class ConfigFactory
      *
      * @return string
      */
-    protected function getEnvironment()
+    protected function getEnvironment(): string
     {
         $env = getenv('PHP_ENV');
         if ($env === false) {
@@ -152,7 +152,7 @@ class ConfigFactory
      *
      * @return Bag
      */
-    private function sortEnvs($envs)
+    private function sortEnvs(Bag $envs): Bag
     {
         $resolver = DependencyResolver::fromMap($envs, function (Bag $env, $key) {
             // Default is the base case and cannot depend upon anything.

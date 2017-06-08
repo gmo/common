@@ -7,7 +7,6 @@ use Bolt\Collection\Bag;
 /**
  * Class Str
  *
- * @package GMO\Common
  * @since   1.15.0 Added remove* and className methods
  * @since   1.8.0 Added equals method
  *              Added optional caseSensitive params
@@ -17,7 +16,6 @@ use Bolt\Collection\Bag;
  */
 class Str
 {
-
     /**
      * Return whether a term is in a string
      *
@@ -27,7 +25,7 @@ class Str
      *
      * @return bool
      */
-    public static function contains($haystack, $needle, $caseSensitive = true)
+    public static function contains(string $haystack, string $needle, bool $caseSensitive = true)
     {
         if ($caseSensitive) {
             return $needle === "" || strpos($haystack, $needle) !== false;
@@ -44,7 +42,7 @@ class Str
      *
      * @return bool
      */
-    public static function containsInsensitive($haystack, $needle)
+    public static function containsInsensitive(string $haystack, string $needle)
     {
         return $needle === "" || stripos($haystack, $needle) !== false;
     }
@@ -58,7 +56,7 @@ class Str
      *
      * @return bool
      */
-    public static function equals($string1, $string2, $caseSensitive = true)
+    public static function equals(string $string1, string $string2, bool $caseSensitive = true)
     {
         if ($caseSensitive) {
             return $string1 === $string2;
@@ -76,7 +74,7 @@ class Str
      *
      * @return bool
      */
-    public static function startsWith($haystack, $needle, $caseSensitive = true)
+    public static function startsWith(string $haystack, string $needle, bool $caseSensitive = true)
     {
         if ($caseSensitive) {
             return $needle === "" || strpos($haystack, $needle) === 0;
@@ -93,7 +91,7 @@ class Str
      *
      * @return bool
      */
-    public static function startsWithInsensitive($haystack, $needle)
+    public static function startsWithInsensitive(string $haystack, string $needle)
     {
         return $needle === "" || stripos($haystack, $needle) === 0;
     }
@@ -107,7 +105,7 @@ class Str
      *
      * @return bool
      */
-    public static function endsWith($haystack, $needle, $caseSensitive = true)
+    public static function endsWith(string $haystack, string $needle, bool $caseSensitive = true)
     {
         if ($caseSensitive) {
             return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
@@ -124,7 +122,7 @@ class Str
      *
      * @return bool
      */
-    public static function endsWithInsensitive($haystack, $needle)
+    public static function endsWithInsensitive(string $haystack, string $needle)
     {
         return $needle === "" || strtolower(substr($haystack, -strlen($needle))) === strtolower($needle);
     }
@@ -146,14 +144,14 @@ class Str
      *         if delimiter contains a value that is not contained in string
      *         and a negative limit is used.
      */
-    public static function explode($subject, $delimiter, $limit = null)
+    public static function explode(string $subject, string $delimiter, int $limit = null): Bag
     {
         if (empty($delimiter)) {
             return new Bag();
         }
         $parts = $limit === null ? explode($delimiter, $subject) : explode($delimiter, $subject, $limit);
 
-        return new Bag($parts ?: array());
+        return new Bag($parts ?: []);
     }
 
     /**
@@ -166,7 +164,7 @@ class Str
      *
      * @return string|bool first piece or false
      */
-    public static function splitFirst($string, $delimiter)
+    public static function splitFirst(string $string, string $delimiter)
     {
         if (empty($delimiter)) {
             return false;
@@ -186,7 +184,7 @@ class Str
      *
      * @return string|bool last piece or false
      */
-    public static function splitLast($string, $delimiter)
+    public static function splitLast(string $string, string $delimiter)
     {
         if (empty($delimiter)) {
             return false;
@@ -208,7 +206,7 @@ class Str
      *
      * @return string
      */
-    public static function removeFirst($string, $value, $caseSensitive = true)
+    public static function removeFirst(string $string, string $value, bool $caseSensitive = true): string
     {
         return static::replaceFirst($string, $value, '', $caseSensitive);
     }
@@ -224,7 +222,7 @@ class Str
      *
      * @return string
      */
-    public static function removeLast($string, $value, $caseSensitive = true)
+    public static function removeLast(string $string, string $value, bool $caseSensitive = true): string
     {
         return static::replaceLast($string, $value, '', $caseSensitive);
     }
@@ -241,7 +239,7 @@ class Str
      *
      * @return string
      */
-    public static function replaceFirst($subject, $from, $to, $caseSensitive = true)
+    public static function replaceFirst(string $subject, string $from, string $to, bool $caseSensitive = true): string
     {
         $pos = $caseSensitive ? strpos($subject, $from) : stripos($subject, $from);
         if ($pos === false) {
@@ -263,7 +261,7 @@ class Str
      *
      * @return string
      */
-    public static function replaceLast($subject, $from, $to, $caseSensitive = true)
+    public static function replaceLast(string $subject, string $from, string $to, bool $caseSensitive = true): string
     {
         $pos = $caseSensitive ? strrpos($subject, $from) : strripos($subject, $from);
         if ($pos === false) {
@@ -306,9 +304,9 @@ class Str
      *
      * @return string The humanized text.
      */
-    public static function humanize($text)
+    public static function humanize(string $text): string
     {
-        return ucfirst(trim(strtolower(preg_replace(array('/([A-Z])/', '/[_\s]+/'), array('_$1', ' '), $text))));
+        return ucfirst(trim(strtolower(preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $text))));
     }
 
     private function __construct()

@@ -14,9 +14,9 @@ trait SerializableTrait
      */
     public function toArray()
     {
-        $values = array(
-            "class" => get_called_class(),
-        );
+        $values = [
+            "class" => static::class,
+        ];
 
         foreach (get_object_vars($this) as $key => $value) {
             if ($value instanceof SerializableInterface) {
@@ -53,9 +53,9 @@ trait SerializableTrait
      */
     public static function fromArray($obj)
     {
-        $cls = new \ReflectionClass(get_called_class());
+        $cls = new \ReflectionClass(static::class);
         $refParams = $cls->getConstructor()->getParameters();
-        $params = array();
+        $params = [];
         foreach ($refParams as $refParam) {
             try {
                 $paramCls = $refParam->getClass();
@@ -64,7 +64,7 @@ trait SerializableTrait
                     sprintf(
                         'The constructor parameter "%s" of class "%s" is type hinting a nonexistent class',
                         $refParam->getName(),
-                        get_called_class()
+                        static::class
                     )
                 );
             }
@@ -74,23 +74,24 @@ trait SerializableTrait
             }
             if (!$paramCls) {
                 $params[] = $obj[$refParam->name];
-            } elseif ($paramCls->isSubclassOf('Gmo\Common\Serialization\SerializableInterface')) {
+            } elseif ($paramCls->isSubclassOf(SerializableInterface::class)) {
                 /** @var SerializableInterface|string $clsName */
                 $clsName = $paramCls->name;
                 if (!class_exists($clsName)) {
                     throw new NotSerializableException($clsName . ' does not exist');
                 }
                 $params[] = $clsName::fromArray($obj[$refParam->name]);
-            } elseif ($paramCls->isSubclassOf('\Exception') || $paramCls->getName() === 'Exception') {
+            } elseif (is_a($paramCls->getName(), \Exception::class, true)) {
                 $params[] = unserialize($obj[$refParam->name]);
-            } elseif (is_a($paramCls->name, 'DateTime', true)) {
+            } elseif (is_a($paramCls->name, \DateTime::class, true)) {
                 $params[] = SerializableCarbon::fromArray($obj[$refParam->name]);
             } else {
-                throw new NotSerializableException($paramCls->name . ' does not implement Gmo\Common\Serialization\SerializableInterface');
+                throw new NotSerializableException($paramCls->name . ' does not implement ' . SerializableInterface::class);
             }
         }
 
-        return $cls->newInstanceArgs($params);
+        $cls = static::class;
+        return $cls(...$params);
     }
 
     public function toJson()
@@ -116,7 +117,7 @@ trait SerializableTrait
     public function unserialize($serialized)
     {
         $cls = $this->fromJson($serialized);
-        $properties = get_class_vars(get_called_class());
+        $properties = get_class_vars($this);
         foreach ($properties as $property => $value) {
             $this->$property = $cls->$property;
         }

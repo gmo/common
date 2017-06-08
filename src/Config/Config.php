@@ -18,15 +18,15 @@ use Webmozart\PathUtil\Path;
  * Using this class is an easy migration from deprecated {@see AbstractConfig} and {@see EnviornmentAwareConfig}.
  * However, we probably want to move away from the singleton pattern for Config. It is really not needed with Silex.
  *
- * @method static mixed get($path, $default = null)
- * @method static Bag getBag($path, $default = null)
- * @method static bool getBool($path, $default = null)
- * @method static string getPath($path, $default = null)
- * @method static void set($path, $value)
- * @method static ConfigBagInterface child($path, $cls = ConfigBagInterface::class)
+ * @method static mixed get(string $path, $default = null)
+ * @method static Bag getBag(string $path, $default = null)
+ * @method static bool getBool(string $path, $default = null)
+ * @method static string getPath(string $path, $default = null)
+ * @method static void set(string $path, $value)
+ * @method static ConfigBagInterface child(string $path, $cls = ConfigBagInterface::class)
  * @method static string getEnv()
- * @method static void setEnv($env)
- * @method static ConfigBagInterface withEnv($env)
+ * @method static void setEnv(string $env)
+ * @method static ConfigBagInterface withEnv(string $env)
  */
 class Config
 {
@@ -67,7 +67,7 @@ class Config
      *
      * @return bool
      */
-    public static function isProduction()
+    public static function isProduction(): bool
     {
         return static::getEnv() === 'production';
     }
@@ -77,7 +77,7 @@ class Config
      *
      * @return bool
      */
-    public static function isStaging()
+    public static function isStaging(): bool
     {
         $env = static::getEnv();
         return $env === 'staging' || $env === 'stage';
@@ -88,7 +88,7 @@ class Config
      *
      * @return bool
      */
-    public static function isDevelopment()
+    public static function isDevelopment(): bool
     {
         return static::getEnv() === 'development';
     }
@@ -98,7 +98,7 @@ class Config
      *
      * @return bool
      */
-    public static function isCI()
+    public static function isCI(): bool
     {
         return (bool) getenv('CI');
     }
@@ -110,7 +110,7 @@ class Config
      *
      * @return string
      */
-    final public static function absPath($path)
+    final public static function absPath(string $path): string
     {
         return Path::makeAbsolute($path, static::getInstance()->getProjectPath());
     }
@@ -120,7 +120,7 @@ class Config
      *
      * @return ConfigBagInterface
      */
-    public static function getConfig()
+    public static function getConfig(): ConfigBagInterface
     {
         return static::getInstance()->config;
     }
@@ -132,7 +132,7 @@ class Config
      */
     final public static function getInstance()
     {
-        $cls = get_called_class();
+        $cls = static::class;
         if (isset(static::$instances[$cls])) {
             return static::$instances[$cls];
         }
@@ -156,7 +156,7 @@ class Config
      *
      * @return mixed
      */
-    public static function __callStatic($name, $arguments)
+    public static function __callStatic(string $name, array $arguments)
     {
         $config = static::getConfig();
         Assert::methodExists($config, $name);
@@ -186,10 +186,10 @@ class Config
      *
      * @return string
      */
-    protected function getProjectPath()
+    protected function getProjectPath(): string
     {
         if (!$this->projectPath) {
-            $cls = new \ReflectionClass(get_called_class());
+            $cls = new \ReflectionClass(static::class);
             $baseDir = dirname($cls->getFileName());
             $this->projectPath = Path::makeAbsolute($this->PROJECT_DIR, $baseDir);
         }

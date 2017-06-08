@@ -4,13 +4,14 @@ namespace Gmo\Common\Serialization;
 
 use Carbon\Carbon;
 use DateTime;
-use Gmo\Common\Json;
 
 /**
  * Out of necessity to maintain ISerializable contract.
  */
 class SerializableCarbon extends Carbon implements SerializableInterface
 {
+    use SerializableTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -36,7 +37,7 @@ class SerializableCarbon extends Carbon implements SerializableInterface
      */
     public function toArray()
     {
-        return array('class' => get_called_class()) + (array) $this;
+        return ['class' => static::class] + (array) $this;
     }
 
     /**
@@ -63,37 +64,13 @@ class SerializableCarbon extends Carbon implements SerializableInterface
         if (isset($trace[0]['file'])) {
             $serialized = sprintf(
                 'C:%d:"%s":%d:{%s}',
-                strlen(get_called_class()),
-                get_called_class(),
+                strlen(static::class),
+                static::class,
                 strlen($serialized),
                 $serialized
             );
         }
 
         return $serialized;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return $this->toArray();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromJson($json)
-    {
-        return static::fromArray(Json::parse($json));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function toJson()
-    {
-        return Json::dump($this->toArray());
     }
 }

@@ -9,9 +9,9 @@ abstract class Enum extends AbstractSerializable
     /** @var mixed Enum value */
     protected $value;
     /** @var Enum[] */
-    private static $instances = array();
+    private static $instances = [];
     /** @var array Store existing constants in a static cache per object. */
-    private static $cache = array();
+    private static $cache = [];
 
     /**
      * Creates a new value of some type
@@ -23,7 +23,7 @@ abstract class Enum extends AbstractSerializable
     private function __construct($value)
     {
         if (!$this->isValid($value)) {
-            throw new \UnexpectedValueException("Value '$value' is not part of the enum " . get_called_class());
+            throw new \UnexpectedValueException("Value '$value' is not part of the enum " . static::class);
         }
         $this->value = $value;
     }
@@ -35,7 +35,7 @@ abstract class Enum extends AbstractSerializable
      */
     public static function create($value)
     {
-        $class = get_called_class();
+        $class = static::class;
         if (!array_key_exists($class, self::$instances)) {
             self::$instances[$class] = array();
         }
@@ -89,7 +89,7 @@ abstract class Enum extends AbstractSerializable
      */
     public static function values()
     {
-        $values = array();
+        $values = [];
         foreach (static::toList() as $key => $value) {
             $values[$key] = new static($value);
         }
@@ -104,7 +104,7 @@ abstract class Enum extends AbstractSerializable
      */
     public static function toList()
     {
-        $class = get_called_class();
+        $class = static::class;
         if (!array_key_exists($class, self::$cache)) {
             $reflection = new \ReflectionClass($class);
             self::$cache[$class] = $reflection->getConstants();
@@ -165,7 +165,7 @@ abstract class Enum extends AbstractSerializable
         $key = "static::$name";
         if (!defined($key)) {
             throw new \BadMethodCallException(
-                "No static method or enum constant '$name' in class " . get_called_class()
+                "No static method or enum constant '$name' in class " . static::class
             );
         }
 
@@ -192,7 +192,7 @@ abstract class Enum extends AbstractSerializable
             }
         }
 
-        throw new \BadMethodCallException("No method '$name' in class" . get_called_class());
+        throw new \BadMethodCallException("No method '$name' in class" . static::class);
     }
 
     /**
@@ -200,10 +200,10 @@ abstract class Enum extends AbstractSerializable
      */
     public function toArray()
     {
-        return array(
-            'class' => get_called_class(),
+        return [
+            'class' => static::class,
             'value' => $this->value,
-        );
+        ];
     }
 
     /**
@@ -226,10 +226,5 @@ abstract class Enum extends AbstractSerializable
         $this->value = $obj->value;
 
         return $obj;
-    }
-
-    public static function className()
-    {
-        return get_called_class();
     }
 }

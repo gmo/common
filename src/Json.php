@@ -101,7 +101,7 @@ class Json
         if (is_string($data)) {
             static::detectAndCleanUtf8($data);
         } elseif (is_array($data)) {
-            array_walk_recursive($data, array(__CLASS__, 'detectAndCleanUtf8'));
+            array_walk_recursive($data, [__CLASS__, 'detectAndCleanUtf8']);
         } else {
             static::throwEncodeError($code, $message);
         }

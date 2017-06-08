@@ -46,7 +46,7 @@ class ConfigBag implements EnvironmentAwareConfigBagInterface
     /**
      * {@inheritdoc}
      */
-    public function child($path, $cls = self::class)
+    public function child(string $path, $cls = null)
     {
         $cls = $cls ?: self::class;
         if ($cls !== self::class) {
@@ -65,7 +65,7 @@ class ConfigBag implements EnvironmentAwareConfigBagInterface
     /**
      * {@inheritdoc}
      */
-    public function get($path, $default = null)
+    public function get(string $path, $default = null)
     {
         $path = Path::join($this->prefix, $path);
 
@@ -101,7 +101,7 @@ class ConfigBag implements EnvironmentAwareConfigBagInterface
     /**
      * {@inheritdoc}
      */
-    public function getBag($path, $default = null)
+    public function getBag(string $path, $default = null)
     {
         $value = $this->get(...func_get_args());
 
@@ -111,7 +111,7 @@ class ConfigBag implements EnvironmentAwareConfigBagInterface
     /**
      * {@inheritdoc}
      */
-    public function getBool($path, $default = null)
+    public function getBool(string $path, $default = null): bool
     {
         $value = $this->get(...func_get_args());
 
@@ -121,7 +121,7 @@ class ConfigBag implements EnvironmentAwareConfigBagInterface
     /**
      * {@inheritdoc}
      */
-    public function getPath($path, $default = null)
+    public function getPath(string $path, $default = null): string
     {
         $value = $this->get(...func_get_args());
 
@@ -131,7 +131,7 @@ class ConfigBag implements EnvironmentAwareConfigBagInterface
     /**
      * {@inheritdoc}
      */
-    public function set($path, $value)
+    public function set(string $path, $value)
     {
         $path = Path::join($this->prefix, $path);
         $this->environments[$this->envName]->setPath($path, $value);
@@ -140,7 +140,7 @@ class ConfigBag implements EnvironmentAwareConfigBagInterface
     /**
      * {@inheritdoc}
      */
-    public function getEnv()
+    public function getEnv(): string
     {
         return $this->envName;
     }
@@ -148,7 +148,7 @@ class ConfigBag implements EnvironmentAwareConfigBagInterface
     /**
      * {@inheritdoc}
      */
-    public function setEnv($env)
+    public function setEnv(string $env)
     {
         $this->verifyEnv($env);
         $this->envName = $env;
@@ -157,7 +157,7 @@ class ConfigBag implements EnvironmentAwareConfigBagInterface
     /**
      * {@inheritdoc}
      */
-    public function withEnv($env)
+    public function withEnv(string $env)
     {
         $this->verifyEnv($env);
 
@@ -174,7 +174,7 @@ class ConfigBag implements EnvironmentAwareConfigBagInterface
     {
     }
 
-    protected function verifyEnv($env)
+    protected function verifyEnv(string $env)
     {
         if (!$this->environments->has($env)) {
             throw new ConfigException("Config does not contain the environment '$env'.");

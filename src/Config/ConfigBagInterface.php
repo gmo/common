@@ -29,7 +29,7 @@ interface ConfigBagInterface
      *
      * @see Bag::getPath() for more info.
      */
-    public function get($path, $default = null);
+    public function get(string $path, $default = null);
 
     /**
      * A shortcut for {@see get} that ensures the returned value is a Bag.
@@ -41,7 +41,7 @@ interface ConfigBagInterface
      *
      * @return Bag
      */
-    public function getBag($path, $default = null);
+    public function getBag(string $path, $default = null);
 
     /**
      * A shortcut for {@see get} that ensures the returned value is a boolean.
@@ -53,7 +53,7 @@ interface ConfigBagInterface
      *
      * @return bool
      */
-    public function getBool($path, $default = null);
+    public function getBool(string $path, $default = null): bool;
 
     /**
      * A shortcut for {@see get} that assumes the value is a path and resolves
@@ -68,7 +68,7 @@ interface ConfigBagInterface
      *
      * @return string
      */
-    public function getPath($path, $default = null);
+    public function getPath(string $path, $default = null): string;
 
     /**
      * Sets a value at the path given.
@@ -79,7 +79,7 @@ interface ConfigBagInterface
      *
      * @see Bag::setPath() for more info.
      */
-    public function set($path, $value);
+    public function set(string $path, $value);
 
     /**
      * Returns a child ConfigBagInterface for the given path. This allows sections of the
@@ -96,5 +96,5 @@ interface ConfigBagInterface
      *
      * @return ConfigBagInterface|static
      */
-    public function child($path, $cls = null);
+    public function child(string $path, $cls = null);
 }

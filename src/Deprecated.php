@@ -76,7 +76,7 @@ class Deprecated
      * @param string|float|null $since   The version it was deprecated in.
      * @param string            $suggest A class or suggestion of what to use instead.
      */
-    public static function cls($class, $since = null, $suggest = null)
+    public static function cls(string $class, $since = null, string $suggest = null)
     {
         if ($suggest && preg_match('/\s/', $suggest) === 0) {
             $suggest = sprintf("Use $suggest instead.", $suggest);
@@ -95,7 +95,7 @@ class Deprecated
      * @param string|float|null $since   The version it was deprecated in.
      * @param string            $suggest A service name or suggestion of what to use instead.
      */
-    public static function service($name, $since = null, $suggest = '')
+    public static function service(string $name, $since = null, string $suggest = '')
     {
         if ($suggest && preg_match('/\s/', $suggest) === 0) {
             $suggest = sprintf("Use \$app['%s'] instead.", $suggest);
@@ -116,7 +116,7 @@ class Deprecated
      * @param string|float|null $since   The version it was deprecated in.
      * @param string            $suggest A suggestion of what to do instead.
      */
-    public static function warn($subject, $since = null, $suggest = '')
+    public static function warn(string $subject, $since = null, string $suggest = '')
     {
         $message = $subject . ' is deprecated';
 
@@ -139,7 +139,7 @@ class Deprecated
      *
      * @param string $message The raw message.
      */
-    public static function raw($message)
+    public static function raw(string $message)
     {
         @trigger_error($message, E_USER_DEPRECATED);
     }

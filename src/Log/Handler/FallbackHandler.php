@@ -24,7 +24,7 @@ class FallbackHandler extends AbstractDecoratorHandler
      * @param HandlerInterface $fallback
      * @param string[]         $exceptionClasses
      */
-    public function __construct(HandlerInterface $main, HandlerInterface $fallback, array $exceptionClasses = array())
+    public function __construct(HandlerInterface $main, HandlerInterface $fallback, array $exceptionClasses = [])
     {
         $this->main = $main;
         $this->fallback = $fallback;
