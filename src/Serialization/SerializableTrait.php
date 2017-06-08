@@ -90,7 +90,7 @@ trait SerializableTrait
         }
 
         $cls = static::class;
-        return $cls(...$params);
+        return new $cls(...$params);
     }
 
     public function jsonSerialize()
