@@ -147,6 +147,9 @@ class JsonTest extends TestCase
         $this->assertJsonFormat($json, $data);
     }
 
+    /**
+     * @requires PHP 5.4
+     */
     public function testDumpOnlyUnicode()
     {
         if (!function_exists('mb_convert_encoding') && PHP_VERSION_ID < 50400) {
