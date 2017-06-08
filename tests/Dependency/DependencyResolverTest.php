@@ -2,10 +2,12 @@
 
 namespace Gmo\Common\Tests\Dependency;
 
-use Bolt\Collection\ImmutableBag;
 use Gmo\Common\Dependency\DependencyResolver;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @requires PHP 5.5
+ */
 class DependencyResolverTest extends TestCase
 {
     public function testMapSort()
@@ -14,8 +16,8 @@ class DependencyResolverTest extends TestCase
 
         $sorted = $resolver->sort();
 
-        $this->assertInstanceOf(ImmutableBag::class, $sorted);
-        $this->assertEquals(['a', 'c', 'd', 'b'], $sorted->keys()->toArray());
+        $this->assertInstanceOf('Bolt\Collection\ImmutableBag', $sorted);
+        $this->assertEquals(array('a', 'c', 'd', 'b'), $sorted->keys()->toArray());
     }
 
     public function testMapGet()
@@ -24,8 +26,8 @@ class DependencyResolverTest extends TestCase
 
         $deps = $resolver->get('d');
 
-        $this->assertInstanceOf(ImmutableBag::class, $deps);
-        $this->assertEquals(['c', 'a'], $deps->toArray());
+        $this->assertInstanceOf('Bolt\Collection\ImmutableBag', $deps);
+        $this->assertEquals(array('c', 'a'), $deps->toArray());
     }
 
     public function testMapAll()
@@ -34,13 +36,13 @@ class DependencyResolverTest extends TestCase
 
         $all = $resolver->all();
 
-        $this->assertInstanceOf(ImmutableBag::class, $all);
-        $expected = [
-            'a' => [],
-            'b' => ['a'],
-            'c' => ['a'],
-            'd' => ['c', 'a'],
-        ];
+        $this->assertInstanceOf('Bolt\Collection\ImmutableBag', $all);
+        $expected = array(
+            'a' => array(),
+            'b' => array('a'),
+            'c' => array('a'),
+            'd' => array('c', 'a'),
+        );
         $this->assertEquals($expected, $all->toArrayRecursive());
     }
 
@@ -52,8 +54,8 @@ class DependencyResolverTest extends TestCase
 
         $sorted = $resolver->sort();
 
-        $this->assertInstanceOf(ImmutableBag::class, $sorted);
-        $this->assertEquals([$a, $c, $d, $b], $sorted->toArray());
+        $this->assertInstanceOf('Bolt\Collection\ImmutableBag', $sorted);
+        $this->assertEquals(array($a, $c, $d, $b), $sorted->toArray());
     }
 
     public function testListGet()
@@ -64,8 +66,8 @@ class DependencyResolverTest extends TestCase
 
         $deps = $resolver->get($d);
 
-        $this->assertInstanceOf(ImmutableBag::class, $deps);
-        $this->assertEquals(['c', 'a'], $deps->toArray());
+        $this->assertInstanceOf('Bolt\Collection\ImmutableBag', $deps);
+        $this->assertEquals(array('c', 'a'), $deps->toArray());
     }
 
     public function testListAll()
@@ -75,13 +77,13 @@ class DependencyResolverTest extends TestCase
 
         $all = $resolver->all();
 
-        $this->assertInstanceOf(ImmutableBag::class, $all);
-        $expected = [
-            'a' => [],
-            'b' => ['a'],
-            'c' => ['a'],
-            'd' => ['c', 'a'],
-        ];
+        $this->assertInstanceOf('Bolt\Collection\ImmutableBag', $all);
+        $expected = array(
+            'a' => array(),
+            'b' => array('a'),
+            'c' => array('a'),
+            'd' => array('c', 'a'),
+        );
         $this->assertEquals($expected, $all->toArrayRecursive());
     }
 
@@ -91,10 +93,10 @@ class DependencyResolverTest extends TestCase
      */
     public function testCyclicDependency()
     {
-        $map = [
-            'a' => ['b'],
-            'b' => ['a'],
-        ];
+        $map = array(
+            'a' => array('b'),
+            'b' => array('a'),
+        );
         $resolver = DependencyResolver::fromMap($map, function ($item) { return $item; });
 
         $resolver->get('a');
@@ -106,9 +108,9 @@ class DependencyResolverTest extends TestCase
      */
     public function testUnknownDependency()
     {
-        $map = [
-            'a' => ['b'],
-        ];
+        $map = array(
+            'a' => array('b'),
+        );
         $resolver = DependencyResolver::fromMap($map, function ($item) { return $item; });
 
         $resolver->get('a');
@@ -116,12 +118,12 @@ class DependencyResolverTest extends TestCase
 
     private function createMapResolver()
     {
-        $map = [
-            'd' => ['depends' => ['c']],
-            'b' => ['depends' => ['a']],
-            'a' => ['depends' => []],
-            'c' => ['depends' => ['a']],
-        ];
+        $map = array(
+            'd' => array('depends' => array('c')),
+            'b' => array('depends' => array('a')),
+            'a' => array('depends' => array()),
+            'c' => array('depends' => array('a')),
+        );
         $resolver = DependencyResolver::fromMap(
             $map,
             function ($item, $key) {
@@ -134,17 +136,17 @@ class DependencyResolverTest extends TestCase
 
     private function createListResolver()
     {
-        $a = (object) ['name' => 'a', 'depends' => []];
-        $b = (object) ['name' => 'b', 'depends' => [$a]];
-        $c = (object) ['name' => 'c', 'depends' => [$a]];
-        $d = (object) ['name' => 'd', 'depends' => [$c]];
-        $list = [$d, $b, $a, $c];
+        $a = (object) array('name' => 'a', 'depends' => array());
+        $b = (object) array('name' => 'b', 'depends' => array($a));
+        $c = (object) array('name' => 'c', 'depends' => array($a));
+        $d = (object) array('name' => 'd', 'depends' => array($c));
+        $list = array($d, $b, $a, $c);
         $resolver = DependencyResolver::fromList(
             $list,
             function ($item) { return $item->name; },
             function ($item) { return $item->depends; }
         );
 
-        return [$list, $resolver];
+        return array($list, $resolver);
     }
 }

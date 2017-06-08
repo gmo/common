@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Gmo\Common\Config\Config
+ * @requires PHP 5.6
  */
 class ConfigTest extends TestCase
 {

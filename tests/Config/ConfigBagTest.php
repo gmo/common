@@ -7,6 +7,9 @@ use Gmo\Common\Config\ConfigBag;
 use PHPUnit\Framework\TestCase;
 use Webmozart\PathUtil\Path;
 
+/**
+ * @requires PHP 5.6
+ */
 class ConfigBagTest extends TestCase
 {
     /** @var ConfigBag */
@@ -14,29 +17,29 @@ class ConfigBagTest extends TestCase
 
     protected function setUp()
     {
-        $envs = Bag::fromRecursive([
-            'default' => [
-                'test' => [
+        $envs = Bag::fromRecursive(array(
+            'default' => array(
+                'test' => array(
                     'hello' => 'world',
-                ],
-            ],
-            'production' => [
-                'test' => [
+                ),
+            ),
+            'production' => array(
+                'test' => array(
                     'hello' => 'world2',
-                    'list' => [1, 2, 3],
+                    'list' => array(1, 2, 3),
                     'enabled' => 'yes',
                     'path' => '../foo/bar',
                     'key' => '%staging%',
                     'bad' => '%derp%',
-                ],
-            ],
-            'staging' => [
-                'test' => [
+                ),
+            ),
+            'staging' => array(
+                'test' => array(
                     'hello' => 'world3',
                     'key' => 'value',
-                ],
-            ],
-        ]);
+                ),
+            ),
+        ));
 
         $this->config = ConfigBag::root($envs, 'production', __DIR__);
     }
@@ -78,15 +81,15 @@ class ConfigBagTest extends TestCase
     public function testGetBag()
     {
         $actual = $this->config->getBag('test/list');
-        $this->assertInstanceOf(Bag::class, $actual);
-        $this->assertEquals([1, 2, 3], $actual->toArray());
+        $this->assertInstanceOf('Bolt\Collection\Bag', $actual);
+        $this->assertEquals(array(1, 2, 3), $actual->toArray());
     }
 
     public function testGetBagDefault()
     {
-        $actual = $this->config->getBag('test/derp', [1, 2]);
-        $this->assertInstanceOf(Bag::class, $actual);
-        $this->assertEquals([1, 2], $actual->toArray());
+        $actual = $this->config->getBag('test/derp', array(1, 2));
+        $this->assertInstanceOf('Bolt\Collection\Bag', $actual);
+        $this->assertEquals(array(1, 2), $actual->toArray());
     }
 
     public function testGetBool()
@@ -133,7 +136,7 @@ class ConfigBagTest extends TestCase
     public function testWithEnv()
     {
         $config = $this->config->withEnv('staging');
-        $this->assertInstanceOf(ConfigBag::class, $config);
+        $this->assertInstanceOf('Gmo\Common\Config\ConfigBag', $config);
         $this->assertNotSame($this->config, $config);
 
         $this->assertEquals('production', $this->config->getEnv());
@@ -164,7 +167,7 @@ class ConfigBagTest extends TestCase
     public function testChild()
     {
         $config = $this->config->child('test');
-        $this->assertInstanceOf(ConfigBag::class, $config);
+        $this->assertInstanceOf('Gmo\Common\Config\ConfigBag', $config);
         $this->assertNotSame($this->config, $config);
 
         $this->assertEquals('world2', $config->get('hello'));
@@ -176,15 +179,15 @@ class ConfigBagTest extends TestCase
     public function testChildNull()
     {
         $config = $this->config->child('test', null);
-        $this->assertInstanceOf(ConfigBag::class, $config);
+        $this->assertInstanceOf('Gmo\Common\Config\ConfigBag', $config);
         $this->assertNotSame($this->config, $config);
     }
 
     public function testChildSubclass()
     {
         /** @var TestSubConfigBag $config */
-        $config = $this->config->child('test', TestSubConfigBag::class);
-        $this->assertInstanceOf(TestSubConfigBag::class, $config);
+        $config = $this->config->child('test', 'Gmo\Common\Tests\Config\TestSubConfigBag');
+        $this->assertInstanceOf('Gmo\Common\Tests\Config\TestSubConfigBag', $config);
 
         $this->assertEquals('world2', $config->getHello());
     }
@@ -195,7 +198,7 @@ class ConfigBagTest extends TestCase
      */
     public function testChildInvalidSubclass()
     {
-        $this->config->child('test', \ArrayObject::class);
+        $this->config->child('test', 'ArrayObject');
     }
 }
 

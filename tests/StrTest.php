@@ -176,7 +176,7 @@ class StrTest extends TestCase
     public function test_class_name()
     {
         $this->assertSame('StrTest', Str::className($this));
-        $this->assertSame('StrTest', Str::className(static::class));
+        $this->assertSame('StrTest', Str::className('Gmo\Common\Tests\StrTest'));
     }
 
     public function test_class_name_does_not_exist()

@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Gmo\Common\Config\ConfigFactory
+ * @requires PHP 5.6
  */
 class ConfigFactoryTest extends TestCase
 {
@@ -16,13 +17,14 @@ class ConfigFactoryTest extends TestCase
 
     public function setUp()
     {
-        $this->config = (new ConfigFactory())->create(__DIR__ . '/../', 'fixtures/config/testConfig.yml');
+        $factory = new ConfigFactory();
+        $this->config = $factory->create(__DIR__ . '/../', 'fixtures/config/testConfig.yml');
         $this->config->setEnv('production');
     }
 
     public function testCreate()
     {
-        $this->assertInstanceOf(ConfigBag::class, $this->config);
+        $this->assertInstanceOf('Gmo\Common\Config\ConfigBag', $this->config);
     }
 
     public function testDefaultEnvironmentMerged()
@@ -51,7 +53,8 @@ class ConfigFactoryTest extends TestCase
      */
     public function testNonExistentFile()
     {
-        (new ConfigFactory())->create(__DIR__, 'nope');
+        $factory = new ConfigFactory();
+        $factory->create(__DIR__, 'nope');
     }
 
     /**
@@ -60,6 +63,7 @@ class ConfigFactoryTest extends TestCase
      */
     public function testInvalidEnvironmentDefinition()
     {
-        (new ConfigFactory())->create(__DIR__ . '/../', 'fixtures/config/invalidEnv.yml');
+        $factory = new ConfigFactory();
+        $factory->create(__DIR__ . '/../', 'fixtures/config/invalidEnv.yml');
     }
 }
