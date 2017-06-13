@@ -16,12 +16,13 @@
     "require-dev": {
         "bolt/collection": "^1.0",
         "gmo/cache": "~1.0",
-        "psr/log": "1.0.0",
         "monolog/monolog": "^1.18",
+        "phpunit/phpunit": "^4.8",
+        "predis/predis": "^1.0",
+        "psr/log": "^1.0",
         "silex/silex": "1.3.*@dev",
         "symfony/phpunit-bridge": "^2.8 || ^3.0",
-        "twig/twig": "~1.8",
-        "phpunit/phpunit": "^4.8"
+        "twig/twig": "~1.8"
     },
     "suggest": {
         "psr/log": "Provides a basic console logger for PSR-3 interface",
