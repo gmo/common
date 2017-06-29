@@ -9,6 +9,9 @@ php:
 matrix:
   fast_finish: true
 
+services:
+  - redis
+
 install:
   - composer install
 
