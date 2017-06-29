@@ -254,14 +254,8 @@ class PredisTest extends TestCase
         }
 
         $this->client->set('foo', 'bar');
-        try {
-            $this->assertEquals('OK', $this->client->rename('foo', 'foo'));
-            $this->fail('rename should throw exception when source and destination are the same');
-        } catch (Predis\Response\ServerException $e) {
-            if ($e->getMessage() !== 'ERR source and destination objects are the same') {
-                throw $e;
-            }
-        }
+
+        $this->assertEquals('OK', $this->client->rename('foo', 'foo'));
 
         $this->assertEquals('OK', $this->client->rename('foo', 'baz'));
         $this->assertEquals(1, $this->client->exists('baz'));
@@ -284,14 +278,8 @@ class PredisTest extends TestCase
 
         $this->client->set('hello', 'world');
         $this->client->set('foo', 'bar');
-        try {
-            $this->assertEquals('OK', $this->client->renamenx('foo', 'foo'));
-            $this->fail('rename should throw exception when source and destination are the same');
-        } catch (Predis\Response\ServerException $e) {
-            if ($e->getMessage() !== 'ERR source and destination objects are the same') {
-                throw $e;
-            }
-        }
+
+        $this->assertEquals(0, $this->client->renamenx('foo', 'foo'));
 
         $this->assertEquals(0, $this->client->renamenx('foo', 'hello'));
 
