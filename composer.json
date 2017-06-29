@@ -17,10 +17,6 @@
         "psr/log": "1.0.0",
         "symfony/phpunit-bridge": "^2.8 || ^3.0"
     },
-    "suggest": {
-        "psr/log": "Provides a basic console logger for PSR-3 interface",
-        "monolog/monolog": "Provides serializable formatter"
-    },
     "autoload": {
         "psr-4": {
             "Gmo\\Common\\": "src"
