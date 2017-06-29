@@ -2,9 +2,7 @@
 
 namespace Gmo\Common;
 
-use Gmo\Common\Serialization\AbstractSerializable;
-
-abstract class Enum extends AbstractSerializable
+abstract class Enum
 {
     /** @var mixed Enum value */
     protected $value;
@@ -37,7 +35,7 @@ abstract class Enum extends AbstractSerializable
     {
         $class = static::class;
         if (!array_key_exists($class, self::$instances)) {
-            self::$instances[$class] = array();
+            self::$instances[$class] = [];
         }
         if (!array_key_exists($value, self::$instances[$class])) {
             self::$instances[$class][$value] = new static($value);
@@ -85,7 +83,7 @@ abstract class Enum extends AbstractSerializable
     /**
      * Returns instances of the Enum class of all Enum constants
      *
-     * @return array Constant name in key, Enum instance in value
+     * @return static[] Constant name in key, Enum instance in value
      */
     public static function values()
     {
@@ -192,39 +190,6 @@ abstract class Enum extends AbstractSerializable
             }
         }
 
-        throw new \BadMethodCallException("No method '$name' in class" . static::class);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function toArray()
-    {
-        return [
-            'class' => static::class,
-            'value' => $this->value,
-        ];
-    }
-
-    /**
-     * @param $obj
-     *
-     * @return $this
-     */
-    public static function fromArray($obj)
-    {
-        return static::create($obj['value']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function unserialize($serialized)
-    {
-        /** @var Enum $obj */
-        $obj = static::fromArray(unserialize($serialized));
-        $this->value = $obj->value;
-
-        return $obj;
+        throw new \BadMethodCallException("No method '$name' in class " . static::class);
     }
 }
