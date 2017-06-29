@@ -2,8 +2,8 @@
 
 namespace Gmo\Common\Cache;
 
+use Bolt\Collection\Bag;
 use Carbon\Carbon;
-use GMO\Common\Collections\ArrayCollection;
 use Predis;
 use Predis\Command\CommandInterface;
 use Predis\NotSupportedException;
@@ -20,11 +20,11 @@ use Predis\NotSupportedException;
  */
 class ArrayPredis implements Predis\ClientInterface
 {
-    /** @var ArrayCollection */
+    /** @var Bag|Bag[] */
     protected $data;
-    /** @var ArrayCollection */
+    /** @var Bag */
     protected $expiring;
-    /** @var ArrayCollection */
+    /** @var Bag */
     protected $pubSub;
 
     /**
@@ -33,13 +33,13 @@ class ArrayPredis implements Predis\ClientInterface
     public function __construct()
     {
         $this->flushdb();
-        $this->pubSub = new ArrayCollection();
+        $this->pubSub = new Bag();
     }
 
     public function flushdb()
     {
-        $this->data = new ArrayCollection();
-        $this->expiring = new ArrayCollection();
+        $this->data = new Bag();
+        $this->expiring = new Bag();
     }
 
     public function flushall()
@@ -147,7 +147,7 @@ class ArrayPredis implements Predis\ClientInterface
     {
         $this->doExpire();
 
-        return Redis\Glob::filter($pattern, $this->data->getKeys());
+        return Redis\Glob::filter($pattern, $this->data->keys());
     }
 
     public function move($key, $db)
@@ -166,7 +166,7 @@ class ArrayPredis implements Predis\ClientInterface
             return 0;
         }
 
-        if (!$this->expiring->containsKey($key)) {
+        if (!$this->expiring->has($key)) {
             return 0;
         }
 
@@ -180,7 +180,7 @@ class ArrayPredis implements Predis\ClientInterface
         if (!$this->doExists($key)) {
             return -2;
         }
-        if (!$this->expiring->containsKey($key)) {
+        if (!$this->expiring->has($key)) {
             return -1;
         }
 
@@ -192,7 +192,7 @@ class ArrayPredis implements Predis\ClientInterface
         if (!$this->doExists($key)) {
             return -2;
         }
-        if (!$this->expiring->containsKey($key)) {
+        if (!$this->expiring->has($key)) {
             return -1;
         }
 
@@ -245,7 +245,7 @@ class ArrayPredis implements Predis\ClientInterface
         $item = $this->data->remove($key);
         $this->data->set($target, $item);
 
-        if ($this->expiring->containsKey($key)) {
+        if ($this->expiring->has($key)) {
             $time = $this->expiring->remove($key);
             $this->expiring->set($target, $time);
         }
@@ -445,7 +445,7 @@ class ArrayPredis implements Predis\ClientInterface
 
     public function mset(array $dictionary)
     {
-        $this->data->replace($dictionary);
+        $this->data = $this->data->replace($dictionary);
 
         return 'OK';
     }
@@ -455,7 +455,7 @@ class ArrayPredis implements Predis\ClientInterface
         $keys = $this->normalizeArgs(func_get_args());
         $this->doExpire();
 
-        $values = array();
+        $values = [];
 
         foreach ($keys as $key) {
             $values[] = $this->get($key);
@@ -497,10 +497,10 @@ class ArrayPredis implements Predis\ClientInterface
 
     public function hset($key, $field, $value)
     {
-        if (!$this->isTraversable($key)) {
-            $this->data[$key] = new ArrayCollection();
+        if (!$this->isIterable($key)) {
+            $this->data[$key] = new Bag();
         }
-        $isNew = $this->data[$key]->containsKey($field);
+        $isNew = $this->data[$key]->has($field);
         $this->data[$key][$field] = $value;
 
         return !$isNew;
@@ -532,7 +532,7 @@ class ArrayPredis implements Predis\ClientInterface
     {
         $this->doExpire();
 
-        if (!$this->isTraversable($key)) {
+        if (!$this->isIterable($key)) {
             return 0;
         }
 
@@ -548,7 +548,7 @@ class ArrayPredis implements Predis\ClientInterface
 
         $this->doExpire();
 
-        if (!$this->isTraversable($key)) {
+        if (!$this->isIterable($key)) {
             return 0;
         }
 
@@ -567,28 +567,28 @@ class ArrayPredis implements Predis\ClientInterface
     {
         $this->doExpire();
 
-        if (!$this->isTraversable($key)) {
-            return array();
+        if (!$this->isIterable($key)) {
+            return [];
         }
 
-        return $this->data[$key]->getKeys()->toArray();
+        return $this->data[$key]->keys()->toArray();
     }
 
     public function hvals($key)
     {
         $this->doExpire();
 
-        if (!$this->isTraversable($key)) {
-            return array();
+        if (!$this->isIterable($key)) {
+            return [];
         }
 
-        return $this->data[$key]->getValues()->toArray();
+        return $this->data[$key]->values()->toArray();
     }
 
     public function hgetall($key)
     {
-        if (!$this->isTraversable($key)) {
-            return array();
+        if (!$this->isIterable($key)) {
+            return [];
         }
 
         return $this->data->get($key)->toArray();
@@ -603,8 +603,8 @@ class ArrayPredis implements Predis\ClientInterface
 
     public function hincrby($key, $field, $increment)
     {
-        if (!$this->isTraversable($key)) {
-            $this->data[$key] = new ArrayCollection();
+        if (!$this->isIterable($key)) {
+            $this->data[$key] = new Bag();
         }
         if (!isset($this->data[$key][$field])) {
             $this->data[$key][$field] = 0;
@@ -620,8 +620,8 @@ class ArrayPredis implements Predis\ClientInterface
 
     public function hmset($key, array $dictionary)
     {
-        if (!$this->isTraversable($key)) {
-            $this->data[$key] = new ArrayCollection();
+        if (!$this->isIterable($key)) {
+            $this->data[$key] = new Bag();
         }
         foreach ($dictionary as $hashKey => $value) {
             $this->data[$key][$hashKey] = $value;
@@ -634,11 +634,11 @@ class ArrayPredis implements Predis\ClientInterface
     {
         $this->doExpire();
 
-        if (!$this->isTraversable($key)) {
-            return array_pad(array(), count($fields), null);
+        if (!$this->isIterable($key)) {
+            return array_pad([], count($fields), null);
         }
 
-        $values = array();
+        $values = [];
         foreach ($fields as $field) {
             $values[] = $this->hget($key, $field);
         }
@@ -673,7 +673,7 @@ class ArrayPredis implements Predis\ClientInterface
 
     public function lpushx($key, $value)
     {
-        if (!$this->isTraversable($key) || $this->data[$key]->isEmpty()) {
+        if (!$this->isIterable($key) || $this->data[$key]->isEmpty()) {
             return 0;
         }
 
@@ -700,7 +700,7 @@ class ArrayPredis implements Predis\ClientInterface
 
     public function rpushx($key, $value)
     {
-        if (!$this->isTraversable($key) || $this->data[$key]->isEmpty()) {
+        if (!$this->isIterable($key) || $this->data[$key]->isEmpty()) {
             return 0;
         }
 
@@ -711,7 +711,7 @@ class ArrayPredis implements Predis\ClientInterface
 
     public function lpop($key)
     {
-        if (!$this->isTraversable($key)) {
+        if (!$this->isIterable($key)) {
             return null;
         }
 
@@ -724,7 +724,7 @@ class ArrayPredis implements Predis\ClientInterface
 
     public function rpop($key)
     {
-        if (!$this->isTraversable($key)) {
+        if (!$this->isIterable($key)) {
             return null;
         }
 
@@ -747,7 +747,7 @@ class ArrayPredis implements Predis\ClientInterface
 
     public function llen($key)
     {
-        if (!$this->isTraversable($key)) {
+        if (!$this->isIterable($key)) {
             return 0;
         }
 
@@ -756,7 +756,7 @@ class ArrayPredis implements Predis\ClientInterface
 
     public function lindex($key, $index)
     {
-        if (!$this->isTraversable($key)) {
+        if (!$this->isIterable($key)) {
             return null;
         }
         $sub = $this->data[$key];
@@ -770,7 +770,7 @@ class ArrayPredis implements Predis\ClientInterface
 
     public function lset($key, $index, $value)
     {
-        if (!$this->isTraversable($key)) {
+        if (!$this->isIterable($key)) {
             throw new Predis\Response\ServerException('ERR no such key');
         }
 
@@ -780,7 +780,7 @@ class ArrayPredis implements Predis\ClientInterface
             $index += $sub->count();
         }
 
-        if (!$sub->containsKey($index)) {
+        if (!$sub->has($index)) {
             throw new Predis\Response\ServerException('ERR index out of range');
         }
 
@@ -793,8 +793,8 @@ class ArrayPredis implements Predis\ClientInterface
 
     public function lrange($key, $start, $stop)
     {
-        if (!$this->isTraversable($key)) {
-            return array();
+        if (!$this->isIterable($key)) {
+            return [];
         }
 
         $sub = $this->data[$key];
@@ -806,23 +806,23 @@ class ArrayPredis implements Predis\ClientInterface
             $stop += $sub->count();
         }
 
-        return $sub->slice($start, $stop + 1)->getValues()->toArray();
+        return $sub->slice($start, $stop + 1)->values()->toArray();
     }
 
     public function ltrim($key, $start, $stop)
     {
-        if (!$this->isTraversable($key)) {
+        if (!$this->isIterable($key)) {
             return 'OK';
         }
 
-        $this->data[$key] = new ArrayCollection($this->lrange($key, $start, $stop));
+        $this->data[$key] = new Bag($this->lrange($key, $start, $stop));
 
         return 'OK';
     }
 
     public function lrem($key, $count, $value)
     {
-        if (!$this->isTraversable($key)) {
+        if (!$this->isIterable($key)) {
             return 0;
         }
 
@@ -870,7 +870,7 @@ class ArrayPredis implements Predis\ClientInterface
 
     public function linsert($key, $whence, $pivot, $value)
     {
-        if (!$this->isTraversable($key)) {
+        if (!$this->isIterable($key)) {
             return 0;
         }
 
@@ -891,9 +891,13 @@ class ArrayPredis implements Predis\ClientInterface
             $secondPart = $sub->slice($index + 1);
         }
 
-        $this->data[$key] = ArrayCollection::create($firstPart)->add($value)->merge($secondPart);
+        $list = Bag::from($firstPart);
+        $list->add($value);
+        $list = $list->merge($secondPart);
 
-        return $this->data[$key]->count();
+        $this->data[$key] = $list;
+
+        return $list->count();
     }
 
     public function rpoplpush($source, $destination)
@@ -952,16 +956,16 @@ class ArrayPredis implements Predis\ClientInterface
 
     public function publish($channel, $message)
     {
-        if (!$this->pubSub->containsKey($channel)) {
-            $this->pubSub[$channel] = new ArrayCollection();
+        if (!$this->pubSub->has($channel)) {
+            $this->pubSub[$channel] = new Bag();
         }
         $this->pubSub[$channel][] = $message;
     }
 
     public function getMessages($channel)
     {
-        if (!$this->pubSub->containsKey($channel)) {
-            return new ArrayCollection();
+        if (!$this->pubSub->has($channel)) {
+            return new Bag();
         }
 
         return $this->pubSub[$channel];
@@ -1015,12 +1019,12 @@ class ArrayPredis implements Predis\ClientInterface
 
     protected function ensureSubCollection($key)
     {
-        if (!$this->isTraversable($key)) {
-            $this->data[$key] = new ArrayCollection();
+        if (!$this->isIterable($key)) {
+            $this->data[$key] = new Bag();
         }
     }
 
-    protected function isTraversable($key)
+    protected function isIterable($key)
     {
         return $this->doExists($key) && is_iterable($this->data[$key]);
     }
@@ -1036,7 +1040,7 @@ class ArrayPredis implements Predis\ClientInterface
 
     protected function resetListIndex($key)
     {
-        $this->data[$key] = $this->data[$key]->getValues();
+        $this->data[$key] = $this->data[$key]->values();
     }
 
     protected function getTimestamp()

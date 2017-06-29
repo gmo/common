@@ -15,7 +15,7 @@ class Glob
      *
      * @return string[]
      */
-    public static function filter($glob, $items)
+    public static function filter(string $glob, iterable $items): array
     {
         $items = $items instanceof \Traversable ? iterator_to_array($items) : $items;
 
@@ -28,10 +28,10 @@ class Glob
         if (!self::isDynamic($glob)) {
             $items = array_flip($items);
             if (isset($items[$glob])) {
-                return array($glob);
+                return [$glob];
             }
 
-            return array();
+            return [];
         }
 
         $regExp = self::toRegEx($glob);
@@ -58,7 +58,7 @@ class Glob
      *
      * @return bool
      */
-    public static function isDynamic($glob)
+    public static function isDynamic(string $glob): bool
     {
         return strpos($glob, '*') !== false || strpos($glob, '?') !== false || strpos($glob, '[') !== false;
     }
@@ -70,9 +70,9 @@ class Glob
      *
      * @return string
      */
-    public static function toRegEx($glob)
+    public static function toRegEx(string $glob): string
     {
-        $quoted = str_replace(array('?', '*'), array('.', '.*'), $glob);
+        $quoted = str_replace(['?', '*'], ['.', '.*'], $glob);
         $regExp = '~^' . $quoted . '$~';
 
         return $regExp;
@@ -87,13 +87,13 @@ class Glob
      *
      * @return string
      */
-    public static function getStaticPrefix($glob)
+    public static function getStaticPrefix(string $glob): string
     {
         if (preg_match('#^.*((?<!\\\\)\[|(?<!\\\\)\*|(?<!\\\\)\?).*$#', $glob, $matches, PREG_OFFSET_CAPTURE)) {
             $prefix = substr($glob, 0, $matches[1][1]);
             // Prefix will be used for string matching not regex, so we need to
             // unescape characters that were escaped by user for this glob.
-            return str_replace(array('\[', '\]', '\?', '\*', '\-', '\^'), array('[', ']', '?', '*', '-', '^'), $prefix);
+            return str_replace(['\[', '\]', '\?', '\*', '\-', '\^'], ['[', ']', '?', '*', '-', '^'], $prefix);
         }
 
         return $glob;
