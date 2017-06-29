@@ -209,7 +209,7 @@ class ArrayPredis implements Predis\ClientInterface
     public function rename($key, $target)
     {
         if ($key == $target) {
-            throw new Predis\Response\ServerException('ERR source and destination objects are the same');
+            return 'OK';
         }
 
         if (!$this->doExists($key)) {
@@ -224,7 +224,7 @@ class ArrayPredis implements Predis\ClientInterface
     public function renamenx($key, $target)
     {
         if ($key == $target) {
-            throw new Predis\Response\ServerException('ERR source and destination objects are the same');
+            return 0;
         }
 
         if (!$this->doExists($key)) {
