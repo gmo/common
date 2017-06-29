@@ -4,6 +4,9 @@ namespace Gmo\Common\Serialization;
 
 use GMO\Common\Exception\NotSerializableException;
 
+/**
+ * @deprecated will be removed in 2.0.
+ */
 trait SerializableTrait
 {
     /**

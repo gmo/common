@@ -7,6 +7,9 @@ use GMO\Common\Exception\NotSerializableException;
 use GMO\Common\ISerializable;
 use GMO\Common\Json;
 
+/**
+ * @deprecated will be removed in 2.0.
+ */
 abstract class AbstractSerializable implements ISerializable
 {
     /**

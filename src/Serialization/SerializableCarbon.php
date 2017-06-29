@@ -10,6 +10,8 @@ use GMO\Common\Json;
 
 /**
  * Out of necessity to maintain ISerializable contract.
+ *
+ * @deprecated will be removed in 2.0.
  */
 class SerializableCarbon extends Carbon implements ISerializable
 {

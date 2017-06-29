@@ -2,8 +2,9 @@
 
 namespace GMO\Common;
 
-Deprecated::cls('GMO\Common\SerializableTrait', null, 'Gmo\Common\Serialization\SerializableTrait');
-
+/**
+ * @deprecated will be removed in 2.0.
+ */
 trait SerializableTrait
 {
     use \Gmo\Common\Serialization\SerializableTrait;

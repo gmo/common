@@ -3,10 +3,16 @@
 namespace GMO\Common\Log;
 
 use GMO\Common\Collection\Arr;
+use Gmo\Common\Deprecated;
 use Gmo\Common\Serialization\SerializableCarbon;
 use Gmo\Common\Serialization\SerializableInterface;
 use Monolog\Formatter\FormatterInterface;
 
+Deprecated::cls('\GMO\Common\Log\SerializableFormatterWrapper');
+
+/**
+ * @deprecated will be removed in 2.0.
+ */
 class SerializableFormatterWrapper implements FormatterInterface
 {
     /** @var FormatterInterface */

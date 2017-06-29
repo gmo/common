@@ -33,7 +33,7 @@ namespace GMO\Common {
     use Gmo\Common\Serialization\SerializableInterface;
 
     /**
-     * @deprecated will be removed in 2.0. Use {@see Gmo\Common\Serialization\SerializableInterface} instead.
+     * @deprecated will be removed in 2.0.
      */
     interface ISerializable extends SerializableInterface
     {

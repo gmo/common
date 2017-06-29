@@ -2,6 +2,9 @@
 
 namespace Gmo\Common\Serialization;
 
+/**
+ * @deprecated will be removed in 2.0.
+ */
 interface SerializableInterface extends \JsonSerializable, \Serializable
 {
     /**

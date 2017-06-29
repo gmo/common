@@ -5,7 +5,7 @@ namespace Gmo\Common\Serialization;
 use GMO\Common\Exception\NotSerializableException;
 
 /**
- * @deprecated will be removed in 2.0. Use {@see AbstractSerializable} or {@see SerializableTrait} instead.
+ * @deprecated will be removed in 2.0.
  */
 class SerializeHelper
 {

@@ -7,6 +7,9 @@ use Gmo\Common\Serialization\AbstractSerializable;
 use Monolog\Formatter\FormatterInterface;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group legacy
+ */
 class SerializableFormatterWrapperTest extends TestCase
 {
     public function testDateTimeClassIsKept()
