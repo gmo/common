@@ -2,7 +2,6 @@
 
 namespace Gmo\Common\Console;
 
-use Gmo\Common\Console\Helper\ContainerHelper;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Command\Command;
 
@@ -13,11 +12,8 @@ use Symfony\Component\Console\Command\Command;
  */
 trait ContainerAwareTrait
 {
-    public function getContainer(): ContainerInterface
+    protected function getContainer(): ContainerInterface
     {
-        /** @var ContainerHelper $helper */
-        $helper = $this->getHelperSet()->get('container');
-
-        return $helper->getContainer();
+        return $this->getHelper('container');
     }
 }
