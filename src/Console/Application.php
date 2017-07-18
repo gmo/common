@@ -114,16 +114,19 @@ class Application extends \Symfony\Component\Console\Application
      * Reads the composer lock file based on the project directory
      * and parses the version for the specified package name.
      *
-     * @param string|null $packageName
-     * @param string|null $projectDir
+     * @param string $packageName
+     * @param string $projectDir
      *
      * @return string|null
      */
-    private function findComposerVersion(?string $packageName, ?string $projectDir): ?string
+    private function findComposerVersion(string $packageName, string $projectDir): ?string
     {
-        $composerFile = file_exists("$projectDir/vendor") ?
-            "$projectDir/composer.lock" :
-            "$projectDir/../../../composer.lock";
+        // A library app, but being ran from source so use git version.
+        if (file_exists("$projectDir/vendor")) {
+            return $this->findGitVersion($projectDir);
+        }
+
+        $composerFile = "$projectDir/../../../composer.lock";
         if (!file_exists($composerFile)) {
             return null;
         }

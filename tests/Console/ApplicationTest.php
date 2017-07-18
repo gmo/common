@@ -36,19 +36,28 @@ class ApplicationTest extends TestCase
         $this->assertStringMatchesFormat('%s %s', $console->getVersion());
     }
 
-    public function testVersionFromComposer()
-    {
-        $console = new Application('common');
-        $console->setProjectDirectory(__DIR__ . '/../..');
-        $console->setPackageName('phpunit/phpunit');
-        $this->assertEquals(Version::id(), $console->getVersion());
-    }
-
     public function testVersionFromGitBadDir()
     {
         $console = new Application('common');
         $console->setProjectDirectory(sys_get_temp_dir());
         $this->assertEquals('UNKNOWN', $console->getVersion());
+    }
+
+    public function testVersionForPackageNameFromGit()
+    {
+        $console = new Application('common');
+        $console->setProjectDirectory(__DIR__ . '/../..');
+        $console->setPackageName('gmo/common');
+
+        $this->assertStringMatchesFormat('%s %s', $console->getVersion());
+    }
+
+    public function testVersionFromComposer()
+    {
+        $console = new Application('common');
+        $console->setProjectDirectory(__DIR__ . '/../../vendor/phpunit/phpunit');
+        $console->setPackageName('phpunit/phpunit');
+        $this->assertEquals(Version::id(), $console->getVersion());
     }
 
     public function testVersionFromComposerBadDir()
@@ -62,7 +71,7 @@ class ApplicationTest extends TestCase
     public function testVersionFromComposerUnknownPackage()
     {
         $console = new Application('common');
-        $console->setProjectDirectory(__DIR__ . '/../..');
+        $console->setProjectDirectory(__DIR__ . '/../../vendor/phpunit/phpunit');
         $console->setPackageName('derp');
         $this->assertEquals('UNKNOWN', $console->getVersion());
     }
