@@ -18,7 +18,7 @@ services:
 
 before_install:
   # Remove bolt/collection for PHP 5.3/5.4 since it requires PHP 5.5
-  - if [[ $TRAVIS_PHP_VERSION = '5.3' || $TRAVIS_PHP_VERSION = '5.4' ]]; then composer remove bolt/collection --dev --no-update; fi
+  - if [[ $TRAVIS_PHP_VERSION = '5.3' || $TRAVIS_PHP_VERSION = '5.4' ]]; then composer remove bolt/collection symfony/cache --dev --no-update; fi
 
 install:
   - composer install
