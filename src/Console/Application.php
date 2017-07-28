@@ -89,8 +89,13 @@ class Application extends \Symfony\Component\Console\Application
     protected function getDefaultCommands()
     {
         $commands = parent::getDefaultCommands();
+
         if (class_exists(CompletionCommand::class)) {
-            $commands[] = new CompletionCommand();
+            $command = new CompletionCommand();
+            if (method_exists($command, 'setHidden')) {
+                $command->setHidden(true);
+            }
+            $commands[] = $command;
         }
 
         return $commands;
