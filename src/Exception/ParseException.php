@@ -5,6 +5,9 @@ namespace GMO\Common\Exception;
 use Exception;
 use Seld\JsonLint\ParsingException as JsonParseException;
 
+/**
+ * @deprecated will be removed in 2.0. Use ParseException from "bolt/common" library.
+ */
 class ParseException extends \RuntimeException
 {
     /** @var int */

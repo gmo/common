@@ -10,6 +10,8 @@ use Seld\JsonLint\ParsingException;
 /**
  * JSON parsing and dumping with error handling.
  *
+ * @deprecated will be removed in 2.0. Use Json from "bolt/common" library.
+ *
  * @see https://github.com/Seldaek/monolog/pull/683
  * @see https://github.com/composer/composer/blob/1.1/src/Composer/Json/JsonFile.php
  */
