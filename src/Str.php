@@ -18,10 +18,10 @@ class Str
     public static function contains($haystack, $needle, $caseSensitive = true)
     {
         if ($caseSensitive) {
-            return $needle === "" || strpos($haystack, $needle) !== false;
+            return $needle === '' || strpos($haystack, $needle) !== false;
         }
 
-        return static::containsInsensitive($haystack, $needle);
+        return $needle === '' || stripos($haystack, $needle) !== false;
     }
 
     /**
@@ -34,7 +34,9 @@ class Str
      */
     public static function containsInsensitive($haystack, $needle)
     {
-        return $needle === "" || stripos($haystack, $needle) !== false;
+        Deprecated::method(1.32, 'contains');
+
+        return $needle === '' || stripos($haystack, $needle) !== false;
     }
 
     /**
@@ -67,10 +69,10 @@ class Str
     public static function startsWith($haystack, $needle, $caseSensitive = true)
     {
         if ($caseSensitive) {
-            return $needle === "" || strpos($haystack, $needle) === 0;
+            return $needle === '' || strpos($haystack, $needle) === 0;
         }
 
-        return static::startsWithInsensitive($haystack, $needle);
+        return $needle === '' || stripos($haystack, $needle) === 0;
     }
 
     /**
@@ -83,7 +85,9 @@ class Str
      */
     public static function startsWithInsensitive($haystack, $needle)
     {
-        return $needle === "" || stripos($haystack, $needle) === 0;
+        Deprecated::method(1.32, 'startsWith');
+
+        return $needle === '' || stripos($haystack, $needle) === 0;
     }
 
     /**
@@ -98,10 +102,10 @@ class Str
     public static function endsWith($haystack, $needle, $caseSensitive = true)
     {
         if ($caseSensitive) {
-            return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
+            return $needle === '' || substr($haystack, -strlen($needle)) === $needle;
         }
 
-        return static::endsWithInsensitive($haystack, $needle);
+        return $needle === '' || strtolower(substr($haystack, -strlen($needle))) === strtolower($needle);
     }
 
     /**
@@ -114,7 +118,9 @@ class Str
      */
     public static function endsWithInsensitive($haystack, $needle)
     {
-        return $needle === "" || strtolower(substr($haystack, -strlen($needle))) === strtolower($needle);
+        Deprecated::method(1.32, 'endsWith');
+
+        return $needle === '' || strtolower(substr($haystack, -strlen($needle))) === strtolower($needle);
     }
 
     /**
