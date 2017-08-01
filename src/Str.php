@@ -35,21 +35,6 @@ class Str
     }
 
     /**
-     * Return whether a term is in a string ignoring case
-     *
-     * @param string $haystack The string to search in
-     * @param string $needle   The search term
-     *
-     * @return bool
-     */
-    public static function containsInsensitive(string $haystack, string $needle)
-    {
-        Deprecated::method(1.32, 'contains');
-
-        return $needle === '' || stripos($haystack, $needle) !== false;
-    }
-
-    /**
      * Compare two strings for identically
      *
      * @param string $string1
@@ -86,21 +71,6 @@ class Str
     }
 
     /**
-     * Return whether a string starts with a term ignoring case
-     *
-     * @param string $haystack The string to search in
-     * @param string $needle   The search term
-     *
-     * @return bool
-     */
-    public static function startsWithInsensitive(string $haystack, string $needle)
-    {
-        Deprecated::method(1.32, 'startsWith');
-
-        return $needle === '' || stripos($haystack, $needle) === 0;
-    }
-
-    /**
      * Return whether a string ends with a term
      *
      * @param string $haystack      The string to search in
@@ -114,21 +84,6 @@ class Str
         if ($caseSensitive) {
             return $needle === '' || substr($haystack, -strlen($needle)) === $needle;
         }
-
-        return $needle === '' || strtolower(substr($haystack, -strlen($needle))) === strtolower($needle);
-    }
-
-    /**
-     * Return whether a string ends with a term ignoring case
-     *
-     * @param string $haystack The string to search in
-     * @param string $needle   The search term
-     *
-     * @return bool
-     */
-    public static function endsWithInsensitive(string $haystack, string $needle)
-    {
-        Deprecated::method(1.32, 'endsWith');
 
         return $needle === '' || strtolower(substr($haystack, -strlen($needle))) === strtolower($needle);
     }
