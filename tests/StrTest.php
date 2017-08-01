@@ -65,24 +65,6 @@ class StrTest extends TestCase
         $this->assertFalse(Str::startsWith("BLah", "lah"));
     }
 
-    public function test_endsWith()
-    {
-        $this->assertTrue(Str::endsWith("blah", "h"));
-        $this->assertTrue(Str::endsWith("blah", "ah"));
-        $this->assertTrue(Str::endsWith("blah", "blah"));
-
-        $this->assertTrue(Str::endsWith("blAH", "blah", false));
-    }
-
-    public function test_does_not_endsWith()
-    {
-        $this->assertFalse(Str::endsWith("blah", "q"));
-        $this->assertFalse(Str::endsWith("blah", "qblah"));
-        $this->assertFalse(Str::endsWith("blah", "lalh"));
-        $this->assertFalse(Str::endsWith("blah", "lahq"));
-        $this->assertFalse(Str::endsWith("blah", "BLAH"));
-    }
-
     public function test_explode()
     {
         $this->assertSame(array("herp", "derp"), Str::explode("herp derp", " ")->toArray());
@@ -96,74 +78,5 @@ class StrTest extends TestCase
     public function test_explode_not_containing_delimiter()
     {
         $this->assertSame('herp derp', Str::explode("herp derp", ",")->first());
-    }
-
-    public function test_split_first_last_empty_returns_false()
-    {
-        $this->assertFalse(Str::splitFirst("herp derp", ""));
-        $this->assertFalse(Str::splitLast("herp derp", ""));
-    }
-
-    public function test_split_not_containing_delimiter()
-    {
-        $this->assertSame("herp derp", Str::splitFirst("herp derp", ","));
-        $this->assertSame("herp derp", Str::splitLast("herp derp", ","));
-    }
-
-    public function test_split_first_containing_delimiter()
-    {
-        $this->assertSame("herp", Str::splitFirst("herp derp", " "));
-    }
-
-    public function test_split_last_containing_delimiter()
-    {
-        $this->assertSame("derp", Str::splitLast("herp derp", " "));
-    }
-
-    public function test_remove_not_containing_value()
-    {
-        $this->assertSame("asdf", Str::removeFirst("asdf", "zxc"));
-        $this->assertSame("asdf", Str::removeLast("asdf", "zxc"));
-    }
-
-    public function test_remove_first_containing_value()
-    {
-        $this->assertSame("HelloHelloGoodbye", Str::removeFirst("HelloGoodbyeHelloGoodbye", "Goodbye"));
-        $this->assertSame("HelloHelloGoodbye", Str::removeFirst("HelloGOODBYEHelloGoodbye", "goodbye", false));
-    }
-
-    public function test_remove_last_containing_value()
-    {
-        $this->assertSame("HelloGoodbyeGoodbye", Str::removeLast("HelloGoodbyeHelloGoodbye", "Hello"));
-        $this->assertSame("HelloGoodbyeGoodbye", Str::removeLast("HelloGoodbyeHELLOGoodbye", "hello", false));
-    }
-
-    public function test_replace_first_containing_value()
-    {
-        $this->assertSame('HelloFooHelloGoodbye', Str::replaceFirst('HelloGoodbyeHelloGoodbye', 'Goodbye', 'Foo'));
-        $this->assertSame(
-            'HelloFooHelloGoodbye',
-            Str::replaceFirst('HelloGOODBYEHelloGoodbye', 'goodbye', 'Foo', false)
-        );
-    }
-
-    public function test_replace_last_containing_value()
-    {
-        $this->assertSame('HelloGoodbyeFooGoodbye', Str::replaceLast('HelloGoodbyeHelloGoodbye', 'Hello', 'Foo'));
-        $this->assertSame(
-            'HelloGoodbyeFooGoodbye',
-            Str::replaceLast('HelloGoodbyeHELLOGoodbye', 'hello', 'Foo', false)
-        );
-    }
-
-    public function test_class_name()
-    {
-        $this->assertSame('StrTest', Str::className($this));
-        $this->assertSame('StrTest', Str::className(static::class));
-    }
-
-    public function test_class_name_does_not_exist()
-    {
-        $this->assertFalse(Str::className('ClassDoesNotExist'));
     }
 }

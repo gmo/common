@@ -2,7 +2,7 @@
 
 namespace Gmo\Common\Log\Handler;
 
-use Gmo\Common\Json;
+use Bolt\Common\Json;
 use Gmo\Common\Log\Formatter\SlackFormatter;
 use Gmo\Common\Str;
 use Monolog\Formatter\LineFormatter;

@@ -14,7 +14,7 @@ use Bolt\Collection\Bag;
  *              Renamed case-insensitive functions
  * @since   1.2.0
  */
-class Str
+class Str extends \Bolt\Common\Str
 {
     /**
      * Return whether a term is in a string
@@ -71,24 +71,6 @@ class Str
     }
 
     /**
-     * Return whether a string ends with a term
-     *
-     * @param string $haystack      The string to search in
-     * @param string $needle        The search term
-     * @param bool   $caseSensitive Optional. Default: true
-     *
-     * @return bool
-     */
-    public static function endsWith(string $haystack, string $needle, bool $caseSensitive = true)
-    {
-        if ($caseSensitive) {
-            return $needle === '' || substr($haystack, -strlen($needle)) === $needle;
-        }
-
-        return $needle === '' || strtolower(substr($haystack, -strlen($needle))) === strtolower($needle);
-    }
-
-    /**
      * Splits a string on the delimiter.
      *
      * @param string $subject   The string to split
@@ -113,164 +95,5 @@ class Str
         $parts = $limit === null ? explode($delimiter, $subject) : explode($delimiter, $subject, $limit);
 
         return new Bag($parts ?: []);
-    }
-
-    /**
-     * Splits a string on the delimiter and returns the first part.
-     * If delimiter is empty false is returned.
-     * If the delimiter is not found in the string the string is returned.
-     *
-     * @param string $string    The string to split
-     * @param string $delimiter The term to split on
-     *
-     * @return string|bool first piece or false
-     */
-    public static function splitFirst(string $string, string $delimiter)
-    {
-        if (empty($delimiter)) {
-            return false;
-        }
-        $parts = explode($delimiter, $string);
-
-        return reset($parts);
-    }
-
-    /**
-     * Splits a string on the delimiter and returns the last part.
-     * If delimiter is empty false is returned.
-     * If the delimiter is not found in the string the string is returned.
-     *
-     * @param string $string    The string to split
-     * @param string $delimiter The term to split on
-     *
-     * @return string|bool last piece or false
-     */
-    public static function splitLast(string $string, string $delimiter)
-    {
-        if (empty($delimiter)) {
-            return false;
-        }
-        $parts = explode($delimiter, $string);
-
-        return end($parts);
-    }
-
-
-    /**
-     * Removes the first occurrence of the value from the string.
-     *
-     * The full string is returned if the value does not exist in the string.
-     *
-     * @param string $string        The string to search in
-     * @param string $value         The value to search for
-     * @param bool   $caseSensitive Should the search be case sensitive
-     *
-     * @return string
-     */
-    public static function removeFirst(string $string, string $value, bool $caseSensitive = true): string
-    {
-        return static::replaceFirst($string, $value, '', $caseSensitive);
-    }
-
-    /**
-     * Removes the last occurrence of the value from the string.
-     *
-     * The full string is returned if the value does not exist in the string.
-     *
-     * @param string $string        The string to search in
-     * @param string $value         The value to search for
-     * @param bool   $caseSensitive Should the search be case sensitive
-     *
-     * @return string
-     */
-    public static function removeLast(string $string, string $value, bool $caseSensitive = true): string
-    {
-        return static::replaceLast($string, $value, '', $caseSensitive);
-    }
-
-    /**
-     * Replaces the first occurrence of $from with $to in the given $subject.
-     *
-     * If $from is not found in the $subject, the $subject is returned.
-     *
-     * @param string $subject       The string to search in
-     * @param string $from          What to search the subject for
-     * @param string $to            What to replace $from with
-     * @param bool   $caseSensitive Whether finding $from in the subject is case sensitive
-     *
-     * @return string
-     */
-    public static function replaceFirst(string $subject, string $from, string $to, bool $caseSensitive = true): string
-    {
-        $pos = $caseSensitive ? strpos($subject, $from) : stripos($subject, $from);
-        if ($pos === false) {
-            return $subject;
-        }
-
-        return substr_replace($subject, $to, $pos, strlen($from));
-    }
-
-    /**
-     * Replaces the last occurrence of $from with $to in the given $subject.
-     *
-     * If $from is not found in the $subject, the $subject is returned.
-     *
-     * @param string $subject       The string to search in
-     * @param string $from          What to search the subject for
-     * @param string $to            What to replace $from with
-     * @param bool   $caseSensitive Whether finding $from in the subject is case sensitive
-     *
-     * @return string
-     */
-    public static function replaceLast(string $subject, string $from, string $to, bool $caseSensitive = true): string
-    {
-        $pos = $caseSensitive ? strrpos($subject, $from) : strripos($subject, $from);
-        if ($pos === false) {
-            return $subject;
-        }
-
-        return substr_replace($subject, $to, $pos, strlen($from));
-    }
-
-    /**
-     * Returns the class name without the namespace.
-     *
-     * If the class does not exist false is returned.
-     *
-     * @param string|object $cls object or fully qualified class name
-     *
-     * @return string|false
-     */
-    public static function className($cls)
-    {
-        if (is_string($cls) && !class_exists($cls)) {
-            return false;
-        } elseif (is_object($cls)) {
-            $cls = get_class($cls);
-        }
-
-        return Str::splitLast($cls, "\\");
-    }
-
-    /**
-     * Makes a technical name human readable.
-     *
-     * Sequences of underscores or camel cased are replaced by single spaces.
-     * The first letter of the resulting string is capitalized,
-     * while all other letters are turned to lowercase.
-     *
-     * @author Symfony
-     *
-     * @param string $text The text to humanize.
-     *
-     * @return string The humanized text.
-     */
-    public static function humanize(string $text): string
-    {
-        return ucfirst(trim(strtolower(preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $text))));
-    }
-
-    private function __construct()
-    {
     }
 }
