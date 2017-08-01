@@ -2,8 +2,14 @@
 
 namespace Gmo\Common\Log;
 
+use Gmo\Common\Deprecated;
 use Psr\Log\AbstractLogger;
 
+Deprecated::cls('Gmo\Common\Log\ConsoleLogger', 1.32);
+
+/**
+ * @deprecated since 1.32 and will be removed in 2.0.
+ */
 class ConsoleLogger extends AbstractLogger
 {
     /**
