@@ -51,13 +51,13 @@ class PredisTest extends TestCase
         $this->assertEquals(0, $this->client->exists('hello'));
     }
 
-    /**
-     * @group redis-keys
-     */
-    public function testDump()
-    {
-        $this->markTestSkipped();
-    }
+    ///**
+    // * @group redis-keys
+    // */
+    //public function testDump()
+    //{
+    //    $this->markTestSkipped();
+    //}
 
     /**
      * @group redis-keys
@@ -160,21 +160,21 @@ class PredisTest extends TestCase
         $this->assertSame(array_diff($expected, $actual), array_diff($actual, $expected));
     }
 
-    /**
-     * @group redis-keys
-     */
-    public function testMove()
-    {
-        $this->markTestSkipped();
-    }
-
-    /**
-     * @group redis-keys
-     */
-    public function testObject()
-    {
-        $this->markTestSkipped();
-    }
+    ///**
+    // * @group redis-keys
+    // */
+    //public function testMove()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    ///**
+    // * @group redis-keys
+    // */
+    //public function testObject()
+    //{
+    //    $this->markTestSkipped();
+    //}
 
     /**
      * @group redis-keys
@@ -288,37 +288,37 @@ class PredisTest extends TestCase
         $this->assertEquals(0, $this->client->exists('foo'));
     }
 
-    /**
-     * @group redis-keys
-     */
-    public function testRestore()
-    {
-        $this->markTestSkipped();
-    }
-
-    /**
-     * @group redis-keys
-     */
-    public function testScan()
-    {
-        $this->markTestSkipped();
-    }
-
-    /**
-     * @group redis-keys
-     */
-    public function testSort()
-    {
-        $this->markTestSkipped();
-    }
-
-    /**
-     * @group redis-keys
-     */
-    public function testType()
-    {
-        $this->markTestSkipped();
-    }
+    ///**
+    // * @group redis-keys
+    // */
+    //public function testRestore()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    ///**
+    // * @group redis-keys
+    // */
+    //public function testScan()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    ///**
+    // * @group redis-keys
+    // */
+    //public function testSort()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    ///**
+    // * @group redis-keys
+    // */
+    //public function testType()
+    //{
+    //    $this->markTestSkipped();
+    //}
 
     //endregion
 
@@ -334,21 +334,21 @@ class PredisTest extends TestCase
         $this->assertSame('Hello World', $this->client->get('foo'));
     }
 
-    /**
-     * @group redis-strings
-     */
-    public function testBitCount()
-    {
-        $this->markTestSkipped();
-    }
-
-    /**
-     * @group redis-strings
-     */
-    public function testBitOp()
-    {
-        $this->markTestSkipped();
-    }
+    ///**
+    // * @group redis-strings
+    // */
+    //public function testBitCount()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    ///**
+    // * @group redis-strings
+    // */
+    //public function testBitOp()
+    //{
+    //    $this->markTestSkipped();
+    //}
 
     /**
      * @group redis-strings
@@ -368,13 +368,13 @@ class PredisTest extends TestCase
         $this->assertEquals(-4, $this->client->decrby('foo', 2));
     }
 
-    /**
-     * @group redis-strings
-     */
-    public function testGetBit()
-    {
-        $this->markTestSkipped();
-    }
+    ///**
+    // * @group redis-strings
+    // */
+    //public function testGetBit()
+    //{
+    //    $this->markTestSkipped();
+    //}
 
     /**
      * @group redis-strings
@@ -508,13 +508,13 @@ class PredisTest extends TestCase
         $this->assertEquals('OK', $this->client->set('foo', 'red', 'XX'));
     }
 
-    /**
-     * @group redis-strings
-     */
-    public function testSetBit()
-    {
-        $this->markTestSkipped();
-    }
+    ///**
+    // * @group redis-strings
+    // */
+    //public function testSetBit()
+    //{
+    //    $this->markTestSkipped();
+    //}
 
     /**
      * @group redis-strings
@@ -749,13 +749,13 @@ class PredisTest extends TestCase
         $this->assertEquals(array('world', 'blue'), $this->client->hmget('foo', array('hello', 'red')));
     }
 
-    /**
-     * @group redis-hashes
-     */
-    public function testHashScan()
-    {
-        $this->markTestSkipped();
-    }
+    ///**
+    // * @group redis-hashes
+    // */
+    //public function testHashScan()
+    //{
+    //    $this->markTestSkipped();
+    //}
 
     //endregion
 
@@ -829,21 +829,21 @@ class PredisTest extends TestCase
         $this->assertEquals(array('A', 'B'), $this->client->lrange('foo', 0, -1));
     }
 
-    /**
-     * @group redis-lists
-     */
-    public function testListBlockLeftPop()
-    {
-        $this->markTestSkipped();
-    }
-
-    /**
-     * @group redis-lists
-     */
-    public function testListBlockRightPop()
-    {
-        $this->markTestSkipped();
-    }
+    ///**
+    // * @group redis-lists
+    // */
+    //public function testListBlockLeftPop()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    ///**
+    // * @group redis-lists
+    // */
+    //public function testListBlockRightPop()
+    //{
+    //    $this->markTestSkipped();
+    //}
 
     /**
      * @group redis-lists
@@ -984,311 +984,311 @@ class PredisTest extends TestCase
         $this->assertEquals(array('B', 'C', 'D'), $this->client->lrange('bar', 0, -1));
     }
 
-    /**
-     * @group redis-lists
-     */
-    public function testListBlockRightPopLeftPush()
-    {
-        $this->markTestSkipped();
-    }
+    ///**
+    // * @group redis-lists
+    // */
+    //public function testListBlockRightPopLeftPush()
+    //{
+    //    $this->markTestSkipped();
+    //}
 
     //endregion
 
     //region Sets
 
-    public function testSetAdd()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSetRemove()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSetMove()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSetIsMember()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSetCard()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSetPop()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSetRandMember()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSetInter()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSetInterStore()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSetUnion()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSetUnionStore()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSetDiff()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSetDiffStore()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSetMembers()
-    {
-        $this->markTestSkipped();
-    }
+    //public function testSetAdd()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSetRemove()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSetMove()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSetIsMember()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSetCard()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSetPop()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSetRandMember()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSetInter()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSetInterStore()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSetUnion()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSetUnionStore()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSetDiff()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSetDiffStore()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSetMembers()
+    //{
+    //    $this->markTestSkipped();
+    //}
 
     //endregion
 
     //region Sorted Sets
 
-    public function testSortedSetAdd()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSortedSetRange()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSortedSetRemove()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSortedSetReverseRange()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSortedSetRangeByScore()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSortedSetReverseRangeByScore()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSortedSetCount()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSortedSetRemoveRangeByScore()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSortedSetRemoveRangeByRank()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSortedSetCard()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSortedSetScore()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSortedSetRank()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSortedSetReverseRank()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSortedSetIncrementBy()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSortedSetUnionStore()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSortedSetInterStore()
-    {
-        $this->markTestSkipped();
-    }
+    //public function testSortedSetAdd()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSortedSetRange()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSortedSetRemove()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSortedSetReverseRange()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSortedSetRangeByScore()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSortedSetReverseRangeByScore()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSortedSetCount()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSortedSetRemoveRangeByScore()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSortedSetRemoveRangeByRank()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSortedSetCard()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSortedSetScore()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSortedSetRank()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSortedSetReverseRank()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSortedSetIncrementBy()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSortedSetUnionStore()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSortedSetInterStore()
+    //{
+    //    $this->markTestSkipped();
+    //}
 
     //endregion
 
     //region Server
 
-    public function testBackgroundRewriteAppendOnlyFile()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testBackgroundSave()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testConfig()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testDbSize()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testFlushAll()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testFlushDb()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testInfo()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testLastSave()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSave()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSlaveOf()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testTime()
-    {
-        $this->markTestSkipped();
-    }
+    //public function testBackgroundRewriteAppendOnlyFile()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testBackgroundSave()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testConfig()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testDbSize()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testFlushAll()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testFlushDb()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testInfo()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testLastSave()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSave()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSlaveOf()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testTime()
+    //{
+    //    $this->markTestSkipped();
+    //}
 
     //endregion
 
     //region Connection
 
-    public function testAuth()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testPing()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSelect()
-    {
-        $this->markTestSkipped();
-    }
+    //public function testAuth()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testPing()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSelect()
+    //{
+    //    $this->markTestSkipped();
+    //}
 
     //endregion
 
     //region Pub/Sub
 
-    public function testPsubscribe()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testSubscribe()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testPublish()
-    {
-        $this->markTestSkipped();
-    }
+    //public function testPsubscribe()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testSubscribe()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testPublish()
+    //{
+    //    $this->markTestSkipped();
+    //}
 
     //endregion
 
     //region Transactions
 
-    public function testDiscard()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testExec()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testMulti()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testUnwatch()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testWatch()
-    {
-        $this->markTestSkipped();
-    }
+    //public function testDiscard()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testExec()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testMulti()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testUnwatch()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testWatch()
+    //{
+    //    $this->markTestSkipped();
+    //}
 
     //endregion
 
     //region Scripting
 
-    public function testEvalSha()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testScript()
-    {
-        $this->markTestSkipped();
-    }
+    //public function testEvalSha()
+    //{
+    //    $this->markTestSkipped();
+    //}
+    //
+    //public function testScript()
+    //{
+    //    $this->markTestSkipped();
+    //}
 
     //endregion
 }
