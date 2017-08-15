@@ -2,6 +2,13 @@
 
 namespace GMO\Common\Log\Processor;
 
+use Gmo\Common\Deprecated;
+
+Deprecated::cls('\GMO\Common\Log\Processor\EnvProcessor', 1.32, '\Gmo\Web\Logger\Processor\ConstantProcessor');
+
+/**
+ * @deprecated since 1.32 and will be removed in 2.0. Use {@see \Gmo\Web\Logger\Processor\ConstantProcessor} instead.
+ */
 class EnvProcessor
 {
     /** @var string */
