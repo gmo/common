@@ -2,7 +2,7 @@
 
 namespace Gmo\Common\Dependency;
 
-use Bolt\Collection\ImmutableBag;
+use Bolt\Collection\Bag;
 
 /**
  * Base functionality for lists of objects that are identified by a property of the object.
@@ -35,7 +35,7 @@ abstract class AbstractListDependency extends AbstractMapDependency
     /**
      * {@inheritdoc}
      */
-    public function getSorted(ImmutableBag $sortedKeys)
+    public function getSorted(Bag $sortedKeys)
     {
         return parent::getSorted($sortedKeys)->values();
     }

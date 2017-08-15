@@ -14,7 +14,7 @@
         "webmozart/path-util": "^2.3"
     },
     "require-dev": {
-        "bolt/collection": "^1.0",
+        "bolt/collection": "^1.1",
         "gmo/cache": "~1.0",
         "monolog/monolog": "^1.18",
         "phpunit/phpunit": "^4.8",

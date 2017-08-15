@@ -2,7 +2,7 @@
 
 namespace Gmo\Common\Config;
 
-use Bolt\Collection\Bag;
+use Bolt\Collection\MutableBag;
 use Gmo\Common\Dependency\DependencyResolver;
 use GMO\Common\Exception\ConfigException;
 use Gmo\Common\Exception\Dependency\CyclicDependencyException;
@@ -65,14 +65,14 @@ class ConfigFactory
      *
      * @throws ConfigException If env extends an env not parsed yet.
      *
-     * @return Bag|Bag[]
+     * @return MutableBag|MutableBag[]
      */
     protected function parseMainFile($file)
     {
         $envs = $this->parse($file);
 
         if (!$envs->has('default')) {
-            $envs['default'] = new Bag();
+            $envs['default'] = new MutableBag();
         }
 
         $envs = $this->sortEnvs($envs);
@@ -94,12 +94,12 @@ class ConfigFactory
     /**
      * Merge in separate environment specific files.
      *
-     * @param string $file
-     * @param Bag|Bag[] $envs
+     * @param string                  $file
+     * @param MutableBag|MutableBag[] $envs
      *
-     * @return Bag|Bag[]
+     * @return MutableBag|MutableBag[]
      */
-    protected function mergeExternalFiles($file, Bag $envs)
+    protected function mergeExternalFiles($file, MutableBag $envs)
     {
         $extPos = strrpos($file, '.');
         $pathTemplate = substr_replace($file, '.%s.', $extPos, 1);
@@ -119,13 +119,13 @@ class ConfigFactory
     /**
      * @param string $file
      *
-     * @return Bag|Bag[]
+     * @return MutableBag|MutableBag[]
      */
     protected function parse($file)
     {
         $data = Yaml::parse(file_get_contents($file));
 
-        return Bag::fromRecursive($data);
+        return MutableBag::fromRecursive($data);
     }
 
     /**
@@ -146,15 +146,15 @@ class ConfigFactory
     /**
      * Sort envs based on their "_extends" key.
      *
-     * @param Bag $envs
+     * @param MutableBag $envs
      *
      * @throws ConfigException
      *
-     * @return Bag
+     * @return MutableBag
      */
     private function sortEnvs($envs)
     {
-        $resolver = DependencyResolver::fromMap($envs, function (Bag $env, $key) {
+        $resolver = DependencyResolver::fromMap($envs, function (MutableBag $env, $key) {
             // Default is the base case and cannot depend upon anything.
             if ($key === 'default') {
                 return [];

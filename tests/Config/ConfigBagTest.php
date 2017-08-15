@@ -2,7 +2,7 @@
 
 namespace Gmo\Common\Tests\Config;
 
-use Bolt\Collection\Bag;
+use Bolt\Collection\MutableBag;
 use Gmo\Common\Config\ConfigBag;
 use PHPUnit\Framework\TestCase;
 use Webmozart\PathUtil\Path;
@@ -17,7 +17,7 @@ class ConfigBagTest extends TestCase
 
     protected function setUp()
     {
-        $envs = Bag::fromRecursive(array(
+        $envs = MutableBag::fromRecursive(array(
             'default' => array(
                 'test' => array(
                     'hello' => 'world',

@@ -16,7 +16,7 @@ class DependencyResolverTest extends TestCase
 
         $sorted = $resolver->sort();
 
-        $this->assertInstanceOf('Bolt\Collection\ImmutableBag', $sorted);
+        $this->assertInstanceOf('Bolt\Collection\Bag', $sorted);
         $this->assertEquals(array('a', 'c', 'd', 'b'), $sorted->keys()->toArray());
     }
 
@@ -26,7 +26,7 @@ class DependencyResolverTest extends TestCase
 
         $deps = $resolver->get('d');
 
-        $this->assertInstanceOf('Bolt\Collection\ImmutableBag', $deps);
+        $this->assertInstanceOf('Bolt\Collection\Bag', $deps);
         $this->assertEquals(array('c', 'a'), $deps->toArray());
     }
 
@@ -36,7 +36,7 @@ class DependencyResolverTest extends TestCase
 
         $all = $resolver->all();
 
-        $this->assertInstanceOf('Bolt\Collection\ImmutableBag', $all);
+        $this->assertInstanceOf('Bolt\Collection\Bag', $all);
         $expected = array(
             'a' => array(),
             'b' => array('a'),
@@ -54,7 +54,7 @@ class DependencyResolverTest extends TestCase
 
         $sorted = $resolver->sort();
 
-        $this->assertInstanceOf('Bolt\Collection\ImmutableBag', $sorted);
+        $this->assertInstanceOf('Bolt\Collection\Bag', $sorted);
         $this->assertEquals(array($a, $c, $d, $b), $sorted->toArray());
     }
 
@@ -66,7 +66,7 @@ class DependencyResolverTest extends TestCase
 
         $deps = $resolver->get($d);
 
-        $this->assertInstanceOf('Bolt\Collection\ImmutableBag', $deps);
+        $this->assertInstanceOf('Bolt\Collection\Bag', $deps);
         $this->assertEquals(array('c', 'a'), $deps->toArray());
     }
 
@@ -77,7 +77,7 @@ class DependencyResolverTest extends TestCase
 
         $all = $resolver->all();
 
-        $this->assertInstanceOf('Bolt\Collection\ImmutableBag', $all);
+        $this->assertInstanceOf('Bolt\Collection\Bag', $all);
         $expected = array(
             'a' => array(),
             'b' => array('a'),

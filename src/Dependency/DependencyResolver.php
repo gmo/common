@@ -3,7 +3,7 @@
 namespace Gmo\Common\Dependency;
 
 use Bolt\Collection\Bag;
-use Bolt\Collection\ImmutableBag;
+use Bolt\Collection\MutableBag;
 use Gmo\Common\Exception\Dependency\CyclicDependencyException;
 use Gmo\Common\Exception\Dependency\UnknownDependencyException;
 
@@ -54,9 +54,9 @@ class DependencyResolver
 {
     /** @var DependencyInterface */
     private $dependency;
-    /** @var Bag|ImmutableBag[] */
+    /** @var MutableBag|Bag[] */
     private $resolved;
-    /** @var Bag */
+    /** @var MutableBag */
     private $resolving;
 
     /**
@@ -94,14 +94,14 @@ class DependencyResolver
     public function __construct(DependencyInterface $dependency)
     {
         $this->dependency = $dependency;
-        $this->resolved = new Bag();
-        $this->resolving = new Bag();
+        $this->resolved = new MutableBag();
+        $this->resolving = new MutableBag();
     }
 
     /**
      * Determines all dependencies for the data set and sorts it so least dependant are first.
      *
-     * @return ImmutableBag
+     * @return Bag
      */
     public function sort()
     {
@@ -114,7 +114,7 @@ class DependencyResolver
     /**
      * Returns all of the dependencies for the data set as a map.
      *
-     * @return ImmutableBag|ImmutableBag[] [ ID => ID[] ]
+     * @return Bag|Bag[] [ ID => ID[] ]
      */
     public function all()
     {
@@ -130,7 +130,7 @@ class DependencyResolver
      *
      * @param mixed $keyOrItem
      *
-     * @return mixed[]|ImmutableBag
+     * @return mixed[]|Bag
      */
     public function get($keyOrItem)
     {
@@ -140,7 +140,7 @@ class DependencyResolver
             return $this->resolved[$id];
         }
 
-        $deps = new Bag();
+        $deps = new MutableBag();
 
         $thisDeps = $this->dependency->getDependencies($keyOrItem);
 
@@ -177,11 +177,11 @@ class DependencyResolver
     /**
      * Sorts the mapping of dependencies and returns an ordered list.
      *
-     * @param ImmutableBag $toSort
+     * @param Bag $toSort
      *
-     * @return ImmutableBag
+     * @return Bag
      */
-    private function sortDeps(ImmutableBag $toSort)
+    private function sortDeps(Bag $toSort)
     {
         $sorted = [];
         $toSort = $toSort->mutable();
@@ -195,6 +195,6 @@ class DependencyResolver
             }
         }
 
-        return new ImmutableBag($sorted);
+        return new Bag($sorted);
     }
 }

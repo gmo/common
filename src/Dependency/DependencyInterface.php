@@ -2,7 +2,7 @@
 
 namespace Gmo\Common\Dependency;
 
-use Bolt\Collection\ImmutableBag;
+use Bolt\Collection\Bag;
 use Gmo\Common\Exception\Dependency\UnknownDependencyException;
 use IteratorAggregate;
 
@@ -30,11 +30,11 @@ interface DependencyInterface extends IteratorAggregate
     /**
      * Map the sorted keys to the data set and return it.
      *
-     * @param ImmutableBag $sortedKeys
+     * @param Bag $sortedKeys
      *
-     * @return ImmutableBag
+     * @return Bag
      */
-    public function getSorted(ImmutableBag $sortedKeys);
+    public function getSorted(Bag $sortedKeys);
 
     /**
      * Verify the given dependency exists within the data set.
