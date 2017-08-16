@@ -1041,6 +1041,6 @@ class ArrayPredis implements Predis\ClientInterface
 
     protected function getTimestamp()
     {
-        return Carbon::now()->timestamp;
+        return time();
     }
 }
