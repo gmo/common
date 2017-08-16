@@ -2,7 +2,7 @@
 
 namespace Gmo\Common\Dependency;
 
-use Bolt\Collection\ImmutableBag;
+use Bolt\Collection\Bag;
 use Gmo\Common\Exception\Dependency\UnknownDependencyException;
 use Webmozart\Assert\Assert;
 
@@ -15,7 +15,7 @@ use Webmozart\Assert\Assert;
  */
 abstract class AbstractMapDependency implements DependencyInterface
 {
-    /** @var ImmutableBag */
+    /** @var Bag */
     protected $data;
 
     /**
@@ -27,7 +27,7 @@ abstract class AbstractMapDependency implements DependencyInterface
     {
         Assert::isTraversable($map);
 
-        $this->data = ImmutableBag::from($map);
+        $this->data = Bag::from($map);
     }
 
     /**
@@ -59,7 +59,7 @@ abstract class AbstractMapDependency implements DependencyInterface
     /**
      * {@inheritdoc}
      */
-    public function getSorted(ImmutableBag $sortedKeys)
+    public function getSorted(Bag $sortedKeys)
     {
         return $sortedKeys->flip()->map(function ($key) {
             return $this->data[$key];

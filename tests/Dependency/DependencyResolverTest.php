@@ -2,7 +2,7 @@
 
 namespace Gmo\Common\Tests\Dependency;
 
-use Bolt\Collection\ImmutableBag;
+use Bolt\Collection\Bag;
 use Gmo\Common\Dependency\DependencyResolver;
 use PHPUnit\Framework\TestCase;
 
@@ -14,7 +14,7 @@ class DependencyResolverTest extends TestCase
 
         $sorted = $resolver->sort();
 
-        $this->assertInstanceOf(ImmutableBag::class, $sorted);
+        $this->assertInstanceOf(Bag::class, $sorted);
         $this->assertEquals(['a', 'c', 'd', 'b'], $sorted->keys()->toArray());
     }
 
@@ -24,7 +24,7 @@ class DependencyResolverTest extends TestCase
 
         $deps = $resolver->get('d');
 
-        $this->assertInstanceOf(ImmutableBag::class, $deps);
+        $this->assertInstanceOf(Bag::class, $deps);
         $this->assertEquals(['c', 'a'], $deps->toArray());
     }
 
@@ -34,7 +34,7 @@ class DependencyResolverTest extends TestCase
 
         $all = $resolver->all();
 
-        $this->assertInstanceOf(ImmutableBag::class, $all);
+        $this->assertInstanceOf(Bag::class, $all);
         $expected = [
             'a' => [],
             'b' => ['a'],
@@ -52,7 +52,7 @@ class DependencyResolverTest extends TestCase
 
         $sorted = $resolver->sort();
 
-        $this->assertInstanceOf(ImmutableBag::class, $sorted);
+        $this->assertInstanceOf(Bag::class, $sorted);
         $this->assertEquals([$a, $c, $d, $b], $sorted->toArray());
     }
 
@@ -64,7 +64,7 @@ class DependencyResolverTest extends TestCase
 
         $deps = $resolver->get($d);
 
-        $this->assertInstanceOf(ImmutableBag::class, $deps);
+        $this->assertInstanceOf(Bag::class, $deps);
         $this->assertEquals(['c', 'a'], $deps->toArray());
     }
 
@@ -75,7 +75,7 @@ class DependencyResolverTest extends TestCase
 
         $all = $resolver->all();
 
-        $this->assertInstanceOf(ImmutableBag::class, $all);
+        $this->assertInstanceOf(Bag::class, $all);
         $expected = [
             'a' => [],
             'b' => ['a'],

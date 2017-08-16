@@ -2,8 +2,14 @@
 
 namespace Gmo\Common\Log\Processor;
 
+use Gmo\Common\Deprecated;
+
+Deprecated::cls('\GMO\Common\Log\Processor\NormalizationProcessor', 1.32);
+
 /**
  * Abstracts looping through the array data looking for an item to normalize
+ *
+ * @deprecated since 1.32 and will be removed in 2.0.
  */
 abstract class NormalizationProcessor
 {

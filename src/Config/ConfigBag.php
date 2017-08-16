@@ -3,6 +3,7 @@
 namespace Gmo\Common\Config;
 
 use Bolt\Collection\Bag;
+use Bolt\Collection\MutableBag;
 use Gmo\Common\Exception\ConfigException;
 use Gmo\Common\Str;
 use Webmozart\Assert\Assert;
@@ -13,7 +14,7 @@ use Webmozart\PathUtil\Path;
  */
 class ConfigBag implements EnvironmentAwareConfigBagInterface
 {
-    /** @var Bag|Bag[] */
+    /** @var MutableBag|MutableBag[] */
     private $environments;
     /** @var string */
     private $envName;
@@ -25,9 +26,9 @@ class ConfigBag implements EnvironmentAwareConfigBagInterface
     /**
      * The constructor for ConfigBag.
      *
-     * @param Bag|Bag[] $environments Configs for mapped to environment names
-     * @param string    $envName      The current environment name
-     * @param string    $projectPath  The project root path
+     * @param MutableBag|MutableBag[] $environments Configs for mapped to environment names
+     * @param string                  $envName      The current environment name
+     * @param string                  $projectPath  The project root path
      *
      * @return static
      */
