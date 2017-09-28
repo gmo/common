@@ -2,7 +2,7 @@
 
 namespace Gmo\Common\Console;
 
-use Gmo\Common\Json;
+use Bolt\Common\Json;
 use Psr\Container\ContainerInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
 
