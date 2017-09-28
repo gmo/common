@@ -3,7 +3,6 @@
 namespace Gmo\Common\Cache;
 
 use Bolt\Collection\MutableBag;
-use Carbon\Carbon;
 use Predis;
 use Predis\Command\CommandInterface;
 use Predis\NotSupportedException;
