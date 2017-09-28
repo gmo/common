@@ -2,7 +2,7 @@
 
 namespace Gmo\Common\Cache;
 
-use Bolt\Collection\Bag;
+use Bolt\Collection\MutableBag;
 use Carbon\Carbon;
 use Predis;
 use Predis\Command\CommandInterface;
@@ -20,11 +20,11 @@ use Predis\NotSupportedException;
  */
 class ArrayPredis implements Predis\ClientInterface
 {
-    /** @var Bag|Bag[] */
+    /** @var MutableBag|MutableBag[] */
     protected $data;
-    /** @var Bag */
+    /** @var MutableBag */
     protected $expiring;
-    /** @var Bag */
+    /** @var MutableBag */
     protected $pubSub;
 
     /**
@@ -33,13 +33,13 @@ class ArrayPredis implements Predis\ClientInterface
     public function __construct()
     {
         $this->flushdb();
-        $this->pubSub = new Bag();
+        $this->pubSub = new MutableBag();
     }
 
     public function flushdb()
     {
-        $this->data = new Bag();
-        $this->expiring = new Bag();
+        $this->data = new MutableBag();
+        $this->expiring = new MutableBag();
     }
 
     public function flushall()
@@ -498,7 +498,7 @@ class ArrayPredis implements Predis\ClientInterface
     public function hset($key, $field, $value)
     {
         if (!$this->isIterable($key)) {
-            $this->data[$key] = new Bag();
+            $this->data[$key] = new MutableBag();
         }
         $isNew = $this->data[$key]->has($field);
         $this->data[$key][$field] = $value;
@@ -604,7 +604,7 @@ class ArrayPredis implements Predis\ClientInterface
     public function hincrby($key, $field, $increment)
     {
         if (!$this->isIterable($key)) {
-            $this->data[$key] = new Bag();
+            $this->data[$key] = new MutableBag();
         }
         if (!isset($this->data[$key][$field])) {
             $this->data[$key][$field] = 0;
@@ -621,7 +621,7 @@ class ArrayPredis implements Predis\ClientInterface
     public function hmset($key, array $dictionary)
     {
         if (!$this->isIterable($key)) {
-            $this->data[$key] = new Bag();
+            $this->data[$key] = new MutableBag();
         }
         foreach ($dictionary as $hashKey => $value) {
             $this->data[$key][$hashKey] = $value;
@@ -815,7 +815,7 @@ class ArrayPredis implements Predis\ClientInterface
             return 'OK';
         }
 
-        $this->data[$key] = new Bag($this->lrange($key, $start, $stop));
+        $this->data[$key] = new MutableBag($this->lrange($key, $start, $stop));
 
         return 'OK';
     }
@@ -891,7 +891,7 @@ class ArrayPredis implements Predis\ClientInterface
             $secondPart = $sub->slice($index + 1);
         }
 
-        $list = Bag::from($firstPart);
+        $list = MutableBag::from($firstPart);
         $list->add($value);
         $list = $list->merge($secondPart);
 
@@ -957,7 +957,7 @@ class ArrayPredis implements Predis\ClientInterface
     public function publish($channel, $message)
     {
         if (!$this->pubSub->has($channel)) {
-            $this->pubSub[$channel] = new Bag();
+            $this->pubSub[$channel] = new MutableBag();
         }
         $this->pubSub[$channel][] = $message;
     }
@@ -965,7 +965,7 @@ class ArrayPredis implements Predis\ClientInterface
     public function getMessages($channel)
     {
         if (!$this->pubSub->has($channel)) {
-            return new Bag();
+            return new MutableBag();
         }
 
         return $this->pubSub[$channel];
@@ -1020,7 +1020,7 @@ class ArrayPredis implements Predis\ClientInterface
     protected function ensureSubCollection($key)
     {
         if (!$this->isIterable($key)) {
-            $this->data[$key] = new Bag();
+            $this->data[$key] = new MutableBag();
         }
     }
 
