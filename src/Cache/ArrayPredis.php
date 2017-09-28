@@ -2,7 +2,6 @@
 
 namespace Gmo\Common\Cache;
 
-use Carbon\Carbon;
 use GMO\Common\Collections\ArrayCollection;
 use Predis;
 use Predis\Command\CommandInterface;
