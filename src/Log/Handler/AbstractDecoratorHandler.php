@@ -85,10 +85,12 @@ abstract class AbstractDecoratorHandler implements HandlerInterface
      */
     public function __call($name, $args)
     {
-        if (!method_exists($this->getHandler(), $name)) {
+        $handler = $this->getHandler();
+
+        if (!method_exists($handler, $name)) {
             throw new \BadMethodCallException('Handler does not have that method.');
         }
 
-        return call_user_func_array(array($this->getHandler(), 'name'), $args);
+        return call_user_func_array(array($handler, $name), $args);
     }
 }
