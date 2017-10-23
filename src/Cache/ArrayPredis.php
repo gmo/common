@@ -878,7 +878,7 @@ class ArrayPredis implements Predis\ClientInterface
         $sub = $this->data[$key];
 
         $index = $sub->indexOf($pivot);
-        if ($index === false) {
+        if ($index === null) {
             return -1;
         }
 
