@@ -2,6 +2,7 @@
 
 namespace Gmo\Common\Tests\Config;
 
+use Bolt\Collection\Bag;
 use Bolt\Collection\MutableBag;
 use Gmo\Common\Config\ConfigBag;
 use PHPUnit\Framework\TestCase;
