@@ -1,0 +1,2 @@
+tests/fixtures/csv/test-input.mac.csv eol=cr
+tests/fixtures/csv/test-input.win.csv eol=crlf
