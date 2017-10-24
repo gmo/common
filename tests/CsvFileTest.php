@@ -5,6 +5,7 @@ namespace Gmo\Common\Tests;
 use Bolt\Collection\Bag;
 use Bolt\Common\Ini;
 use Gmo\Common\CsvFile;
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 
 class CsvFileTest extends TestCase
@@ -276,5 +277,110 @@ class CsvFileTest extends TestCase
         } finally {
             Ini::set($eolKey, $original);
         }
+    }
+
+    public function testWriteRowFailWhenNotWriting()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('The CSV file is not open for writing');
+
+        $csv = new CsvFile(static::CSV_ONLY_HEADERS, 'r');
+        $csv->writeRow([]);
+    }
+
+    public function testWriteRowFailWhenNothingWritten()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Failed to write row to CSV file');
+
+        $file = vfsStream::setup()->url() . '/new.csv';
+        $csv = new CsvFile($file, 'w+', false);
+
+        // After file is opened
+        chmod($csv, 0000);
+
+        $csv->writeRow(['hello', 'color']);
+    }
+
+    public function testWriteRow()
+    {
+        $file = vfsStream::setup()->url() . '/new.csv';
+        $csv = new CsvFile($file, 'w+', false);
+
+        $csv->writeRow(['hello', 'color']);
+        $csv->writeRow(Bag::of('world', 'blue'));
+        $csv->writeRow([1 => 'red', 0 => 'world2']);
+
+        $expected = [
+            Bag::of('hello', 'color'),
+            Bag::of('world', 'blue'),
+            Bag::of('red', 'world2'),
+        ];
+        $actual = iterator_to_array($csv);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testWriteRowAssociative()
+    {
+        $file = vfsStream::setup()->url() . '/new.csv';
+        $csv = new CsvFile($file, 'w+');
+
+        $csv->writeRows([
+            // These keys define the headers
+            [
+                'hello' => 'world',
+                'color' => 'blue',
+            ],
+            // flipped values still work
+            [
+                'color' => 'red',
+                'hello' => 'world2',
+            ],
+            // Indexed arrays still work and just ignore validation
+            ['world3', 'green']
+        ]);
+
+        $expected = [
+            // Note: header isn't written
+            Bag::of('world', 'blue'),
+            Bag::of('world2', 'red'),
+            Bag::of('world3', 'green'),
+        ];
+        $actual = iterator_to_array(new CsvFile($file, 'r', false));
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testWriteRowAssociativeWithGenerator()
+    {
+        $file = vfsStream::setup()->url() . '/new.csv';
+        $csv = new CsvFile($file, 'w+');
+        $csv->setHeaders(['hello', 'color'], false);
+
+        $generator = (function () {
+            yield from [
+                'hello' => 'world',
+                'color' => 'blue',
+            ];
+        })();
+        $csv->writeRow($generator);
+
+        $this->assertSame(1, iterator_count($csv));
+    }
+
+    public function testWriteRowAssociativeWithExtraFields()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Row contains extra fields not found in headers: "color", "derp"');
+
+        $file = vfsStream::setup()->url() . '/new.csv';
+        $csv = new CsvFile($file, 'w+');
+        $csv->setHeaders(['hello'], false);
+
+        $csv->writeRow([
+            'hello' => 'world',
+            'color' => 'blue',
+            'derp'  => 'herp',
+        ]);
     }
 }

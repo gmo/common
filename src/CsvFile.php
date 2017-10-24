@@ -2,6 +2,7 @@
 
 namespace Gmo\Common;
 
+use Bolt\Collection\Arr;
 use Bolt\Collection\Bag;
 use Bolt\Common\Ini;
 
@@ -31,7 +32,7 @@ class CsvFile extends \SplFileObject
      *
      * @param string $fileName          The file to open
      * @param string $mode              The mode in which to open the file. See {@see fopen} for allowed modes.
-     * @param bool   $associativeRows   Whether to read with their headers as keys
+     * @param bool   $associativeRows   Whether to read and write rows with their headers as keys
      * @param bool   $detectLineEndings Whether to automatically detect line endings
      *
      * @throws \RuntimeException When the filename cannot be opened
@@ -174,6 +175,72 @@ class CsvFile extends \SplFileObject
                 $this
             );
             throw new \RuntimeException($message, 0, $e);
+        }
+    }
+
+    /**
+     * Write a list of rows to the file.
+     *
+     * @param iterable $rows
+     */
+    public function writeRows(iterable $rows): void
+    {
+        foreach ($rows as $row) {
+            $this->writeRow($row);
+        }
+    }
+
+    /**
+     * Write a row to the file.
+     *
+     * Be warned that if associated rows is enabled and the file does not have headers, the headers need to be set
+     * manually with {@see setHeaders}. Else the first values of the first row in the file will be used as the headers
+     * and the row being written won't match.
+     *
+     * @param iterable $row
+     */
+    public function writeRow(iterable $row): void
+    {
+        if (!$this->writing) {
+            throw new \RuntimeException('The CSV file is not open for writing');
+        }
+
+        // Convert to bag here in case $row cannot be rewound
+        $row = Bag::from($row);
+
+        if (!$this->associativeRows || $row->isIndexed()) {
+            $this->doWriteRow($row);
+
+            return;
+        }
+
+        // If headers have not been set and headers in file are empty, use the keys of the given row
+        if ($this->headers === null && $this->getHeaders()->isEmpty()) {
+            $this->headers = $row->keys();
+        }
+
+        $extra = $row->omit(...$this->headers);
+        if (!$extra->isEmpty()) {
+            throw new \RuntimeException(
+                sprintf('Row contains extra fields not found in headers: "%s"', $extra->keys()->join('", "'))
+            );
+        }
+
+        // Correctly sort values based on headers
+        $row = $this->headers
+            ->flip()
+            ->replace($row)
+            ->values()
+        ;
+
+        $this->doWriteRow($row);
+    }
+
+    private function doWriteRow(iterable $row): void
+    {
+        $result = $this->fputcsv(Arr::from($row));
+        if ($result === 0 || $result === false) {
+            throw new \RuntimeException(sprintf('Failed to write row to CSV file. File: %s', $this));
         }
     }
 }
