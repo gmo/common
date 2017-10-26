@@ -4,7 +4,7 @@ namespace Gmo\Common\Config;
 
 use Bolt\Collection\MutableBag;
 use Gmo\Common\Dependency\DependencyResolver;
-use GMO\Common\Exception\ConfigException;
+use Gmo\Common\Exception\ConfigException;
 use Gmo\Common\Exception\Dependency\CyclicDependencyException;
 use Gmo\Common\Exception\Dependency\UnknownDependencyException;
 use Symfony\Component\Yaml\Yaml;
