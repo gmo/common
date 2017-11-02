@@ -2,9 +2,9 @@
 
 namespace GMO\Common;
 
-use Gmo\Common\Serialization\AbstractSerializable;
+use Gmo\Common\Serialization;
 
-abstract class Enum extends AbstractSerializable
+abstract class Enum extends Serialization\AbstractSerializable
 {
     /** @var mixed Enum value */
     protected $value;
