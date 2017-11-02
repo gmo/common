@@ -38,7 +38,7 @@ abstract class NagiosCommand extends Command
         }
     }
 
-    protected function ok(string $str, ...$params): int
+    protected function ok(string $str = 'All good', ...$params): int
     {
         $this->output->writeln(sprintf("<info>$str</info>", ...$params));
 
