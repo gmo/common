@@ -2,8 +2,6 @@
 
 namespace Gmo\Common\Csv;
 
-use Bolt\Collection\Arr;
-use Bolt\Common\Thrower;
 use Psr\Http\Message\StreamInterface;
 
 class CsvStreamWriter implements CsvWriterInterface
@@ -42,7 +40,7 @@ class CsvStreamWriter implements CsvWriterInterface
      */
     public function writeRow(iterable $row): void
     {
-        $str = $this->rowToCsvStr($row);
+        $str = Csv::dump($row, $this->delimiter, $this->enclosure, $this->escape);
 
         try {
             $written = $this->stream->write($str);
@@ -53,28 +51,5 @@ class CsvStreamWriter implements CsvWriterInterface
         if (strlen($str) !== $written) {
             throw new \RuntimeException('Failed to write CSV row.');
         }
-    }
-
-    private function rowToCsvStr(iterable $row): string
-    {
-        $row = Arr::from($row);
-
-        $res = fopen('php://temp', 'r+');
-
-        try {
-            $written = Thrower::call('fputcsv', $res, $row, $this->delimiter, $this->enclosure, $this->escape);
-            $out = stream_get_contents($res, -1, 0);
-        } catch (\Throwable $e) {
-            throw new \RuntimeException('Failed to write CSV row.', 0, $e);
-        } finally {
-            fclose($res);
-            unset($res);
-        }
-
-        if ($written === 0 || $written === false) {
-            throw new \RuntimeException('Failed to write CSV row.');
-        }
-
-        return $out;
     }
 }

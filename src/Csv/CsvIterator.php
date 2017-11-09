@@ -2,7 +2,6 @@
 
 namespace Gmo\Common\Csv;
 
-use Bolt\Collection\Bag;
 use Generator;
 
 /**
@@ -36,9 +35,7 @@ class CsvIterator implements \IteratorAggregate
                 continue;
             }
 
-            $row = str_getcsv($line, $this->delimiter, $this->enclosure, $this->escape);
-
-            yield Bag::from(array_map('trim', $row));
+            yield Csv::parse($line, $this->delimiter, $this->enclosure, $this->escape);
         }
     }
 }
