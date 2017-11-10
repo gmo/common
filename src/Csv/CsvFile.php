@@ -17,7 +17,7 @@ class CsvFile extends \SplFileInfo implements \IteratorAggregate
     use CsvControlTrait;
     use CsvHeaderTrait;
 
-    /** @var CsvIterator */
+    /** @var CsvParseIterator */
     private $iterator;
 
     /**
@@ -46,7 +46,7 @@ class CsvFile extends \SplFileInfo implements \IteratorAggregate
         $stream = $this->openStream('rb');
         $it = new LineIterator($stream);
 
-        $it = new CsvIterator($it);
+        $it = new CsvParseIterator($it);
         $it->setCsvControl($this->delimiter, $this->enclosure, $this->escape);
 
         if ($this->associativeRows) {

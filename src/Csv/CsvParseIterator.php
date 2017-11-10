@@ -7,7 +7,7 @@ use Generator;
 /**
  * An iterator that parses CSV strings to Bags.
  */
-class CsvIterator implements \IteratorAggregate
+class CsvParseIterator implements \IteratorAggregate
 {
     use CsvControlTrait;
 

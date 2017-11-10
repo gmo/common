@@ -3,12 +3,12 @@
 namespace Gmo\Common\Tests\Csv;
 
 use Bolt\Collection\Bag;
-use Gmo\Common\Csv\CsvIterator;
+use Gmo\Common\Csv\CsvParseIterator;
 use Gmo\Common\Iterator\LineIterator;
 use PHPUnit\Framework\TestCase;
 use function GuzzleHttp\Psr7\stream_for;
 
-class CsvIteratorTest extends TestCase
+class CsvParseIteratorTest extends TestCase
 {
     public function testIteration()
     {
@@ -27,7 +27,7 @@ CSV;
 
         $stream = stream_for($data);
         $it = new LineIterator($stream);
-        $it = new CsvIterator($it);
+        $it = new CsvParseIterator($it);
 
         $this->assertEquals($expected, iterator_to_array($it));
         $this->assertEquals($expected, iterator_to_array($it));
@@ -49,7 +49,7 @@ CSV;
 
         $stream = stream_for($data);
         $it = new LineIterator($stream);
-        $it = new CsvIterator($it);
+        $it = new CsvParseIterator($it);
         $it->setCsvControl("\t");
 
         $this->assertEquals($expected, iterator_to_array($it));
@@ -61,7 +61,7 @@ CSV;
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Delimiter must be a single character. Got: "as"');
 
-        $it = new CsvIterator(new \EmptyIterator());
+        $it = new CsvParseIterator(new \EmptyIterator());
         $it->setCsvControl('as');
     }
 
@@ -70,7 +70,7 @@ CSV;
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Enclosure must be a single character. Got: "as"');
 
-        $it = new CsvIterator(new \EmptyIterator());
+        $it = new CsvParseIterator(new \EmptyIterator());
         $it->setCsvControl(',', 'as');
     }
 
@@ -79,7 +79,7 @@ CSV;
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Escape must be a single character. Got: "as"');
 
-        $it = new CsvIterator(new \EmptyIterator());
+        $it = new CsvParseIterator(new \EmptyIterator());
         $it->setCsvControl(',', '"', 'as');
     }
 }
