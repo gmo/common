@@ -3,14 +3,19 @@
 namespace Gmo\Common\Console;
 
 use Bolt\Common\Json;
+use Gmo\Common\ExceptionNormalizer;
 use Psr\Container\ContainerInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Base Application that adds:
  *   - Auto versioning from git or composer
  *   - Added optional ContainerHelper to default helpers
  *   - Added optional CompletionCommand to default commands
+ *   - Tweaked exception rendering
  */
 class Application extends \Symfony\Component\Console\Application
 {
@@ -33,6 +38,11 @@ class Application extends \Symfony\Component\Console\Application
         $this->container = $container;
 
         parent::__construct($name, $version);
+    }
+
+    public function getProjectDirectory(): ?string
+    {
+        return $this->projectDir;
     }
 
     /**
@@ -81,6 +91,66 @@ class Application extends \Symfony\Component\Console\Application
         }
 
         return parent::getVersion();
+    }
+
+    public function renderException(\Exception $e, OutputInterface $output)
+    {
+        $io = new SymfonyStyle(new ArrayInput([]), $output);
+
+        $normalizer = new ExceptionNormalizer($this->getProjectDirectory());
+
+        $mainTrace = null;
+        do {
+            $this->renderExceptionTitle($e, $io);
+
+            if ($io->isVerbose()) {
+                $io->writeln('<comment>Exception trace:</comment>');
+
+                $trace = $normalizer->normalizeTrace($e);
+                if ($mainTrace === null) {
+                    $mainTrace = $trace;
+                } else {
+                    $trace = $normalizer->shortenTrace($mainTrace, $trace);
+                }
+
+                $this->renderExceptionTrace($trace, $io);
+
+                $io->newLine();
+            }
+        } while ($e = $e->getPrevious());
+    }
+
+    private function renderExceptionTitle(\Exception $e, SymfonyStyle $io)
+    {
+        $message = sprintf(
+            "[%s%s]\n%s",
+            get_class($e),
+            $io->isVerbose() && 0 !== ($code = $e->getCode()) ? " ($code)" : '',
+            trim($e->getMessage())
+        );
+
+        $io->block($message, null, 'fg=white;bg=red', ' ', true);
+    }
+
+    private function renderExceptionTrace(array $trace, SymfonyStyle $io)
+    {
+        foreach ($trace as $i => $frame) {
+            if (isset($frame['removed'])) {
+                $io->writeln(sprintf(' ... %s more', $frame['removed']));
+                continue;
+            }
+
+            $class = $frame['class'] ?? '';
+            $type = $frame['type'] ?? '';
+            $function = $frame['function'] ?? '';
+            $file = $frame['file'] ?? 'n/a';
+            $line = $frame['line'] ?? 'n/a';
+
+            $message = $i === 0
+                ? ' Thrown at <info>%4$s:%5$s</info>'
+                : ' %s%s%s() at <info>%s:%s</info>';
+            $io->writeln(sprintf($message, $class, $type, $function, $file, $line));
+        }
     }
 
     /**
