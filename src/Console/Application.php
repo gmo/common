@@ -99,19 +99,16 @@ class Application extends \Symfony\Component\Console\Application
 
         $normalizer = new ExceptionNormalizer($this->getProjectDirectory());
 
-        $mainTrace = null;
+        $prevTrace = null;
         do {
             $this->renderExceptionTitle($e, $io);
 
             if ($io->isVerbose()) {
                 $io->writeln('<comment>Exception trace:</comment>');
 
-                $trace = $normalizer->normalizeTrace($e);
-                if ($mainTrace === null) {
-                    $mainTrace = $trace;
-                } else {
-                    $trace = $normalizer->shortenTrace($mainTrace, $trace);
-                }
+                $fullTrace = $normalizer->normalizeTrace($e);
+                $trace = $prevTrace !== null ? $normalizer->shortenTrace($prevTrace, $fullTrace) : $fullTrace;
+                $prevTrace = $fullTrace;
 
                 $this->renderExceptionTrace($trace, $io);
 

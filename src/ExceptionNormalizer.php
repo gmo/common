@@ -20,9 +20,24 @@ final class ExceptionNormalizer
 
     public function shortenTrace(array $main, array $inner): array
     {
-        $removed = count($main) - 1;
-        $inner = array_slice($inner, 0, $removed * -1);
-        $inner[] = ['removed' => $removed];
+        $main = array_reverse($main);
+        $inner = array_reverse($inner);
+
+        $removed = 0;
+        for ($i = 0, $count = count($inner); $i < $count; ++$i) {
+            if (!isset($main[$i])) {
+                break;
+            }
+            if ($main[$i] == $inner[$i]) {
+                unset($inner[$i]);
+                ++$removed;
+            }
+        }
+
+        $inner = array_reverse($inner);
+        if ($removed > 0) {
+            $inner[] = ['removed' => $removed];
+        }
 
         return $inner;
     }
