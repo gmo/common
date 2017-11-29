@@ -84,10 +84,12 @@ final class ExceptionNormalizer
                 }
             }
 
-            if ($this->rootDir && isset($frame['file'])) {
-                $frame['file'] = strpos($frame['file'], "eval()'d code") !== false
-                    ? "eval()'d code"
-                    : Path::makeRelative($frame['file'], $this->rootDir);
+            if (isset($frame['file'])) {
+                if (strpos($frame['file'], "eval()'d code") !== false) {
+                    $frame['file'] = "eval()'d code";
+                } elseif ($this->rootDir) {
+                    $frame['file'] = Path::makeRelative($frame['file'], $this->rootDir);
+                }
             }
         }
 
