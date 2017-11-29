@@ -27,13 +27,11 @@ final class ExceptionNormalizer
 
         $removed = 0;
         for ($i = 0, $count = count($inner); $i < $count; ++$i) {
-            if (!isset($main[$i])) {
+            if (!isset($main[$i]) || $main[$i] != $inner[$i]) {
                 break;
             }
-            if ($main[$i] == $inner[$i]) {
-                unset($inner[$i]);
-                ++$removed;
-            }
+            unset($inner[$i]);
+            ++$removed;
         }
 
         $inner = array_reverse($inner);
