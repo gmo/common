@@ -2,6 +2,8 @@
 
 namespace Gmo\Common;
 
+use Doctrine\Common\Persistence\Proxy as DoctrineProxy;
+use ProxyManager\Proxy\ProxyInterface as OcramiusProxy;
 use Twig\Template;
 use Webmozart\PathUtil\Path;
 
@@ -62,15 +64,24 @@ final class ExceptionNormalizer
         }
         $trace = array_values($trace);
 
-        // Twig: Add template name to frame and replace class name.
         foreach ($trace as $i => &$frame) {
-            if (isset($frame['class']) && is_subclass_of($frame['class'], Template::class, true)) {
-                $frame['template'] = (new \ReflectionClass($frame['class']))
-                    ->newInstanceWithoutConstructor()
-                    ->getTemplateName()
-                ;
-                $frame['class_orig'] = $frame['class'];
-                $frame['class'] = 'Template(' . $frame['template'] . ')';
+            if (isset($frame['class'])) {
+                // Twig: Add template name to frame and replace class name.
+                if (is_subclass_of($frame['class'], Template::class, true)) {
+                    $frame['template'] = (new \ReflectionClass($frame['class']))
+                        ->newInstanceWithoutConstructor()
+                        ->getTemplateName()
+                    ;
+                    $frame['class_orig'] = $frame['class'];
+                    $frame['class'] = 'Template(' . $frame['template'] . ')';
+                }
+
+                // Proxy: Add proxied name to frame and replace class name.
+                if (Str::isClassOneOf($frame['class'], DoctrineProxy::class, OcramiusProxy::class)) {
+                    $frame['proxied'] = get_parent_class($frame['class']);
+                    $frame['class_orig'] = $frame['class'];
+                    $frame['class'] = 'Proxy(' . $frame['proxied'] . ')';
+                }
             }
 
             if ($this->rootDir && isset($frame['file'])) {
