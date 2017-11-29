@@ -96,4 +96,23 @@ class Str extends \Bolt\Common\Str
 
         return new Bag($parts ?: []);
     }
+
+    /**
+     * Return whether a class name is one of the classes/interfaces/traits given.
+     *
+     * @param string   $subject
+     * @param string[] ...$classes
+     *
+     * @return bool
+     */
+    public static function isClassOneOf(string $subject, string ...$classes): bool
+    {
+        foreach ($classes as $class) {
+            if (is_a($subject, $class, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

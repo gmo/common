@@ -79,4 +79,10 @@ class StrTest extends TestCase
     {
         $this->assertSame('herp derp', Str::explode("herp derp", ",")->first());
     }
+
+    public function testIsClassOneOf()
+    {
+        $this->assertTrue(Str::isClassOneOf(Str::class, Str::class, \Exception::class));
+        $this->assertFalse(Str::isClassOneOf(Str::class, \Exception::class));
+    }
 }
