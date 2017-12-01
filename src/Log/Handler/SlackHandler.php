@@ -73,6 +73,8 @@ class SlackHandler extends SlackHandlerBase
     protected function write(array $record)
     {
         // Use actual formatted data instead of unformatted record
+        // Except for `datetime` as parent expects that to be a DateTime object
+        $record['formatted']['datetime'] = $record['datetime'];
         $record = $record['formatted'];
         parent::write($record);
     }
