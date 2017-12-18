@@ -2,6 +2,7 @@
 
 namespace GMO\Common\Log\Handler;
 
+use Gmo\Common\Deprecated;
 use GMO\Common\Json;
 use GMO\Common\Log\Formatter\SlackFormatter;
 use GMO\Common\Str;
@@ -9,10 +10,14 @@ use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\SlackHandler as SlackHandlerBase;
 use Monolog\Logger;
 
+Deprecated::cls('\GMO\Common\Log\Handler\SlackHandler', 1.32, '\Gmo\Web\Logger\Handler\SlackHandler');
+
 /**
  * {@inheritdoc}
  *
  * Subclassing to tweak formatting and change defaults
+ *
+ * @deprecated since 1.32 and will be removed in 2.0. Use {@see \Gmo\Web\Logger\Handler\SlackHandler} instead.
  */
 class SlackHandler extends SlackHandlerBase
 {

@@ -8,6 +8,11 @@ use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\RedisHandler;
 use Monolog\Logger;
 
+Deprecated::cls('\GMO\Common\Log\Handler\LogstashHandler', 1.32, '\Gmo\Web\Logger\Handler\LogstashHandler');
+
+/**
+ * @deprecated since 1.32 and will be removed in 2.0. Use {@see \Gmo\Web\Logger\Handler\LogstashHandler} instead.
+ */
 class LogstashHandler extends RedisHandler
 {
     protected $appName;
