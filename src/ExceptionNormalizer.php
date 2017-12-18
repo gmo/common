@@ -72,6 +72,9 @@ final class ExceptionNormalizer
                     ;
                     $frame['class_orig'] = $frame['class'];
                     $frame['class'] = 'Template(' . $frame['template'] . ')';
+
+                    // Previous call is from generated file so remove it
+                    unset($trace[$i - 1]['file'], $trace[$i - 1]['line']);
                 }
 
                 // Proxy: Add proxied name to frame and replace class name.
@@ -79,6 +82,9 @@ final class ExceptionNormalizer
                     $frame['proxied'] = get_parent_class($frame['class']);
                     $frame['class_orig'] = $frame['class'];
                     $frame['class'] = 'Proxy(' . $frame['proxied'] . ')';
+
+                    // Previous call is from generated file so remove it
+                    unset($trace[$i - 1]['file'], $trace[$i - 1]['line']);
                 }
             }
 
