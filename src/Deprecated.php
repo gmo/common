@@ -9,22 +9,4 @@ namespace Gmo\Common;
  */
 class Deprecated extends \Bolt\Common\Deprecated
 {
-    /**
-     * Shortcut for triggering a deprecation warning for a DI service.
-     *
-     * Example:
-     *     Deprecated::service('foo', 3.3, 'bar'); // triggers warning: "Accessing $app['foo'] is deprecated since 3.3 and will be removed in 4.0. Use $app['bar'] instead."
-     *
-     * @param string            $name    The service that is deprecated.
-     * @param string|float|null $since   The version it was deprecated in.
-     * @param string            $suggest A service name or suggestion of what to use instead.
-     */
-    public static function service(string $name, $since = null, ?string $suggest = '')
-    {
-        if ($suggest && preg_match('/\s/', $suggest) === 0) {
-            $suggest = sprintf("Use \$app['%s'] instead.", $suggest);
-        }
-
-        static::warn(sprintf("Accessing \$app['%s']", $name), $since, $suggest);
-    }
 }
