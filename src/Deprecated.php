@@ -97,9 +97,13 @@ class Deprecated
      * @param string            $name    The service that is deprecated.
      * @param string|float|null $since   The version it was deprecated in.
      * @param string            $suggest A service name or suggestion of what to use instead.
+     *
+     * @deprecated since 1.32 will be removed in 2.0.
      */
     public static function service($name, $since = null, $suggest = '')
     {
+        static::method(1.32);
+
         if ($suggest && preg_match('/\s/', $suggest) === 0) {
             $suggest = sprintf("Use \$app['%s'] instead.", $suggest);
         }
